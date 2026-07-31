@@ -39,3 +39,4 @@ temp/
 !.env.example
 *.local
 config.local.*
+!.compound-engineering/config.local.example.yaml
