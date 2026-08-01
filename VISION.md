@@ -1,3 +1,8 @@
+---
+proof_url: https://www.proofeditor.ai/d/pphx9an5?token=73d8ec92-ff17-458c-9a6f-2c537bb2dcd0
+proof_slug: pphx9an5
+---
+
 # Arjim: What I Want It to Become
 
 Date: 2026-08-01

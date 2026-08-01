@@ -8,6 +8,8 @@ artifact_readiness: requirements-only
 product_contract_source: ce-brainstorm
 execution: code
 deepened: 2026-08-01
+proof_url: https://www.proofeditor.ai/d/h1nem0fe?token=37899eaf-8fbd-4e57-8e9a-9025a6c08040
+proof_slug: h1nem0fe
 ---
 
 # Workstream Registration and Discovery - Plan
