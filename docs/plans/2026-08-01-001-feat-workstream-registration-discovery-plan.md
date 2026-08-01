@@ -37,7 +37,7 @@ Use this document as the canonical implementation plan. The sections have differ
 
 - **Objective:** Define a portable, assistant-neutral contract for workstream registration so future runtimes can recognize the same workspace, identity, record homes, and registration outcomes.
 - **Product authority:** `VISION.md`; this contract lays the durable foundation for registered-workstream awareness but does not yet deliver a working registration adapter.
-- **Active delivery:** The marker schema, registration protocol, result taxonomy, conformance fixtures, and integration guidance.
+- **Active delivery:** The marker schema, registration and unregister protocol, result taxonomy (including `unregistered` and `duplicate-registration`), conformance fixtures, and integration guidance.
 - **Stop condition:** Do not claim point-and-read registration works until a runtime and operator-facing adapter implement the contract and pass its fixtures.
 - **Trust test:** The contract must prevent local routing state, device paths, unconfirmed drafts, or identity regeneration from becoming authoritative.
 - **Work-reduction test:** A later adapter must let the operator register from a workspace pointer without supplying a remembered map of tools; this contract makes that behavior consistent across adapters.
@@ -48,7 +48,7 @@ Use this document as the canonical implementation plan. The sections have differ
 
 ### Summary
 
-The product scope remains point-and-read registration through a durable workspace self-description. This plan implements the portable contract first: an assistant-neutral marker, registration state rules, explicit outcomes, and conformance fixtures. Filesystem execution, assistant integration, and local inventory persistence are deferred until a runtime is selected.
+The product scope remains point-and-read registration through a durable workspace self-description. This plan implements the portable contract first: an assistant-neutral marker, registration and unregister state rules, explicit outcomes (including `unregistered` and `duplicate-registration`), and conformance fixtures. Filesystem execution, assistant integration, and local inventory persistence are deferred until a runtime is selected.
 
 **Product Contract preservation:** restructured, no scope change: R2 now names the existing label requirement, and KD4 now cites the full minimal self-description already implied by R2 and R5.
 
@@ -68,6 +68,8 @@ The `session-settled` annotations record decisions already made during planning.
 - KD6. **Point-and-read is the only working v1 entry path** (session-settled: user-directed — chosen over all three sources working in v1: smallest valuable slice; scan and registries stay designed but dormant). **Governs R12.**
 - KD7. **Arjim reads registries, never writes them** (session-settled: user-directed — chosen over publishing pointers on registration: publishing is owned outside this feature). **Governs R11.**
 - KD8. **Access-gated registration** (session-settled: user-directed — chosen over registering and flagging access later: an instance registers only what it can access, consistent with `VISION.md:104` device limits). **Governs R8, R9.**
+- KD9. **Confirmed conditional unregister** (session-settled: user-directed — chosen over a no-delete v1: unregister is the operator's durable way to resolve a duplicate registration and to retire a workstream). A confirmed conditional delete removes a marker only if it still matches the confirmed identity and verifies absence by read-back. **Governs R15, R16.**
+- KD10. **Accept any valid-looking record-home URI; warn on malformed ones** (session-settled: user-directed — chosen over rejecting schemes or credential components: adapters must not disagree on validity, and unsupported providers stay valid but non-dereferenceable). URI validity is syntactic only; a malformed URI warns without invalidating the marker. **Governs R2, R7-R9.**
 
 ### Actors
 
@@ -81,6 +83,7 @@ The `session-settled` annotations record decisions already made during planning.
 - F3. **Proxy workspace registration** — **Covers R6, R7.** The operator designates a regular folder as the metadata workspace; the marker records proxy kind while record homes point to the real system or tool.
 - F4. **Rejected or stale draft** — **Covers R3, R4.** Rejection writes nothing. A material draft or target-state change invalidates confirmation and requires a new draft.
 - F5. **Invalid location or marker** — **Covers R8-R10.** Missing, inaccessible, malformed, unsupported, or conflicting inputs stop registration with a distinct outcome and no overwrite.
+- F6. **Unregister and duplicate resolution** — **Covers R15, R16.** The operator confirms an unregister draft bound to the marker's exact identity; Arjim conditionally deletes the marker and verifies absence by read-back. A duplicate registration stops for operator-directed resolution: one party unregisters its marker and the survivor's identity stays canonical.
 
 ### Requirements
 
@@ -115,6 +118,11 @@ The requirements below define observable product behavior. The technical decisio
 - R13. Local inventory is a replaceable projection derived from readable workspace markers and may retain device-local routing data without becoming registration authority.
 - R14. Reading a valid marker yields the same identity on every device or assistant; retries and existing-marker linking never regenerate that identity.
 
+**Unregistration and duplicate registration**
+
+- R15. The operator can unregister a workstream; Arjim drafts an unregister intent bound to the marker's exact identity, obtains confirmation, performs a conditional delete that fails if the marker changed since confirmation, and completes only when read-back verifies absence.
+- R16. When one workspace is observed under two distinct valid identities, registration and unregister report a `duplicate-registration` outcome and stop for operator-directed resolution; one party unregisters its marker and the survivor's identity remains canonical. Identical copies of a marker that share one identity are not duplicates.
+
 ### Acceptance Examples
 
 - AE1. **New folder marker** — **Covers R1-R5.** A valid confirmed draft for an unmarked folder produces one marker whose read-back value matches the confirmed data and whose identity remains stable.
@@ -124,20 +132,23 @@ The requirements below define observable product behavior. The technical decisio
 - AE5. **Invalid or inaccessible input** — **Covers R8-R10.** A missing or inaccessible location, invalid marker, unsupported version, or conflict produces a distinct diagnostic and no write.
 - AE6. **Name change keeps identity** — **Covers R5, R14.** Two otherwise valid revisions may differ in label while retaining the same identity.
 - AE7. **Post-write link failure** — **Covers R4, R13.** If the marker is written and verified but local linking fails, the marker remains authoritative and a later relink reuses its identity.
+- AE8. **Unregister** — **Covers R15.** A confirmed unregister deletes the marker, verifies absence by read-back, and reports `unregistered`; a later re-registration generates a fresh identity.
+- AE9. **Duplicate registration** — **Covers R16.** Two distinct valid identities for one workspace report `duplicate-registration` and stop; unregistering one leaves the survivor canonical with its identity unchanged.
+- AE10. **Warned record home** — **Covers R2, R7-R9, R11.** A marker whose record home carries a malformed URI, URI user-info, a signed-URL token, or a local-resource scheme remains valid and readable; the affected record home reports non-dereferenceable capability with a structured warning and no dereference.
 
 ### Scope Boundaries
 
 #### Active in This Plan
 
 - Version 1 marker schema and examples.
-- Registration state and authority protocol, including existing markers, exact-draft confirmation, conflicts, retries, and partial success.
-- Portable result and error taxonomy.
+- Registration and unregister state and authority protocol, including existing markers, exact-draft confirmation, confirmed conditional delete, duplicate registrations, retries, and partial success.
+- Portable result, warning, and error taxonomy, including `unregistered` and `duplicate-registration` outcomes.
 - Runtime-neutral conformance fixtures and adapter obligations.
 
 #### Deferred to Follow-Up Work
 
 - Select a runtime and validation library.
-- Implement filesystem inspection, create-only writes, read-back, and local inventory persistence.
+- Implement filesystem inspection, create-only writes, confirmed conditional deletes, read-back, and local inventory persistence.
 - Add the operator-facing assistant or CLI adapter.
 - Run executable end-to-end tests for folder access, permissions, concurrent writes, interruption recovery, and local relinking.
 
@@ -148,7 +159,7 @@ The requirements below define observable product behavior. The technical decisio
 - Purpose, lifecycle state, and designated decision record home in the marker.
 - Workstream status, progress, next actions, and freshness.
 - Operating-process requirements.
-- Broad proposal-to-audit write-safety and attribution machinery beyond this contract's narrow create-only rule.
+- Broad proposal-to-audit write-safety and attribution machinery beyond this contract's narrow create-only and conditional-delete rules.
 - Cross-device root rediscovery and wipe-and-rebuild proof.
 - Coverage-driven authority escalation.
 
@@ -160,8 +171,9 @@ The requirements below define observable product behavior. The technical decisio
 
 - `VISION.md` remains product authority.
 - The operator is the sole v1 human actor.
-- Version 1 record homes are typed, absolute URI references validated for structure only; provider access and ownership checks require later adapters.
-- Marker files contain no credentials, tokens, private keys, URI user-info, or provider secrets.
+- Version 1 record homes are typed, absolute URI references validated for structure only; any syntactically valid URI is accepted regardless of scheme or credential-bearing components, and malformed ones warn. Provider access and ownership checks require later adapters.
+- Record-home URIs are accepted as untrusted data even when credential-bearing; adapters never dereference them and diagnostics never echo them. Later adapters own secret scanning.
+- Unregister uses the same operator-confirmation authority as registration; no adapter deletes a marker without a confirmed exact identity.
 
 ### Sources / Research
 
@@ -182,12 +194,13 @@ This section is the implementation boundary. An agent may choose details that ar
 - KTD1. **Deliver a runtime-neutral contract before an executable adapter** (session-settled: user-directed — chosen over selecting TypeScript or Python now: the user wants the portable boundary settled first). The active units produce schemas, protocol text, and fixtures; they do not claim working registration. **Supports R1-R14.**
 - KTD2. **Use `.workstream/workstream.json` as the assistant-neutral marker** (session-settled: user-directed — chosen over an Arjim-named path and a root-level marker: the namespace stays portable and extensible). **Supports R4, R10-R14.**
 - KTD3. **Version each portable contract surface independently with JSON Schema Draft 2020-12** (session-settled: user-approved — chosen over YAML or field-only prose: machine-readable schemas give runtimes one conformance target). The package release, marker schema, result schema, fixture schema, and protocol each carry an identifier; compatibility is explicit rather than inferred from one shared number. A reader dispatches on the marker version before applying its closed schema, so an unknown version is unsupported rather than malformed. **Supports R2, R5-R7, R9, R10, R14.**
-- KTD4. **Keep durable and device-local references separate.** Version 1 uses the literal workspace self-reference `.` and lexically locates the marker at `.workstream/workstream.json` below the inspected root. Absolute paths, traversal, symlink-resolved paths, and local link locations belong only in adapter state. **Supports R2, R9, R13, R14.**
-- KTD5. **Use open typed URI references as untrusted data.** Each record home carries a namespaced type token and absolute URI. Version 1 checks syntax and exact duplicate pairs, but validity never authorizes dereferencing; unsupported type/scheme pairs remain valid data with unsupported capability status. **Supports R2, R7-R9.**
+- KTD4. **Keep durable and device-local references separate.** Version 1 uses the literal workspace self-reference `.` and lexically locates the marker at `.workstream/workstream.json` below the inspected root. Absolute paths, traversal, symlink-resolved paths, and local link locations belong only in adapter state; the workspace reference never carries a device path. Record-home URIs are not workspace references and are accepted per KTD5. **Supports R2, R9, R13, R14.**
+- KTD5. **Use open typed URI references as untrusted data.** Each record home carries a namespaced type token and absolute URI. Version 1 accepts any syntactically well-formed URI regardless of scheme or credential-bearing components and warns on malformed URIs; validity never authorizes dereferencing. Unsupported type/scheme pairs remain valid data with unsupported capability status. **Supports R2, R7-R9.**
 - KTD6. **Bind single-use confirmation to a canonical semantic envelope** (session-settled: user-approved — chosen over conversational approval detached from content: changed data or target state must not inherit authority). The envelope includes contract versions, every parsed marker field in order, an adapter-supplied stable target handle, and observed marker absence. The adapter revalidates the same handle before writing and during read-back, and stops if it cannot establish that stability. Duplicate JSON keys are invalid; only property ordering and insignificant whitespace may change during serialization. Confirmation expires after any write attempt, reinspection, terminal transition, or marker-state change. **Supports R3, R4.**
 - KTD7. **Treat an existing supported marker as registration authority.** Linking reads it unchanged. Invalid, unsupported, ambiguous, or conflicting markers stop for operator resolution rather than repair or identity regeneration. **Supports R4, R9, R14.**
 - KTD8. **Make versioned conformance fixtures the portable test boundary.** Fixture and expectation schemas define inputs, observations, mandatory protocol assertions, and adapter-specific capability assertions. Every future adapter must pass the mandatory corpus before claiming protocol compliance. **Supports R1-R14.**
-- KTD9. **Bound and isolate untrusted marker data.** Version 1 limits marker bytes, JSON nesting depth, field lengths, and record-home count; rejects duplicate keys, controls, bidirectional overrides, URI user-info, and local-resource schemes; and treats labels and URIs as data rather than assistant instructions. Results use bounded structured diagnostics without raw marker bodies, full URIs, labels, secrets, or local paths. **Supports R8-R10.**
+- KTD9. **Bound and isolate untrusted marker data.** Version 1 limits marker bytes, JSON nesting depth, field lengths, and record-home count; rejects duplicate keys, controls, and bidirectional overrides; accepts any valid-looking record-home URI and warns on malformed ones; and treats labels and URIs as data rather than assistant instructions. Results use bounded structured diagnostics without raw marker bodies, full URIs, labels, secrets, or local paths. **Supports R8-R10.**
+- KTD10. **Unregister is a confirmed conditional delete that mirrors KTD6 with the presence precondition inverted.** Confirmation binds to the marker's exact identity, the stable target handle, and observed marker presence with that exact identity; the delete proceeds only if the marker still matches at write time, and completes only when read-back verifies absence. A changed marker, target, or identity invalidates confirmation and stops without deleting. **Supports R15, R16.**
 
 ### High-Level Technical Design
 
@@ -214,6 +227,7 @@ stateDiagram-v2
     Inspected --> Linked: supported marker exists
     Inspected --> Drafted: marker absent
     Inspected --> Stopped: invalid or inaccessible
+    Inspected --> Duplicate: distinct identities observed
     Drafted --> Cancelled: rejected
     Drafted --> Reinspect: draft or target changed
     Drafted --> Written: exact draft confirmed
@@ -223,6 +237,12 @@ stateDiagram-v2
     Registered --> RegisteredUnlinked: projection fails
     WrittenUnverified --> Reinspect: retry
     RegisteredUnlinked --> Linked: relink
+    Linked --> UnregisterDrafted: unregister requested
+    UnregisterDrafted --> Unregistered: delete verified absent
+    UnregisterDrafted --> UnregisterUnverified: read-back still present
+    UnregisterDrafted --> Stopped: marker or target changed
+    UnregisterUnverified --> Reinspect: retry
+    Duplicate --> UnregisterDrafted: operator directs one removed
     Reinspect --> Inspected: inspect again
 ```
 
@@ -248,6 +268,7 @@ tests/
       raw/
       valid/
       invalid/
+      warn/
       transitions/
 ```
 
@@ -264,20 +285,20 @@ The dependency graph is `U5 -> U1 -> U2 -> U3 -> U4`. U5 is a prerequisite for e
 ### Risks & Dependencies
 
 - **Contract without executable proof:** A malformed schema or contradictory fixture can survive manual review. Mitigation: keep one expectation manifest, require every fixture to declare its expected result, and make runtime selection include choosing a standards-compliant validator.
-- **Path portability:** Persisting local absolute paths would break cross-device identity. Mitigation: fixtures reject device paths in the marker and reserve them for local projection examples.
+- **Path portability:** Persisting local absolute paths in the workspace reference would break cross-device identity. Mitigation: fixtures reject device paths in the workspace reference and reserve them for local projection examples; record-home URIs may be local-resource but remain untrusted, non-dereferenceable data.
 - **Resource exhaustion:** A shared marker can be hostile before schema validation. Mitigation: KTD9 sets pre-parse and collection bounds, and fixtures cover exact-limit and over-limit inputs.
-- **URI overclaim:** Structural validity does not prove access, ownership, or safety. Mitigation: KTD5 prohibits automatic dereference and distinguishes `not-checked`, `unsupported`, and inaccessible states.
-- **Secret leakage:** URI syntax can hide credentials. Mitigation: KTD9 rejects obvious carriers and prevents diagnostics from echoing sensitive values; later adapters still own secret scanning.
+- **URI overclaim:** Structural validity does not prove access, ownership, or safety. Mitigation: KTD5 prohibits automatic dereference, warns on malformed URIs, and distinguishes `not-checked`, `unsupported`, and inaccessible states.
+- **Secret leakage:** URI syntax can hide credentials. Mitigation: KTD9 accepts credential-bearing URIs as untrusted data instead of rejecting them, never echoes sensitive values in diagnostics, and warns on malformed ones; later adapters still own secret scanning.
 - **Schema lock-in:** A closed provider enum would force schema changes for every integration. Mitigation: keep record-home type tokens open and version behavior, not providers.
 
 ### System-Wide Impact
 
 - **Source control and sync:** The marker may be shared through the workspace's normal storage, but the contract does not require committing it to version control. Ignore, backup, and sync policy stays with the workspace owner.
-- **Moves and aliases:** The marker identity survives a workspace move. Device-local links may become stale and must be repaired without editing the marker. Simultaneously available copies of one identity are reported as a collision, not resolved from local cache authority.
-- **Concurrent assistants:** Readers may trust only a valid supported marker. Writers must use the KTD6 precondition and create-only rule; a concurrently created marker wins authority and invalidates the draft.
-- **Lifecycle changes:** Version 1 registration adapters do not edit, upgrade, relocate, or delete existing markers. Label mutation fixtures prove identity invariance only; update and unregistration protocols require separate authority and conflict rules.
+- **Moves and aliases:** The marker identity survives a workspace move. Device-local links may become stale and must be repaired without editing the marker. Simultaneously available copies of one identity are reported as a `duplicate-registration` outcome, resolved by operator-directed unregister, not from local cache authority.
+- **Concurrent assistants:** Readers may trust only a valid supported marker. Writers must use the KTD6 precondition and create-only rule; a concurrently created marker wins authority and invalidates the draft. Unregisters must use the KTD10 conditional-delete rule; a concurrently changed or recreated marker stops the delete.
+- **Lifecycle changes:** Version 1 registration adapters do not edit, upgrade, or relocate existing markers. Deletion is supported only through the confirmed conditional unregister protocol (KTD10) and reports `unregistered` on verified absence. Label mutation fixtures prove identity invariance only; update and upgrade protocols require separate authority and conflict rules.
 - **Schema upgrades:** Future marker versions remain recognizable but unsupported until an adapter declares compatibility. No adapter may rewrite an unsupported marker during registration.
-- **Projection rebuilds:** Deleting local routing state never unregisters a workstream. Re-linking begins from the marker and may surface missing, moved, duplicated, or inaccessible workspaces.
+- **Projection rebuilds:** Deleting local routing state never unregisters a workstream. Re-linking begins from the marker and may surface missing, moved, duplicated, or inaccessible workspaces; a surfaced duplicate stops for operator-directed unregister.
 
 ---
 
@@ -294,13 +315,14 @@ The dependency graph is `U5 -> U1 -> U2 -> U3 -> U4`. U5 is a prerequisite for e
   - Create `contracts/workstream-registration/v1/conformance-case.schema.json`.
   - Create `contracts/workstream-registration/v1/expectations.schema.json`.
   - Create `tests/contracts/workstream-registration/expectations.json` with package and fixture-format versions.
-- **Approach:** Separate parsed-value cases from raw-byte cases. Raw cases carry base64-encoded input inside valid JSON envelopes; expectations identify the stage and outcome without treating the decoded payload as a JSON document. Define which assertions are mandatory protocol conformance and which are runtime capability checks.
+- **Approach:** Separate parsed-value cases from raw-byte cases. Raw cases carry base64-encoded input inside valid JSON envelopes; expectations identify the stage and outcome without treating the decoded payload as a JSON document. Define which assertions are mandatory protocol conformance, which are runtime capability checks, and which observations are non-blocking warnings (valid marker, warned record home).
 - **Patterns to follow:** Independent version ownership in KTD3 and portable fixture authority in KTD8.
 - **Test scenarios:**
   1. A parsed-value envelope identifies its input object and expected schema outcome.
   2. A raw-byte envelope identifies its base64 payload and expected pre-parse outcome.
   3. An expectation with an unknown fixture path, duplicate path, unsupported fixture-format version, or missing expected stage is invalid.
-  4. Mandatory protocol assertions remain separate from runtime-specific capability assertions.
+   4. Mandatory protocol assertions remain separate from runtime-specific capability assertions.
+   5. A warning expectation is distinct from a failure expectation; both are mandatory outcomes, and a fixture can be valid-with-warnings.
 - **Verification:** The envelope and expectation schemas are closed, versioned, and sufficient to describe every fixture planned by U1-U3 without forward invention.
 
 ### U1. Define the version 1 marker contract
@@ -308,28 +330,31 @@ The dependency graph is `U5 -> U1 -> U2 -> U3 -> U4`. U5 is a prerequisite for e
 **Execution position:** Second, after U5.
 
 - **Goal:** Establish the canonical marker schema and assistant-neutral durable data boundary.
-- **Requirements:** R2, R5-R7, R10, R14; KTD2-KTD5, KTD9.
+- **Requirements:** R2, R5-R7, R10, R14; KTD2-KTD5, KTD9, KTD10.
 - **Dependencies:** U5.
 - **Files:**
   - Create `contracts/workstream-registration/v1/workstream.schema.json`.
   - Create `tests/contracts/workstream-registration/valid/folder.json`.
   - Create `tests/contracts/workstream-registration/valid/proxy.json`.
   - Create `tests/contracts/workstream-registration/valid/label-changed-same-id.json`.
-  - Create `tests/contracts/workstream-registration/invalid/` fixtures for missing fields, unknown fields, malformed identity, invalid kind, local path leakage, duplicate record homes, relative record-home URI, and URI user-info.
+  - Create `tests/contracts/workstream-registration/invalid/` fixtures for missing fields, unknown fields, malformed identity, invalid kind, device-path leakage in the workspace reference, and duplicate record homes.
+  - Create `tests/contracts/workstream-registration/warn/` fixtures for malformed record-home URIs, URI user-info, signed-URL tokens, and local-resource schemes; each warns without invalidating the marker.
   - Create `tests/contracts/workstream-registration/raw/` envelopes for invalid UTF-8, duplicate keys, byte-order marks, trailing content, and nesting-depth limits.
-- **Approach:** Define a versioned closed object with a lowercase UUID identity, bounded label, `folder|proxy` kind, literal `.` workspace reference, and bounded typed absolute record-home URIs. Set a 64 KiB UTF-8 pre-parse ceiling, a maximum JSON nesting depth of 8 containers, a 256-character label limit, 64-character ASCII type-token limit, 2,048-character URI limit, and 32-record-home limit. Keep property order and formatting non-normative.
+- **Approach:** Define a versioned closed object with a lowercase UUID identity, bounded label, `folder|proxy` kind, literal `.` workspace reference, and bounded typed absolute record-home URIs. Set a 64 KiB UTF-8 pre-parse ceiling, a maximum JSON nesting depth of 8 containers, a 256-character label limit, 64-character ASCII type-token limit, 2,048-character URI limit, and 32-record-home limit. Keep property order and formatting non-normative. Record-home validity is syntactic only: any URI that parses is accepted regardless of scheme or credential-bearing components; a URI that fails to parse produces a structured warning and the affected record home reports non-dereferenceable capability. Diagnostics never echo full URIs, labels, or secrets.
 - **Patterns to follow:** Stable IDs and authority language in this plan; sensitive-data boundary in `VISION.md`.
 - **Test scenarios:**
   1. Covers AE1. A folder marker with every required field validates.
   2. Covers AE3. A proxy marker validates while retaining real-system record-home URIs.
   3. Covers AE6. Two valid markers with different labels retain the same identity.
-  4. A marker missing each required field fails with that fixture's expected schema outcome.
-  5. A marker with an unknown property, malformed UUID, unsupported kind, or empty label fails.
-  6. A marker containing an absolute or traversing workspace reference, relative or local-resource record-home URI, duplicate type/URI pair, URI user-info, controls, backslashes, or bidirectional overrides fails.
-  7. Exact-limit inputs validate; one-over-limit marker bytes, labels, type tokens, URIs, and record-home collections fail with the expected category.
-  8. Base64-backed raw envelopes prove duplicate keys, invalid UTF-8, a byte-order mark, and trailing JSON fail before schema validity is considered.
-  9. Raw inputs at nesting depth 8 reach normal validation; depth 9 stops before schema validation.
-  10. An instruction-like but otherwise valid label remains data and does not change its expected protocol outcome.
+   4. A marker missing each required field fails with that fixture's expected schema outcome.
+   5. A marker with an unknown property, malformed UUID, unsupported kind, or empty label fails.
+   6. A marker containing an absolute or traversing workspace reference, duplicate type/URI pair, controls, backslashes, or bidirectional overrides fails.
+   7. Exact-limit inputs validate; one-over-limit marker bytes, labels, type tokens, URIs, and record-home collections fail with the expected category.
+   8. Base64-backed raw envelopes prove duplicate keys, invalid UTF-8, a byte-order mark, and trailing JSON fail before schema validity is considered.
+   9. Raw inputs at nesting depth 8 reach normal validation; depth 9 stops before schema validation.
+   10. An instruction-like but otherwise valid label remains data and does not change its expected protocol outcome.
+   11. Covers AE10. A record home with URI user-info, a signed-URL token, a local-resource scheme, or an unsupported type remains a valid marker whose record home reports non-dereferenceable capability with a warning.
+   12. Covers AE10. A record home whose URI fails to parse produces a warning and non-dereferenceable capability, but the marker remains valid; a marker with both a malformed record home and a structural defect is invalid for the structural defect only.
 - **Verification:** Every fixture is valid JSON, appears once in the expectations manifest created by U5, and has an unambiguous expected validity result.
 
 ### U2. Specify registration states and authority transitions
@@ -337,7 +362,7 @@ The dependency graph is `U5 -> U1 -> U2 -> U3 -> U4`. U5 is a prerequisite for e
 **Execution position:** Third, after U5 and U1.
 
 - **Goal:** Define how any adapter inspects, drafts, confirms, writes, reads back, links, retries, and stops without changing product authority.
-- **Requirements:** R1, R3, R4, R8-R10, R13, R14; F1-F5; KTD1, KTD6, KTD7.
+- **Requirements:** R1, R3, R4, R8-R10, R13-R16; F1-F6; KTD1, KTD6, KTD7, KTD10.
 - **Dependencies:** U5, U1.
 - **Files:**
   - Create `contracts/workstream-registration/v1/registration-protocol.md`.
@@ -346,7 +371,9 @@ The dependency graph is `U5 -> U1 -> U2 -> U3 -> U4`. U5 is a prerequisite for e
   - Create `tests/contracts/workstream-registration/transitions/rejected-draft.json`.
   - Create `tests/contracts/workstream-registration/transitions/stale-confirmation.json`.
   - Create `tests/contracts/workstream-registration/transitions/registered-unlinked.json`.
-- **Approach:** Make read-only inspection, canonical confirmation-envelope comparison, create-only write, authoritative read-back, and replaceable linking separate protocol stages. Anchor inspection, write, and read-back to the same stable target handle; reject redirected marker-path components and stop when equivalent target stability cannot be established. Define retries by observed marker state so a successful write followed by failure recovers the existing identity. Treat local identity conflicts as blocking evidence only when both marker locations are currently readable; stale projection data remains advisory.
+  - Create `tests/contracts/workstream-registration/transitions/unregister-confirmed.json`.
+  - Create `tests/contracts/workstream-registration/transitions/duplicate-registration.json`.
+- **Approach:** Make read-only inspection, canonical confirmation-envelope comparison, create-only write, confirmed conditional delete, authoritative read-back, and replaceable linking separate protocol stages. Anchor inspection, write, delete, and read-back to the same stable target handle; reject redirected marker-path components and stop when equivalent target stability cannot be established. Define retries by observed marker state so a successful write followed by failure recovers the existing identity, and a successful delete followed by failed read-back enters a visible recovery state. Treat local identity conflicts as blocking evidence only when both marker locations are currently readable; stale projection data remains advisory. Unregister mirrors KTD6's envelope with the presence precondition inverted; a `duplicate-registration` outcome stops for operator-directed unregister and never auto-resolves or regenerates identity.
 - **Execution note:** Start from the transition fixtures so protocol prose cannot omit a terminal or recovery state.
 - **Patterns to follow:** The authority levels and unknown-state rules in `VISION.md`; KTD6-KTD7.
 - **Test scenarios:**
@@ -362,6 +389,11 @@ The dependency graph is `U5 -> U1 -> U2 -> U3 -> U4`. U5 is a prerequisite for e
   10. An unknown record-home type or scheme is never dereferenced and reports unsupported capability.
   11. A parent-component swap or final-marker swap between inspection and write fails target revalidation; read-back from a different target cannot verify registration.
   12. Confirmation cannot be reused after a write attempt, reinspection, terminal outcome, or an absent-present-absent marker sequence.
+  13. Covers AE8. A confirmed unregister deletes the marker, verifies absence by read-back, and reports `unregistered`.
+  14. Covers AE9. Two distinct valid identities for one workspace report `duplicate-registration` and stop for operator-directed resolution.
+  15. A conditional delete fails without deleting when the marker, target, or identity changed since confirmation, or the marker is already absent.
+  16. Identical marker copies that share one identity are linked normally and never reported as `duplicate-registration`.
+  17. Unregister confirmation cannot be reused after a delete attempt, reinspection, terminal outcome, or a present-absent-present marker sequence.
 - **Verification:** Every state has defined entry conditions, allowed transitions, side effects, terminal outcomes, and retry behavior; no transition writes before exact confirmation.
 
 ### U3. Define portable results and conformance expectations
@@ -369,22 +401,25 @@ The dependency graph is `U5 -> U1 -> U2 -> U3 -> U4`. U5 is a prerequisite for e
 **Execution position:** Fourth, after U5, U1, and U2.
 
 - **Goal:** Give adapters one result vocabulary and one machine-readable fixture index.
-- **Requirements:** R3, R4, R8-R10, R13; KTD8, KTD9.
+- **Requirements:** R3, R4, R8-R10, R13, R15, R16; KTD8, KTD9, KTD10.
 - **Dependencies:** U5, U1, U2.
 - **Files:**
   - Create `contracts/workstream-registration/v1/registration-result.schema.json`.
-  - Add result fixtures under `tests/contracts/workstream-registration/transitions/` for registered, linked-existing, cancelled, stopped, and written-unverified outcomes; reuse `registered-unlinked.json` from U2 for that result expectation.
+  - Add result fixtures under `tests/contracts/workstream-registration/transitions/` for registered, linked-existing, cancelled, stopped, written-unverified, unregistered, and duplicate-registration outcomes; reuse `registered-unlinked.json` from U2 for that result expectation.
 - **Approach:** Define a closed bounded envelope that separates protocol outcome, marker validity, observed write/read-back/link effects, verified identity, capability status, and structured adapter diagnostics. Invalid or unsupported markers cannot promote their claimed values to authoritative results. Complete the U5 expectation manifest with every result and transition case.
 - **Patterns to follow:** `VISION.md` distinctions between current, unavailable, unsupported, and not checked.
 - **Test scenarios:**
   1. A successful new registration reports marker write, read-back, and link separately.
   2. Existing-marker linking reports the durable identity without claiming a write.
   3. Missing, unreadable, unwritable, invalid, unsupported, and conflicting inputs remain distinct.
-  4. Record-home checks can report `not-checked` without making a structurally valid marker invalid.
+   4. Record-home checks can report `not-checked` without making a structurally valid marker invalid; malformed, unsupported, or credential-bearing record homes warn and report non-dereferenceable capability without invalidating the marker.
   5. Written-unverified and registered-unlinked results expose partial success without rollback or false completion.
   6. Every schema and transition fixture has exactly one expected outcome in the manifest.
   7. Contradictory combinations fail, including registered without matching read-back, linked after an invalid marker, or a write on the existing-marker path.
   8. Diagnostics reject raw markers, full URIs, labels, secrets, local paths, oversized messages, and unbounded collections.
+  9. An `unregistered` result reports the deleted identity and verified absence without claiming a write.
+  10. A `duplicate-registration` result reports both distinct verified identities and stops without auto-resolution, write, or regeneration.
+  11. A result can carry bounded non-blocking warnings for malformed or credential-bearing record homes while remaining a valid outcome; warnings never echo raw URIs, labels, secrets, or local paths.
 - **Verification:** The result schema can represent every protocol terminal state, and the expectation manifest has no missing, duplicate, or orphan fixture entries.
 
 ### U4. Publish adapter and conformance guidance
@@ -392,13 +427,13 @@ The dependency graph is `U5 -> U1 -> U2 -> U3 -> U4`. U5 is a prerequisite for e
 **Execution position:** Last, after U5 and U1-U3.
 
 - **Goal:** Make the contract usable by a later runtime without allowing it to weaken authority, portability, or verification rules.
-- **Requirements:** R1-R14; KTD1-KTD9.
+- **Requirements:** R1-R16; KTD1-KTD10.
 - **Dependencies:** U5, U1-U3.
 - **Files:**
   - Create `contracts/workstream-registration/README.md`.
   - Create `contracts/workstream-registration/v1/compatibility.md`.
   - Update `README.md`.
-- **Approach:** Document independent contract versions, compatibility, marker discovery, untrusted-data handling, adapter obligations, and the active/deferred boundary. Define the Draft 2020-12 validation profile and assign checks that cannot be expressed portably in JSON Schema to the protocol. State that an adapter is not compliant until it passes every mandatory fixture plus runtime-specific filesystem and interruption tests.
+- **Approach:** Document independent contract versions, compatibility, marker discovery, untrusted-data handling, adapter obligations (including confirmed conditional unregister and duplicate handling), and the active/deferred boundary. Define the Draft 2020-12 validation profile and assign checks that cannot be expressed portably in JSON Schema to the protocol. State that an adapter is not compliant until it passes every mandatory fixture plus runtime-specific filesystem, delete, and interruption tests.
 - **Patterns to follow:** Plain-language product boundaries in `README.md` and `VISION.md`.
 - **Test scenarios:** Test expectation: none -- documentation-only unit.
 - **Verification:** A new implementer can identify the authoritative schemas, protocol, fixture manifest, compliance bar, and deferred runtime work without reading this planning artifact.
@@ -418,7 +453,7 @@ The repository has no selected runtime, package manifest, or test runner. This d
 | Fixture inventory | U5, U1-U3 | The expectation manifest has no duplicate, missing, or orphan paths. |
 | Traceability | U4 | Adapter guidance cites the schemas, protocol, fixtures, and deferred runtime gates. |
 
-When a runtime is selected, its first delivery must declare compatibility with the contract's Draft 2020-12 validation profile, execute every mandatory fixture, and add integration tests for real folders, permissions, create-only conflicts, target swaps, read-back failure, interruption recovery, and local relinking.
+When a runtime is selected, its first delivery must declare compatibility with the contract's Draft 2020-12 validation profile, execute every mandatory fixture, and add integration tests for real folders, permissions, create-only conflicts, confirmed conditional deletes, duplicate-registration resolution, target swaps, read-back failure, interruption recovery, and local relinking.
 
 ---
 
@@ -427,9 +462,10 @@ When a runtime is selected, its first delivery must declare compatibility with t
 - The marker, result, and protocol contracts agree on field names, states, and authority boundaries.
 - Every active requirement is cited by at least one implementation unit and covered by a fixture, protocol rule, or documentation obligation.
 - Valid, invalid, and transition fixtures cover all acceptance examples that can be proved without a runtime.
-- Durable marker data contains no device-local paths or credential fields.
-- Existing markers, retries, partial success, and identity conflicts cannot cause silent overwrite or identity regeneration under the protocol.
+- Durable marker data keeps the workspace reference literal (never a device path) and rejects dedicated credential fields; record-home URIs are accepted as untrusted data that is never dereferenced or echoed.
+- Existing markers, retries, partial success, and identity conflicts cannot cause silent overwrite, silent delete, or identity regeneration under the protocol.
 - The local projection is described only as replaceable routing state.
+- Unregister requires operator confirmation of the exact identity and verifies absence by read-back; duplicates never auto-resolve.
 - The README states plainly that the contract exists but working point-and-read registration remains deferred.
 - External-research unavailability is not presented as standards validation.
 - Reviewable gates are not presented as executable schema or protocol proof.
@@ -448,10 +484,10 @@ This contract is the dependency for a future point-and-read adapter and later ro
 
 ### From 2026-08-01 review
 
-- **URI validity and secret policy conflict** — Record-home contract (P1, feasibility and security-lens, confidence 75)
+- **URI validity and secret policy conflict is resolved** — Record-home contract (P1, feasibility and security-lens, confidence 75)
 
-  Adapters may disagree on marker validity, and a structurally valid marker may persist a signed URL or token. Decide which URI schemes and credential-bearing components version 1 rejects while keeping unsupported provider types valid but non-dereferenceable.
+  Adapters may disagree on marker validity, and a structurally valid marker may persist a signed URL or token. **Resolved (2026-08-01):** version 1 accepts any syntactically valid record-home URI regardless of scheme or credential-bearing components; malformed URIs warn without invalidating the marker (KD10, KTD5, KTD9). Unsupported providers remain valid data with non-dereferenceable capability, diagnostics never echo URIs, labels, or secrets, and adapters own secret scanning.
 
-- **Create-only consistency domain is unresolved** — System-Wide Impact (P1, adversarial, confidence 75)
+- **Create-only consistency domain is resolved** — System-Wide Impact (P1, adversarial, confidence 75)
 
-  Separately synchronized workspace copies can each create a marker and later reveal competing permanent identities. Decide whether version 1 requires strongly consistent exclusive creation or permits weaker storage with an explicit unresolved-collision outcome.
+  Separately synchronized workspace copies can each create a marker and later reveal competing permanent identities. **Resolved (2026-08-01):** version 1 permits weaker storage — it does not require strongly consistent exclusive creation — and surfaces distinct identities as a `duplicate-registration` outcome that stops for operator-directed unregister (R15, R16; KTD10). Identical marker copies sharing one identity remain valid markers and are not duplicates.
