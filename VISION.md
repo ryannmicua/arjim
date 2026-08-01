@@ -1,8 +1,8 @@
-# Arjim Product Vision and Desired Outcomes
+# Arjim: What I Want It to Become
 
 Date: 2026-08-01
 
-Status: This document defines what I want Arjim to become and the outcomes I expect from it. It sets the direction, not the implementation plan.
+Status: This document says what I want Arjim to become and what I expect it to do. It sets the direction, not the implementation plan.
 
 ## Vision
 
@@ -14,11 +14,11 @@ The goal is simple: I can rely on Arjim to run my workstreams, keep me informed,
 
 I do not want another dashboard or system that I have to maintain. I want an assistant that understands how my work is organized, brings the right things to me, and becomes more useful as I trust it with more responsibility.
 
-**Workstream** is the user-facing term for any bounded body of work Arjim manages. It includes projects, recurring responsibilities, operational processes, shared initiatives, and other ongoing work.
+**Workstream** means anything I want Arjim to manage as one unit. It can be a project, recurring responsibility, operational process, shared initiative, or other ongoing work.
 
-**Workspace** is the durable record environment for a workstream. It may include files and connected systems such as Planner, SharePoint, email, or a repository. The workspace identifies where each authoritative record lives.
+**Workspace** is where a workstream keeps its lasting records. It may include files and connected systems such as Planner, SharePoint, email, or a repository. It tells Arjim where each authoritative record lives.
 
-A workstream is in scope once it is registered with Arjim and its workspace and authoritative record homes are identified.
+Arjim is responsible for a workstream once it is registered and Arjim knows its workspace and authoritative record homes.
 
 ## Near-term promise
 
@@ -28,28 +28,28 @@ This comes before broader automation. Arjim should earn my trust through reliabl
 
 ## How the outcomes fit together
 
-I want the outcomes pursued in this order:
+I want the work done in this order:
 
-1. **Primary outcome: trustworthy awareness.** Outcome 2 owns items that require my action. Outcome 4 owns portfolio status and change reporting. Together, they define the first useful product.
-2. **Non-negotiable constraint: durable workstream memory.** Arjim never becomes the only home for important workstream facts. Outcome 3 applies to everything Arjim does.
-3. **Expansion outcome: managed action.** Arjim gradually takes responsibility for workstream administration and official filing. Outcome 1 follows only after awareness is trustworthy.
-4. **Scale outcomes: work anywhere and with others.** Arjim gives answers backed by authoritative records across devices and communicates and coordinates safely with other assistants. Outcomes 5 and 6 extend proven behavior; they do not come before it.
+1. **Start with trustworthy awareness.** Outcome 2 covers items that require my action. Outcome 4 covers status and changes across my workstreams. Together, they make Arjim useful to me.
+2. **Never compromise workstream memory.** Arjim must never become the only home for important workstream facts. This rule applies to everything it does.
+3. **Then let Arjim take on the admin.** Arjim can gradually handle workstream administration and official filing. I only want Outcome 1 after I can trust its awareness.
+4. **Then make it work anywhere and with others.** Arjim can give answers backed by authoritative records across devices and coordinate safely with other assistants. I only want Outcomes 5 and 6 after the underlying behavior is reliable.
 
-When priorities conflict, I want us to protect trust first, then improve awareness, then add action, then expand reach.
+When priorities conflict, protect trust first. Then improve awareness, add action, and expand where Arjim can work.
 
 ## 1. Arjim runs my workstreams for me
 
-Arjim manages the administrative lifecycle of a registered workstream: create it, check its management status, change its location or ownership when authorized, and close it. I should not have to open a different app for each administrative step.
+Arjim handles the management side of a registered workstream: set it up, check its status, change its location or ownership when authorized, and close it. I should not have to open a different app for each step.
 
 When a decision or approval needs to be official, Arjim files it in the workstream's designated record home, such as Planner, SharePoint, or email.
 
 **Why I want this:** Today I mentally track which tool holds each workstream. Managing work across several places adds overhead to everything I manage.
 
-**What changes for me:** I have one digital assistant managing workstream administration. The authoritative records remain in the workspace, but I no longer have to manage their locations myself.
+**What changes for me:** I have one digital assistant handling workstream administration. The authoritative records remain in the workspace, but I no longer have to manage their locations myself.
 
 **Boundary:** This outcome covers workstream management and filing. It does not mean Arjim performs the workstream's delivery work.
 
-**Direction:** This is the long-term outcome. Arjim gains write authority gradually and only after its read, recommendation, and confirmation behavior is trustworthy.
+**Direction:** This is the long-term outcome. Arjim gets permission to write gradually and only after I can trust how it reads, recommends, and asks for confirmation.
 
 ## 2. Arjim brings things to me instead of me chasing them
 
@@ -79,7 +79,7 @@ Arjim may keep a working copy, but it is never the only home for information I n
 
 Arjim tells me how my workstreams are going without waiting for me to ask.
 
-It gives me portfolio-level status: which workstreams are active, where each workstream stands, what changed since the last successful check, and which record homes could not be checked.
+It gives me one management view: which workstreams are active, where each one stands, what changed since the last successful check, and which record homes could not be checked.
 
 **Why I want this:** Today, asking "how is it going?" means opening each workstream. I do not always remember what is active.
 
@@ -107,9 +107,9 @@ This is a later outcome. The cross-device mechanism is not designed yet.
 
 ## 6. Arjim communicates and coordinates with other people's digital assistants
 
-Other people may use their own digital assistants on the same workstreams. Their assistants and Arjim may communicate directly, similar to human operators. They can exchange status, request action, coordinate timing, clarify ownership, and hand work to one another.
+Other people may use their own digital assistants on the same workstreams. Their assistants and Arjim can communicate directly, much like human operators. They can share status, request action, coordinate timing, clarify ownership, and hand work to one another.
 
-Direct communication helps the assistants coordinate, but it does not replace the workspace. Any accepted decision, approval, commitment, handoff, or change that must persist is recorded in the workstream's designated authoritative record home.
+Direct communication helps the assistants coordinate, but it does not replace the workspace. Any decision, approval, commitment, handoff, or change that needs to last must be recorded in the workstream's designated authoritative record home.
 
 Each assistant keeps its own working copy. The workspace and its designated record homes remain the durable source of truth. No assistant cache or conversation transcript becomes authoritative by itself.
 
@@ -117,7 +117,7 @@ Each assistant keeps its own working copy. The workspace and its designated reco
 
 **What changes for me:** Shared workstreams behave like shared workstreams. Our assistants coordinate directly when useful, while accepted outcomes remain visible, attributable, and durable in the workspace.
 
-**Boundary:** Direct assistant communication coordinates work; it does not authorize a change or preserve the final record. Authority comes from the responsible operator and the workstream's rules. Durability comes from recording the accepted outcome in the workspace.
+**Boundary:** Direct assistant communication helps move the work. It does not authorize a change or preserve the final record by itself. Permission comes from the responsible operator and the workstream's rules. The accepted outcome lasts because it is recorded in the workspace.
 
 ## Conditions of trust
 
@@ -142,7 +142,7 @@ A check is complete only when every required record home for that answer was che
 
 Reading, recommending, drafting, and committing are different levels of authority.
 
-Arjim must know which level it has before it acts. It asks for confirmation when required and does not treat a cached observation as permission to change an authoritative record.
+Arjim must know which level it has before it acts. It asks me when confirmation is required and never treats something in its cache as permission to change an authoritative record.
 
 ### 3. Shared changes are safe and attributable
 
@@ -166,7 +166,7 @@ Arjim uses the least access needed for the work and keeps private information ou
 
 I should be able to see that Arjim is reducing management work without hiding uncertainty or creating unsafe actions. These tests make that visible.
 
-Before automation begins, the first pilot records 30 days of current workstream-management behavior. It then works toward these initial targets:
+Before automation begins, the first pilot records how I currently manage my workstreams for 30 days. It then works toward these targets:
 
 ### Awareness and coverage
 
@@ -200,17 +200,17 @@ Before automation begins, the first pilot records 30 days of current workstream-
 - Two assistants can exchange a request or handoff, record the accepted outcome in the workspace, and recover that outcome later without relying on the conversation transcript.
 - A change made through another assistant appears after the next successful check of its authoritative record home and remains attributable to the responsible operator and acting assistant.
 
-These are initial acceptance targets, not permanent service levels. They should be revised after the pilot establishes normal usage, record-home limitations, and realistic freshness windows.
+These are starting targets, not permanent promises. After the pilot, adjust them based on how I actually work, the limits of each record home, and realistic freshness windows.
 
 ## How to use this vision
 
 Any new work should answer three questions:
 
-1. Which level of the outcome hierarchy does this improve?
-2. How does it preserve the conditions of trust?
-3. Which success measure will show that it worked?
+1. Which outcome will this make real for me?
+2. What could this make less trustworthy?
+3. How will I know it reduced my work?
 
-A technical foundation may support several outcomes without delivering any of them by itself. Plans should state that difference clearly.
+A technical foundation may support several outcomes without giving me any of them yet. Plans should say that clearly.
 
 ## In one line
 
