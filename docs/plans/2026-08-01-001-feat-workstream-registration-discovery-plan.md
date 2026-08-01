@@ -178,8 +178,7 @@ The requirements below define observable product behavior. The technical decisio
 - `VISION.md` — product authority for durable memory, access honesty, authority, and rebuildability.
 - `docs/ideation/2026-08-01-arjim-improvement-ideation.md` — registration idea and surrounding work relationships.
 - `README.md` — confirms the repository is planning-only with no selected stack or test tooling; now superseded by the runtime resolution below.
-- No `docs/solutions/` corpus or implementation precedent exists yet.
-- `docs/research/2026-08-01-workstream-registration-runtime-stack.md` — the runtime and Draft 2020-12 validation-stack assessment this plan's KTDs adopt: it recommends CPython 3.14.x + `jsonschema` 4.26.x with `Draft202012Validator`, an adapter-owned bounded raw-input guard, normalized redacted diagnostics, exclusive-create plus read-back filesystem lifecycle, cooperative-lock conditional delete, and `sqlite3` for the local projection. It also fixes the raw limits (64 KiB UTF-8, depth 8, label 256, type 64, URI 2,048, 32 homes), the `Bidi_Control` prohibited set, the requirement to bundle schemas and block network `$ref`, the keep-format-assertion-disabled rule, and the mandatory conformance checks (contract corpus, official JSON Schema Test Suite, Bowtie). Its primary-source citations [S1]-[S30] back the load-bearing claims in the KTDs.
+- `docs/solutions/tooling-decisions/runtime-validation-stack-python-jsonschema.md` — the adopted runtime and Draft 2020-12 validation-stack decision this plan's KTDs follow: CPython 3.14.x + `jsonschema` 4.26.x with `Draft202012Validator`, the bounded raw-input guard, normalized redacted diagnostics, exclusive-create plus read-back lifecycle, cooperative-lock conditional delete, and `sqlite3` projection (KTD11-KTD14). It records the raw limits (64 KiB UTF-8, depth 8, label 256, type 64, URI 2,048, 32 homes), the `Bidi_Control` prohibited set, the bundle-schemas-and-block-network-`$ref` rule, keep-format-assertion-disabled, and the mandatory conformance checks (contract corpus, official JSON Schema Test Suite, Bowtie).
 
 ---
 
@@ -528,7 +527,7 @@ These units build the reference adapter on the resolved runtime (KTD11). They co
   - Create `src/workstream_registration/` package skeleton and `tests/adapters/python/` test tree.
   - Create `src/workstream_registration/conformance_runner.py` skeleton that can load the U5 expectation manifest and run zero fixtures.
 - **Approach:** Pin exact patch versions and record the resolved versions in the compatibility declaration. Require a CPython build that includes stdlib `sqlite3`. Keep network `$ref` resolution off by default and bundle schema loading paths for the later validation unit. Establish the test command that the verification contract will use.
-- **Patterns to follow:** KTD11 pinning discipline; the research's common runner sequence.
+- **Patterns to follow:** KTD11 pinning discipline; the runtime decision's fixture-runner guidance.
 - **Test scenarios:**
   1. `pyproject.toml` resolves against the pinned versions and the project installs in editable mode.
   2. The conformance runner loads the expectation manifest and reports zero fixtures with a defined exit code.
@@ -547,7 +546,7 @@ These units build the reference adapter on the resolved runtime (KTD11). They co
   - Create `src/workstream_registration/raw_guard.py`.
   - Create `tests/adapters/python/test_raw_guard.py`.
 - **Approach:** Bound the read to 65,537 bytes so an allowed 65,536-byte input is distinguishable from an oversized one. Decode strictly as UTF-8; do not feed raw bytes to `json.loads` because it can auto-detect UTF-16/UTF-32. Use a token-aware scanner to enforce container depth 8 while ignoring braces/brackets inside strings. Configure the decoder with a duplicate-preserving `object_pairs_hook` and a `parse_constant` that rejects `NaN`, `Infinity`, and `-Infinity`. Post-decode, scan string names and values against the fixture-defined prohibited controls and `Bidi_Control` set.
-- **Patterns to follow:** KTD12; the research's raw-input pipeline ordering.
+- **Patterns to follow:** KTD12; the runtime decision's raw-input pipeline ordering.
 - **Test scenarios:**
   1. A 65,536-byte input passes; a 65,537-byte input fails with the over-limit code.
   2. Malformed UTF-8 and UTF-16/UTF-32 bytes are rejected, not silently replaced or auto-detected.
@@ -570,7 +569,7 @@ These units build the reference adapter on the resolved runtime (KTD11). They co
   - Create `src/workstream_registration/validation.py` and `src/workstream_registration/diagnostics.py`.
   - Create `tests/adapters/python/test_validation.py` and `tests/adapters/python/test_diagnostics.py`.
 - **Approach:** Explicitly instantiate `Draft202012Validator`; never rely on an implicit latest-draft default. Bundle the contract schemas and the Draft 2020-12 meta-schemas under the package, load them from the package path only, and disable any network `$ref` retrieval. Keep generic `format` assertion disabled. Map `ValidationError` structural fields (validator, bounded safe path, phase) into the versioned diagnostic vocabulary; never pass through native messages, instance values, property names, URIs, labels, secrets, snippets, or local paths. Enforce diagnostic count and serialized-size caps.
-- **Patterns to follow:** KTD3 dialect selection; KTD13 normalization; the research's no-echo rule.
+- **Patterns to follow:** KTD3 dialect selection; KTD13 normalization; the runtime decision's no-echo rule.
 - **Test scenarios:**
   1. A valid folder and proxy marker validate and yield the expected identity.
   2. Unknown properties at every closed-object level fail; unsupported marker versions report unsupported rather than malformed.
@@ -591,7 +590,7 @@ These units build the reference adapter on the resolved runtime (KTD11). They co
   - Create `src/workstream_registration/filesystem.py` and `src/workstream_registration/registration.py`.
   - Create `tests/adapters/python/test_filesystem.py` and `tests/adapters/python/test_registration.py`.
 - **Approach:** Implement inspection read-only against the stable target handle, rejecting redirected marker-path components. Draft the minimal self-description, bind single-use confirmation to the KTD6 canonical semantic envelope, and revalidate the same handle before writing and during read-back. Open the final path with exclusive-create semantics, write the complete bounded document, flush and `os.fsync`, close, reopen, re-run the U7 and U8 pipelines, and verify exact identity before reporting registered. On read-back failure, enter `written-unverified` and never regenerate identity. Update the projection only after authoritative completion.
-- **Patterns to follow:** KTD6, KTD14; the research's portable lifecycle baseline.
+- **Patterns to follow:** KTD6, KTD14; the runtime decision's portable lifecycle baseline.
 - **Test scenarios:**
   1. Covers AE1. An absent marker progresses through exact confirmation, create-only write, read-back, and link.
   2. Covers AE2. A valid existing marker links unchanged with no confirmation, write, or new identity.
@@ -615,7 +614,7 @@ These units build the reference adapter on the resolved runtime (KTD11). They co
   - Create `src/workstream_registration/unregister.py` and `src/workstream_registration/projection.py`.
   - Create `tests/adapters/python/test_unregister.py` and `tests/adapters/python/test_projection.py`.
 - **Approach:** Mirror KTD6's envelope with presence inverted: bind confirmation to exact identity, stable target handle, and observed presence. On confirm, acquire the cooperative per-workspace lock, read and revalidate, compare exact identity, re-read and re-compare while holding the lock, delete, and verify absence by read-back; then rebuild the projection. Document the residual non-cooperating-writer race. Store projection rows in a transactional `sqlite3` database under an adapter-owned local location with schema/version metadata and marker-identity stales detection; allow full rebuild from inspected markers; treat projection write failure as retriable local state that never modifies the marker.
-- **Patterns to follow:** KTD10, KTD14; the research's conditional-delete and projection design basis.
+- **Patterns to follow:** KTD10, KTD14; the runtime decision's conditional-delete and projection design basis.
 - **Test scenarios:**
   1. Covers AE8. A confirmed unregister deletes the marker, verifies absence, and reports `unregistered`.
   2. A changed marker, target, or identity since confirmation fails the conditional delete without deleting; an already-absent marker stops without deleting.
@@ -639,7 +638,7 @@ These units build the reference adapter on the resolved runtime (KTD11). They co
   - Create `tests/adapters/python/test_cli.py` and `tests/adapters/python/test_conformance_runner.py`.
   - Produce `contracts/workstream-registration/v1/compatibility.md` declaring the adapter's compliance.
 - **Approach:** Wire CLI subcommands to the U9/U10 flows with exact-draft confirmation surfaced to the operator and bounded redacted diagnostics. Complete the conformance runner to feed raw-byte fixtures through U7 and parsed-value envelopes through U8, compare stable result fields against the U5 manifest, assert diagnostic caps and no-echo guarantees, and fail on any mismatch. Run the official JSON Schema Test Suite Draft 2020-12 subset and Bowtie against the pinned configuration in CI, and record the fresh Bowtie pass figure in the compatibility declaration.
-- **Patterns to follow:** KTD13 diagnostics; the research's common runner sequence and external conformance checks.
+- **Patterns to follow:** KTD13 diagnostics; the runtime decision's fixture-runner guidance and external conformance checks.
 - **Test scenarios:**
   1. CLI `register <folder>` produces a marker and reports registered; existing-marker invocation links without confirmation or rewrite.
   2. CLI unregister on a confirmed identity reports `unregistered`; identity mismatch stops without deleting.
@@ -670,7 +669,7 @@ The repository selects its first runtime in this delivery: CPython 3.14.x + `jso
 | Unregister and projection | U10 | U3 unregister and duplicate-registration fixtures pass; conditional-delete, absence read-back, and projection rebuild/staleness tests pass. |
 | CLI and conformance | U11 | CLI end-to-end flows pass; full corpus, official Draft 2020-12 suite, and Bowtie are green in CI; `compatibility.md` declares compliance with a fresh Bowtie figure. |
 
-The runtime's first delivery must declare compatibility with the contract's Draft 2020-12 validation profile, execute every mandatory fixture, and add integration tests for real folders, permissions, create-only conflicts, confirmed conditional deletes, duplicate-registration resolution, target swaps, read-back failure, interruption recovery, and local relinking. Conformance testing must distinguish local filesystems, symbolic-link behavior, network or synchronized filesystems, read-only paths, abrupt termination stages, and concurrent cooperating attempts, matching the research's filesystem compatibility declaration.
+The runtime's first delivery must declare compatibility with the contract's Draft 2020-12 validation profile, execute every mandatory fixture, and add integration tests for real folders, permissions, create-only conflicts, confirmed conditional deletes, duplicate-registration resolution, target swaps, read-back failure, interruption recovery, and local relinking. Conformance testing must distinguish local filesystems, symbolic-link behavior, network or synchronized filesystems, read-only paths, abrupt termination stages, and concurrent cooperating attempts, matching the runtime decision's filesystem compatibility declaration.
 
 ---
 
