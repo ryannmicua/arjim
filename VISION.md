@@ -30,28 +30,14 @@ This comes before broader automation. Arjim should earn my trust through reliabl
 
 I want the work done in this order:
 
-1. **Start with trustworthy awareness.** Outcome 2 covers items that require my action. Outcome 4 covers status and changes across my workstreams. Together, they make Arjim useful to me.
-2. **Never compromise workstream memory.** Arjim must never become the only home for important workstream facts. This rule applies to everything it does.
-3. **Then let Arjim take on the admin.** Arjim can gradually handle workstream administration and official filing. I only want Outcome 1 after I can trust its awareness.
-4. **Then make it work anywhere and with others.** Arjim can give answers backed by authoritative records across devices and coordinate safely with other assistants. I only want Outcomes 5 and 6 after the underlying behavior is reliable.
+1. **Start with trustworthy awareness.** Outcome 1 brings me items that require my action. Outcome 2 keeps me posted on status and changes across my workstreams. Together, they make Arjim useful to me.
+2. **Never compromise workstream memory.** Outcome 3 keeps important workstream facts outside Arjim's working copy. This rule applies to everything it does.
+3. **Then let Arjim take on the admin.** Outcome 4 lets Arjim gradually handle workstream administration and official filing, but only after I can trust its awareness.
+4. **Then make it work anywhere and with others.** Outcomes 5 and 6 extend reliable behavior across devices and other assistants. They do not come first.
 
 When priorities conflict, protect trust first. Then improve awareness, add action, and expand where Arjim can work.
 
-## 1. Arjim runs my workstreams for me
-
-Arjim handles the management side of a registered workstream: set it up, check its status, change its location or ownership when authorized, and close it. I should not have to open a different app for each step.
-
-When a decision or approval needs to be official, Arjim files it in the workstream's designated record home, such as Planner, SharePoint, or email.
-
-**Why I want this:** Today I mentally track which tool holds each workstream. Managing work across several places adds overhead to everything I manage.
-
-**What changes for me:** I have one digital assistant handling workstream administration. The authoritative records remain in the workspace, but I no longer have to manage their locations myself.
-
-**Boundary:** This outcome covers workstream management and filing. It does not mean Arjim performs the workstream's delivery work.
-
-**Direction:** This is the long-term outcome. Arjim gets permission to write gradually and only after I can trust how it reads, recommends, and asks for confirmation.
-
-## 2. Arjim brings things to me instead of me chasing them
+## 1. Arjim brings things to me instead of me chasing them
 
 When something across any workstream needs my decision, approval, or help, Arjim tells me. It brings these items together into one "this needs me" view.
 
@@ -61,7 +47,21 @@ Arjim reports "nothing pending" only after checking every required record home. 
 
 **What changes for me:** I stop doing the rounds. I get one trustworthy view of what needs me, refreshed from the required authoritative records and clearly marked with its freshness and coverage.
 
-**Boundary:** This outcome covers items that require my action. General progress and change reporting belong to Outcome 4.
+**Boundary:** This outcome covers items that require my action. General progress and change reporting belong to Outcome 2.
+
+## 2. Arjim keeps me posted
+
+Arjim tells me how my workstreams are going without waiting for me to ask.
+
+It gives me one management view: which workstreams are active, where each one stands, what changed since the last successful check, and which record homes could not be checked.
+
+**Why I want this:** Today, asking "how is it going?" means opening each workstream. I do not always remember what is active.
+
+**What changes for me:** I can see my active work at a glance.
+
+**Honest limit:** Arjim manages workstream awareness. It does not pretend to understand execution details it has not checked. Build status, task-by-task progress, and code health must come from the workspace's authoritative records.
+
+**Boundary:** This outcome explains workstream state and change. Items requiring my decision, approval, or help belong to Outcome 1.
 
 ## 3. Arjim never holds my memory hostage
 
@@ -75,19 +75,19 @@ Arjim may keep a working copy, but it is never the only home for information I n
 
 **Proof required:** Arjim should eventually demonstrate this through a repeatable wipe-and-rebuild test and a report showing anything that still exists only in its working copy.
 
-## 4. Arjim keeps me posted
+## 4. Arjim runs my workstreams for me
 
-Arjim tells me how my workstreams are going without waiting for me to ask.
+Arjim handles the management side of a registered workstream: set it up, check its status, change its location or ownership when authorized, and close it. I should not have to open a different app for each step.
 
-It gives me one management view: which workstreams are active, where each one stands, what changed since the last successful check, and which record homes could not be checked.
+When a decision or approval needs to be official, Arjim files it in the workstream's designated record home, such as Planner, SharePoint, or email.
 
-**Why I want this:** Today, asking "how is it going?" means opening each workstream. I do not always remember what is active.
+**Why I want this:** Today I mentally track which tool holds each workstream. Managing work across several places adds overhead to everything I manage.
 
-**What changes for me:** I can see my active work at a glance.
+**What changes for me:** I have one digital assistant handling workstream administration. The authoritative records remain in the workspace, but I no longer have to manage their locations myself.
 
-**Honest limit:** Arjim manages workstream awareness. It does not pretend to understand execution details it has not checked. Build status, task-by-task progress, and code health must come from the workspace's authoritative records.
+**Boundary:** This outcome covers workstream management and filing. It does not mean Arjim performs the workstream's delivery work.
 
-**Boundary:** This outcome explains workstream state and change. Items requiring my decision, approval, or help belong to Outcome 2.
+**Direction:** This is the long-term outcome. Arjim gets permission to write gradually and only after I can trust how it reads, recommends, and asks for confirmation.
 
 ## 5. Arjim is with me on any device
 
