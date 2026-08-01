@@ -139,7 +139,6 @@ flowchart TB
 ### Dependencies / Assumptions
 
 - `VISION.md` is the product authority for this feature.
-- The ideation doc's referenced prior work from the former HQ repository (portable routing manifest, device-local bindings, self-describing workspaces) is not present in this checkout; this plan assumes its concepts align with the self-description approach and can be reconciled during planning.
 - The operator is the sole v1 actor; other people's assistants (VISION Outcome 6) are future work.
 - Registration assumes the workspace location is readable on the device at registration time (the access gate).
 
