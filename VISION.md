@@ -20,14 +20,14 @@ This comes before broader automation. Arjim should first earn my trust by giving
 
 ## How the outcomes fit together
 
-The outcomes below do not all have the same role:
+The outcomes have a clear order:
 
-- **Core job:** Bring me what needs attention and keep me posted.
-- **Trust foundation:** Keep project memory outside Arjim so my work survives it.
-- **Long-term autonomy:** Run my projects and file official actions for me.
-- **Operating environment:** Give me consistent answers across devices and work safely alongside other assistants.
+1. **Primary outcome: trustworthy awareness.** Arjim brings me what needs attention and keeps me posted. Outcomes 2 and 4 define the first useful product.
+2. **Non-negotiable constraint: durable project memory.** Arjim never becomes the only home for important project facts. Outcome 3 applies to everything Arjim does.
+3. **Expansion outcome: managed action.** Arjim gradually takes responsibility for starting, moving, closing, and filing project work. Outcome 1 follows only after awareness is trustworthy.
+4. **Scale outcomes: work anywhere and with others.** Arjim gives source-backed answers across devices and works safely alongside other assistants. Outcomes 5 and 6 extend proven behavior; they do not come before it.
 
-This order should guide what gets built. Trustworthy awareness comes first. Broader action comes after.
+When priorities conflict, protect trust first, then improve awareness, then add action, then expand reach.
 
 ## 1. Arjim runs my projects for me
 
@@ -138,21 +138,50 @@ Arjim uses the least access needed for the work and keeps private information ou
 
 ### 5. The benefit must be visible
 
-Arjim is useful only if it reduces management work. Progress should be measured by practical changes such as:
+Arjim is useful only if it reduces management work without hiding uncertainty or creating unsafe actions.
 
-- Fewer visits to source tools just to check status
-- Fewer missed decisions, approvals, and follow-ups
-- Less manual tracking of where project records live
-- Less time spent rebuilding project context
-- Clearer status with fewer false "nothing pending" answers
+The first pilot should establish a 30-day baseline, then work toward these initial targets:
+
+#### Awareness and coverage
+
+- Every registered active project appears in the project view.
+- Every status answer shows when it was checked, which sources were checked, and which checks failed or were skipped.
+- Arjim reports "nothing pending" only when every required source was checked within its defined freshness window.
+- Every item that needs me identifies the project, source, requested action, and due date when one exists.
+
+#### Reduced management effort
+
+- Routine visits to source tools just to check status decrease by at least 75% from the 30-day baseline.
+- I can answer "what am I working on?", "what needs me?", and "what changed?" from one Arjim view without opening another tool.
+- A newly registered project can be located and understood without me remembering where its records live.
+
+#### Durable memory
+
+- A clean rebuild restores every registered workspace and its record locations from durable project sources without copying Arjim's previous working cache.
+- No decision, approval, or agreed scope exists only inside Arjim without being clearly reported as unprotected.
+- A wipe-and-rebuild test reports every missing, inaccessible, or unsupported record instead of silently omitting it.
+
+#### Safe action
+
+- Every shared write records the responsible person, target record, time, and result.
+- Every shared write checks the current source record before committing a change.
+- Conflicting changes produce a visible conflict. The acceptable target for silent overwrites is zero.
+
+#### Cross-device and shared-project consistency
+
+- A newly authorized device can discover the same registered workspaces without copying another device's cache.
+- Two authorized assistants reading the same source record report the same source facts and identify any difference in freshness, access, or supported capability.
+- Changes made through another assistant appear after the next successful source check and remain attributable to the responsible person.
+
+These are initial acceptance targets, not permanent service levels. They should be revised after the pilot establishes normal usage, source limitations, and realistic freshness windows.
 
 ## How to use this vision
 
 New work should answer three questions:
 
-1. Which outcome does this improve?
+1. Which level of the outcome hierarchy does this improve?
 2. How does it preserve the conditions of trust?
-3. What user-visible change will show that it worked?
+3. Which success measure will show that it worked?
 
 A technical foundation may support several outcomes without delivering any of them by itself. Plans should state that difference clearly.
 
