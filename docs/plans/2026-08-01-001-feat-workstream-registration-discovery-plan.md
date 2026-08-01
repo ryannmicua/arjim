@@ -14,6 +14,25 @@ proof_slug: h1nem0fe
 
 # Workstream Registration and Discovery - Plan
 
+## How to Read This Plan
+
+Use this document as the canonical implementation plan. The sections have different jobs:
+
+- **Goal Capsule** — the short version of the objective, active delivery, and stop conditions.
+- **Product Contract** — why this work matters, what behavior is required, and what is explicitly out of scope.
+- **Planning Contract** — the technical decisions and design constraints an implementation agent must follow.
+- **Implementation Units** — the work to perform, in dependency order, with exact files and verification rules.
+- **Verification Contract** — the review gates for this requirements-only delivery.
+- **Definition of Done** — the final completion checklist.
+
+### Agent Execution Rules
+
+1. Treat `VISION.md` and the decisions marked `session-settled` as authoritative.
+2. Implement only the active scope. Do not select a runtime or build a working adapter in this delivery.
+3. Follow the implementation-unit dependencies and sequencing; do not begin a dependent unit early.
+4. Treat the marker as durable authority and local inventory as replaceable projection state.
+5. Use the verification gates and Definition of Done as completion criteria, not as claims that executable runtime tests already exist.
+
 ## Goal Capsule
 
 - **Objective:** Define a portable, assistant-neutral contract for workstream registration so future runtimes can recognize the same workspace, identity, record homes, and registration outcomes.
@@ -39,6 +58,8 @@ The operator currently carries a mental map of which tool holds each workstream 
 
 ### Key Decisions
 
+The `session-settled` annotations record decisions already made during planning. Do not reopen those choices unless a documented open question or a new user decision changes them.
+
 - KD1. **Workspace-authoritative registration; registries are discovery aids only** (session-settled: user-directed — chosen over an Arjim-owned central catalog as the record: metadata must survive Arjim replacement, and a registry that holds metadata would drift). **Governs R4, R11, R12.**
 - KD2. **Proxy workspace for metadata-incapable workspaces** (session-settled: user-directed — chosen over requiring the real workspace to hold metadata: systems and tools cannot always store assistant metadata). **Governs R6, R7.**
 - KD3. **Arjim-generated identity; name is a label** (session-settled: user-directed — chosen over operator-chosen or workspace-derived identity: portability must not depend on naming). **Governs R2, R5, R14.**
@@ -62,6 +83,8 @@ The operator currently carries a mental map of which tool holds each workstream 
 - F5. **Invalid location or marker** — **Covers R8-R10.** Missing, inaccessible, malformed, unsupported, or conflicting inputs stop registration with a distinct outcome and no overwrite.
 
 ### Requirements
+
+The requirements below define observable product behavior. The technical decisions later in this document constrain how an adapter may satisfy them.
 
 **Registration**
 
@@ -152,6 +175,8 @@ The operator currently carries a mental map of which tool holds each workstream 
 
 ## Planning Contract
 
+This section is the implementation boundary. An agent may choose details that are not decided here, but it must not contradict these technical decisions or expand the active scope.
+
 ### Key Technical Decisions
 
 - KTD1. **Deliver a runtime-neutral contract before an executable adapter** (session-settled: user-directed — chosen over selecting TypeScript or Python now: the user wants the portable boundary settled first). The active units produce schemas, protocol text, and fixtures; they do not claim working registration. **Supports R1-R14.**
@@ -203,6 +228,8 @@ stateDiagram-v2
 
 ### Output Structure
 
+The paths below are the intended deliverables. Create only the files assigned to the active implementation units; do not add runtime code or experimental files as part of this plan.
+
 ```text
 contracts/
   workstream-registration/
@@ -226,11 +253,13 @@ tests/
 
 ### Sequencing
 
-1. Define the conformance envelope, expectation manifest, and adapter-obligation rules that constrain every fixture.
-2. Establish the marker schema and valid examples before defining workflow results.
-3. Define the state protocol and result taxonomy against that schema.
-4. Complete the versioned negative and transition corpus against both contracts.
-5. Publish the final guidance after the fixtures cover the full active scope.
+1. **U5 — Conformance envelope:** Define the fixture schemas, expectation manifest, and adapter-obligation rules that constrain every fixture.
+2. **U1 — Marker contract:** Establish the marker schema and valid examples before defining workflow results.
+3. **U2 — State protocol:** Define the registration states and authority transitions against the marker schema.
+4. **U3 — Results:** Define the result taxonomy and complete the versioned negative and transition corpus.
+5. **U4 — Guidance:** Publish the final guidance after the schemas, protocol, and fixtures cover the full active scope.
+
+The dependency graph is `U5 -> U1 -> U2 -> U3 -> U4`. U5 is a prerequisite for every other unit; U2 also depends on U1, and U3 and U4 depend on all preceding units shown in their unit definitions.
 
 ### Risks & Dependencies
 
@@ -256,6 +285,8 @@ tests/
 
 ### U5. Define the conformance envelope
 
+**Execution position:** First. This unit defines the fixture vocabulary used by U1-U3.
+
 - **Goal:** Establish the portable fixture and expectation formats before any unit creates cases that depend on them.
 - **Requirements:** R1-R14; KTD3, KTD8, KTD9.
 - **Dependencies:** None.
@@ -273,6 +304,8 @@ tests/
 - **Verification:** The envelope and expectation schemas are closed, versioned, and sufficient to describe every fixture planned by U1-U3 without forward invention.
 
 ### U1. Define the version 1 marker contract
+
+**Execution position:** Second, after U5.
 
 - **Goal:** Establish the canonical marker schema and assistant-neutral durable data boundary.
 - **Requirements:** R2, R5-R7, R10, R14; KTD2-KTD5, KTD9.
@@ -297,9 +330,11 @@ tests/
   8. Base64-backed raw envelopes prove duplicate keys, invalid UTF-8, a byte-order mark, and trailing JSON fail before schema validity is considered.
   9. Raw inputs at nesting depth 8 reach normal validation; depth 9 stops before schema validation.
   10. An instruction-like but otherwise valid label remains data and does not change its expected protocol outcome.
-- **Verification:** Every fixture is valid JSON, appears once in the expectations manifest created by U3, and has an unambiguous expected validity result.
+- **Verification:** Every fixture is valid JSON, appears once in the expectations manifest created by U5, and has an unambiguous expected validity result.
 
 ### U2. Specify registration states and authority transitions
+
+**Execution position:** Third, after U5 and U1.
 
 - **Goal:** Define how any adapter inspects, drafts, confirms, writes, reads back, links, retries, and stops without changing product authority.
 - **Requirements:** R1, R3, R4, R8-R10, R13, R14; F1-F5; KTD1, KTD6, KTD7.
@@ -331,6 +366,8 @@ tests/
 
 ### U3. Define portable results and conformance expectations
 
+**Execution position:** Fourth, after U5, U1, and U2.
+
 - **Goal:** Give adapters one result vocabulary and one machine-readable fixture index.
 - **Requirements:** R3, R4, R8-R10, R13; KTD8, KTD9.
 - **Dependencies:** U5, U1, U2.
@@ -351,6 +388,8 @@ tests/
 - **Verification:** The result schema can represent every protocol terminal state, and the expectation manifest has no missing, duplicate, or orphan fixture entries.
 
 ### U4. Publish adapter and conformance guidance
+
+**Execution position:** Last, after U5 and U1-U3.
 
 - **Goal:** Make the contract usable by a later runtime without allowing it to weaken authority, portability, or verification rules.
 - **Requirements:** R1-R14; KTD1-KTD9.
