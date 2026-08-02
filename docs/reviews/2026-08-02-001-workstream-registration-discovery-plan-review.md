@@ -20,7 +20,7 @@ The direction is sound, but the plan is not ready for execution yet.
 
 The authority model is clear: the workspace marker remains durable truth, local SQLite state stays replaceable, and all destructive actions stop when their preconditions change. That is aligned with `VISION.md` and gives the implementation a strong safety posture.
 
-Before implementation starts, please resolve the privacy boundary for observation files, reconcile the marker-size limits, and complete the interruption and partial-success result model. These are contract issues. If they are left to the implementer, the code and conformance corpus will make product decisions the plan is supposed to settle.
+Before implementation starts, reconcile the marker-size limits and complete the interruption and partial-success result model. These are contract issues. If they are left to the implementer, the code and conformance corpus will make product decisions the plan is supposed to settle. The observation-file privacy boundary is resolved: the operator cut the observation flow on 2026-08-02, removing the exposure rather than protecting it.
 
 One mechanical fix was applied during review: the Unit Index now lists the observation schema owned by the results unit and the registration files also touched by the unregister/projection unit.
 
@@ -29,19 +29,19 @@ One mechanical fix was applied during review: the Unit Index now lists the obser
 This work answers the three questions in `VISION.md` as follows:
 
 1. **Which outcome does this make real?** It makes the registration foundation of Outcome 3 real and prepares the safe-management boundary in Outcome 4. It does not yet deliver portfolio awareness, status, or automatic discovery.
-2. **What could make it less trustworthy?** Marker data copied into weakly protected observation files, URI values exposed through command-line history, contradictory limits, and unnamed interruption outcomes would all weaken the plan's claim that it never hides uncertainty or mishandles authority.
+2. **What could make it less trustworthy?** Contradictory limits and unnamed interruption outcomes would all weaken the plan's claim that it never hides uncertainty or mishandles authority. Command-line history exposure is a recorded, accepted risk gated on the operator's choice of URI content; the observation-file exposure was removed entirely by cutting the observation flow.
 3. **How will we know it reduced work?** Point-and-read registration and projection rebuild reduce the remembered map for ordinary folders. Proxy workspaces remain the exception: without discovery or a registry path, the operator may still need to remember where the proxy folder lives.
 
 ## Review summary
 
 - Applied 1 mechanical fix.
-- 12 items need attention: 4 errors and 8 omissions.
+- 12 items need attention: 4 errors and 8 omissions. Two were resolved earlier on 2026-08-02 (command-line exposure as accepted risk; observation files by scope cut), nine more were resolved by decision on 2026-08-02, and the last open item (marker-size limits) was resolved on 2026-08-02 by the 256 KiB ceiling change — no open items remain.
 - 5 FYI observations do not require a decision.
 - No agreement boost was applied. All delegated reviewers used the same user-selected DeepSeek model family, so separate-agent agreement was treated as supporting evidence only.
 
 ## Applied fix
 
-- **Unit Index — file ownership now matches the detailed units.** The results unit now lists the marker-observation schema, and the unregister/projection unit now lists the registration implementation and test files it also changes. This was mechanically established by the unit bodies. (coherence and whole-document sweep)
+- **Unit Index — file ownership now matches the detailed units.** The results unit now lists the marker-observation schema, and the unregister/projection unit now lists the registration implementation and test files it also changes. This was mechanically established by the unit bodies. (coherence and whole-document sweep). The marker-observation schema itself was removed by the 2026-08-02 scope cut.
 
 ## P1 - Fix before implementation
 
@@ -55,6 +55,8 @@ This work answers the three questions in `VISION.md` as follows:
 
 Reviewer: security lens. Confidence: 75. Tier: `gated_auto`.
 
+**Decision (2026-08-02): Resolved by scope cut.** The operator cut the cross-instance duplicate machinery — `capture-observation`, `compare`, the `marker-observation.schema.json` envelope, and the `duplicate-registration` outcome — from v1. Observation files are no longer produced, so the exposure this finding describes no longer exists. Duplicate workstreams are left to the operator, who owns any multiple copies; the projection's write-time `conflict` outcome remains the only in-scope duplicate signal.
+
 ## P2 - Resolve before implementation
 
 ### The documented field limits cannot fit inside the total marker limit
@@ -67,6 +69,12 @@ Reviewer: security lens. Confidence: 75. Tier: `gated_auto`.
 
 Reviewer: feasibility. Confidence: 100. Tier: `gated_auto`.
 
+**Decision (2026-08-02): Applied.** The total serialized-marker ceiling is raised from 64 KiB to 256 KiB (262,144 bytes), and the bounded raw read is raised to 262,145 bytes so an allowed exact-limit marker remains distinguishable from an oversized one. Per-field maxima (2,048-character URI, 32 record homes) are unchanged; a worst-case marker now composes at roughly 70 KB with ~3.7x headroom under the binding total budget.
+
+**Re-review note (2026-08-02):** The focused re-review at the 262,144-byte boundary confirmed the numeric contract reads consistently across the plan, research, and solution documents, then resolved three residual gaps: (1) record-home URIs were character-limited without an ASCII pin, so 32 x 2,048 multi-byte characters reached the ceiling exactly and could not compose — URIs are now RFC 3986 ASCII (percent-encoded non-ASCII) and label and URI limits are stated in UTF-8 bytes; (2) the promised worst-case composition fixture did not exist — U1 now requires an all-maxima fixture that must validate under the binding byte ceiling; (3) byte exact-limit semantics were ambiguous because no valid marker can reach 262,144 bytes — U1 now splits byte-limit raw-byte cases (262,144 pass the raw phase / 262,145 oversized) from field-limit marker cases.
+
+**Scope-cut note (2026-08-02):** The operator deferred exact byte-ceiling conformance from v1 to the RAID log (X-001). v1 keeps the coarse 262,145-byte bounded read cap and the ASCII/byte-stated field limits, but no longer requires exact-limit byte fixtures, the binding total-ceiling contract, or the worst-case composition fixture.
+
 ### Retry after parent creation has no canonical envelope state
 
 **Recommendation: Apply the proposed fix.** A crash after `.workstream/` is created but before the marker is created leaves a state the confirmation envelope does not represent, even though interruption at every lifecycle stage is a required test.
@@ -76,6 +84,8 @@ Reviewer: feasibility. Confidence: 100. Tier: `gated_auto`.
 **Basis:** The current envelope defines only the absent-parent-to-created-parent transition. The occupied-invalid recovery path does not apply because no marker exists.
 
 Reviewer: feasibility. Confidence: 75. Tier: `gated_auto`.
+
+**Decision (2026-08-02): Applied.** KTD6 now defines the parent-exists-no-marker state as a no-transition confirmation variant (captured parent identity must match, marker must remain absent, draft revalidated before write); the U2 fixture list gains the interrupted parent-created retry.
 
 ### The result contract omits states used by recovery commands
 
@@ -87,6 +97,8 @@ Reviewer: feasibility. Confidence: 75. Tier: `gated_auto`.
 
 Reviewer: whole-document sweep. Confidence: 75. Tier: `gated_auto`.
 
+**Decision (2026-08-02): Applied.** `occupied-invalid` and `invalid-marker-resolved` are added to the U3 result vocabulary and conformance scenarios. No separate versioned resolution-result surface: v1 keeps one closed result vocabulary.
+
 ### Invalid-marker deletion has no unverified-success outcome
 
 **Recommendation: Apply the proposed fix.** If invalid-marker cleanup deletes the file but absence read-back fails, the implementation has no named outcome or recovery rule. Two implementations can report the same filesystem state differently.
@@ -96,6 +108,8 @@ Reviewer: whole-document sweep. Confidence: 75. Tier: `gated_auto`.
 **Basis:** Successful read-back is named, but the corresponding failed read-back branch is missing even though the result-review gate requires every terminal and partial-success state.
 
 Reviewer: design lens. Confidence: 75. Tier: `gated_auto`.
+
+**Decision (2026-08-02): Applied.** New partial-success outcome `invalid-deleted-unverified` (exit code 5) covers delete-succeeded/read-back-failed in U9 and U11, with re-inspection as the recovery rule, mirroring unregister's verified-absence completion.
 
 ### Record-home URIs are exposed through command-line arguments
 
@@ -107,6 +121,8 @@ Reviewer: design lens. Confidence: 75. Tier: `gated_auto`.
 
 Reviewer: security lens. Confidence: 75. Tier: `gated_auto`.
 
+**Decision (2026-08-02): Accepted as acceptable risk.** No stdin or input-file channel is required for v1. The plan should document that record-home values entered on the command line may persist in shell history and appear in process listings; operators choose whether the entered URI content warrants that exposure.
+
 ### The closing summary incorrectly defers point-and-read
 
 **Recommendation: Apply the proposed fix.** A reader can conclude that point-and-read registration is later work even though it is the only working v1 entry path and the CLI for it is part of this delivery.
@@ -116,6 +132,8 @@ Reviewer: security lens. Confidence: 75. Tier: `gated_auto`.
 **Basis:** The detailed Product Contract and implementation units are authoritative; the closing summary is the less specific passage and should match them.
 
 Reviewer: coherence. Confidence: 75. Tier: `gated_auto`.
+
+**Decision (2026-08-02): Applied.** The closing summary now states the plan delivers point-and-read registration and is the dependency for later root-based rediscovery and broader operator workflows.
 
 ### Proxy workspaces still require a remembered location
 
@@ -127,6 +145,8 @@ Reviewer: coherence. Confidence: 75. Tier: `gated_auto`.
 
 Reviewer: adversarial. Confidence: 75. Tier: `manual`.
 
+**Decision (2026-08-02): Accepted gap, documented.** The remembered-location requirement applies to all workspaces, not just proxies — point-and-read requires the operator to point. R13 now states v1 cannot recover locations it is never pointed at, for proxy and ordinary workspaces alike; no proxy-specific machinery is added.
+
 ### Changed-marker duplicate resolution has no named retry loop
 
 **Recommendation: Apply the proposed resolution.** When the marker changes after unregister confirmation, the safety guard correctly stops deletion, but the duplicate remains and the plan does not name the next state.
@@ -136,6 +156,8 @@ Reviewer: adversarial. Confidence: 75. Tier: `manual`.
 **Basis:** The guard must remain; weakening it would violate the settled authority decision. The missing piece is the recovery loop after the guard trips.
 
 Reviewer: adversarial. Confidence: 75. Tier: `manual`.
+
+**Decision (2026-08-02): Applied.** KTD10 names the guard trip `changed-marker-stopped`; recovery requires a fresh inspection, a new unregister draft, and a new confirmation. Added to the U3 result vocabulary.
 
 ## P3 - Tighten the contract while editing
 
@@ -147,6 +169,8 @@ Reviewer: adversarial. Confidence: 75. Tier: `manual`.
 
 Reviewer: coherence. Confidence: 75. Tier: `gated_auto`.
 
+**Decision (2026-08-02): Applied.** `conflict` added to the U10 projection-outcome summary sentence (now linked, registered-unlinked, conflict, or bounded projection failure).
+
 ### One concept has two names
 
 **Recommendation: Apply the proposed fix.** Readers may look for a separate result-taxonomy artifact because the Goal Capsule uses that phrase while the rest of the plan uses result vocabulary and reserves taxonomy for warnings and errors.
@@ -155,6 +179,8 @@ Reviewer: coherence. Confidence: 75. Tier: `gated_auto`.
 
 Reviewer: coherence. Confidence: 75. Tier: `gated_auto`.
 
+**Decision (2026-08-02): Applied.** The Goal Capsule now uses “result vocabulary”; the lone “result taxonomy” occurrence is removed.
+
 ### The conformance-envelope unit understates its scope
 
 **Recommendation: Apply the proposed fix.** The first contract unit can omit fields needed by unregister and duplicate fixtures because its traceability stops before those requirements, even though later dependent units require the envelope to express them.
@@ -162,6 +188,8 @@ Reviewer: coherence. Confidence: 75. Tier: `gated_auto`.
 **Change:** Add the unregister and duplicate requirements, plus the conditional-delete decision, to the conformance-envelope unit's traceability list.
 
 Reviewer: whole-document sweep. Confidence: 75. Tier: `gated_auto`.
+
+**Decision (2026-08-02): Applied.** U5 traceability now includes R15 and KTD10 (unregister and conditional delete); the duplicate-fixture mention is dropped with the 2026-08-02 duplicate cut.
 
 ## FYI observations
 
@@ -183,24 +211,25 @@ These are verified observations, but they do not need a decision before implemen
 
 - Must the marker schema require at least one record home, matching the CLI's required `--record-home` input?
 - Does an omitted workspace kind default to `folder`, or must the operator always state it?
-- Who owns retention and deletion of captured observation files after duplicate resolution?
 - Which platform identity, liveness, synchronization, and ACL APIs define the first supported local-filesystem profile?
 
 ## Coverage
 
 | Persona | Status | Findings | Auto | Proposed | Decisions | FYI | Residual |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| coherence | completed | 3 | 0 | 3 | 0 | 0 | 0 |
-| feasibility | completed | 3 | 0 | 2 | 0 | 1 | 3 |
+| coherence | completed | 3 | 0 | 0 | 3 | 0 | 0 |
+| feasibility | completed | 3 | 0 | 1 | 1 | 1 | 3 |
 | product lens | completed | 1 | 0 | 0 | 0 | 1 | 3 |
-| design lens | completed | 2 | 0 | 1 | 0 | 1 | 2 |
-| security lens | completed | 3 | 0 | 2 | 0 | 1 | 2 |
+| design lens | completed | 2 | 0 | 0 | 1 | 1 | 2 |
+| security lens | completed | 3 | 0 | 2 | 2 | 1 | 2 |
 | scope guardian | completed | 1 | 0 | 0 | 0 | 1 | 2 |
 | adversarial | completed | 2 | 0 | 0 | 2 | 0 | 3 |
-| whole-document sweep | completed | 3 | 1 | 2 | 0 | 0 | 3 |
+| whole-document sweep | completed | 3 | 1 | 0 | 2 | 0 | 3 |
 
 The design-lens rebuild finding was suppressed because the plan already states that an inaccessible input returns non-success and leaves the previous projection unchanged. Residual and deferred items that merely restated actionable findings were also removed from this report.
 
 ## Recommended next action
 
-Resolve the P1 and P2 items in the Product and Planning Contracts, update the conformance envelope and result vocabulary, then run one focused re-review before handing the plan to execution.
+One item remains: reconcile the marker-size limits (P2, feasibility, confidence 100) in the marker contract, then run one focused re-review before handing the plan to execution.
+
+**Update (2026-08-02):** The marker-size conflict is reconciled — the contract now enforces a coarse 256 KiB (262,144-byte) bounded read cap with a 262,145-byte read, ASCII-pinned record-home URIs, and byte-stated field limits. Exact byte-ceiling conformance fixtures and the worst-case composition fixture are deferred to v2 (RAID X-001, 2026-08-02). The focused re-review is complete; no marker-limit work remains before handing the plan to execution.

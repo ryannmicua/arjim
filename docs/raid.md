@@ -22,7 +22,7 @@ Seeded from the workstream registration and discovery plan (`docs/plans/2026-08-
 |---|---|---|---|---|---|---|
 | R-001 | Contract without executable proof | High | Medium | Arjim CE | 2026-08-01 | A malformed schema or contradictory fixture can survive manual review. Mitigation: one expectation manifest, every fixture declares its expected result, and the pinned Python implementation executes the complete project corpus. |
 | R-002 | Path portability | Medium | Medium | Arjim CE | 2026-08-01 | Device paths in the workspace reference would break cross-device identity. Mitigation: fixtures reject device paths in the workspace reference; record-home URIs may be local-resource but stay untrusted, non-dereferenceable data. |
-| R-003 | Resource exhaustion | Medium | Low | Arjim CE | 2026-08-01 | A shared marker can be hostile before schema validation. Mitigation: KTD9 pre-parse and collection bounds; fixtures cover exact-limit and over-limit inputs. |
+| R-003 | Resource exhaustion | Medium | Low | Arjim CE | 2026-08-01 | A shared marker can be hostile before schema validation. Mitigation: KTD9 pre-parse and collection bounds, including a coarse 262,145-byte bounded read cap; exact byte-ceiling conformance fixtures deferred to v2 (2026-08-02, X-001). |
 | R-004 | URI overclaim | High | Medium | Arjim CE | 2026-08-01 | Structural validity does not prove access, ownership, or safety. Mitigation: KTD5 prohibits automatic dereference, warns on malformed URIs, and distinguishes `not-checked`, `unsupported`, and inaccessible states. |
 | R-005 | Secret leakage | High | Medium | Arjim CE | 2026-08-01 | URI syntax can contain sensitive-looking content. Mitigation: KTD9 accepts credential-bearing URIs as untrusted data, the Python implementation never inspects or dereferences URI content, never echoes sensitive values, and warns only on malformed syntax. |
 | R-006 | Schema lock-in | Medium | Medium | Arjim CE | 2026-08-01 | A closed provider enum would force schema changes per integration. Mitigation: keep record-home type tokens open as workspace data and report unsupported capability separately in the Python implementation. |
@@ -64,7 +64,7 @@ Seeded from the workstream registration and discovery plan (`docs/plans/2026-08-
 | ID | Title | Severity | Opened | Resolved | Resolution |
 |---|---|---|---|---|---|
 | I-001 | URI validity and secret policy conflict | P1 | 2026-08-01 | 2026-08-01 | v1 accepts any syntactically valid record-home URI regardless of scheme or credential-bearing components; malformed URIs warn without invalidating the marker (KD10, KTD5, KTD9). Unsupported providers remain valid data with non-dereferenceable capability; diagnostics never echo URI content, labels, or secrets; the Python implementation does not inspect URI content. |
-| I-002 | Create-only consistency domain | P1 | 2026-08-01 | 2026-08-01 | v1 permits weaker storage — no strongly consistent exclusive creation — and surfaces distinct identities as a `duplicate-registration` outcome that stops for operator-directed unregister (R15, R16; KTD10). Identical marker copies sharing one identity remain valid markers and are not duplicates. |
+| I-002 | Create-only consistency domain | P1 | 2026-08-01 | 2026-08-01 | v1 permits weaker storage — no strongly consistent exclusive creation — and accepts that two distinct valid identities may exist for one target. The projection reports a `conflict` when a captured target already holds a different identity, without changing the marker (KTD10). Cross-instance duplicate detection and resolution are out of scope: duplicate workstreams are left to the operator, who owns any multiple copies (2026-08-02 operator decision). |
 
 ## Dependencies (D)
 
@@ -80,3 +80,17 @@ Seeded from the workstream registration and discovery plan (`docs/plans/2026-08-
 | ID | Dependency | Opened | Resolved | Resolution |
 |---|---|---|---|---|
 | D-001 | Future runtime and validation library selection. | 2026-08-01 | 2026-08-02 | Runtime selection is resolved to CPython 3.14.x with `jsonschema` 4.26.x, explicit `Draft202012Validator`, and stdlib `sqlite3`; exact patch pins and the supported local filesystem are tracked separately as D-003. |
+
+## Deferred (X)
+
+### Active
+
+| ID | Item | Why deferred | Revisit | Opened |
+|---|---|---|---|---|
+| X-001 | Exact total marker byte ceiling (262,144 bytes) with exact-limit byte fixtures and a worst-case composition fixture. | Field limits already bound valid markers to roughly 69 KB, so the exact ceiling adds no v1 test value beyond heavy fixtures (~350 KB base64 payloads). The coarse bounded read covers resource exhaustion. | v2 contract review | 2026-08-02 |
+
+### Resolved
+
+| ID | Item | Opened | Resolved | Resolution |
+|---|---|---|---|---|
+| — | — | — | — | — |

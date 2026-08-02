@@ -38,7 +38,7 @@ This assessment does not reopen any of the following decisions:
 - JSON Schema Draft 2020-12 is the declared schema dialect.
 - A runtime must declare compatibility with the validation profile and pass the portable fixture corpus before claiming compliance.
 - The marker remains one closed JSON document at `.workstream/workstream.json` within a workspace folder.
-- The fixed raw-input limits remain: 64 KiB UTF-8, maximum JSON container depth 8, 256-character label, 64-character ASCII type token, 2,048-character URI, and at most 32 record homes.
+- The fixed raw-input limits remain: a 256 KiB (262,144-byte) bounded read cap, maximum JSON container depth 8, 256-byte label, 64-byte ASCII type token, 2,048-byte ASCII record-home URI, and at most 32 record homes. Exact byte-ceiling conformance fixtures are deferred (2026-08-02, RAID X-001).
 - Registration remains inspect, Arjim-drafted self-description, exact operator confirmation, create-only write, read-back verification, then replaceable local link projection.
 - Unregistration remains an exact-identity-bound confirmed conditional delete, complete only after read-back verifies absence.
 - Record-home URIs remain untrusted, are never dereferenced, and may contain credentials.
@@ -80,7 +80,7 @@ JSON Schema validates an instance's data model and structure. It does not preser
 
 Therefore, every compliant adapter needs the same logical validation pipeline:
 
-1. Bound the raw read to 65,537 bytes so the adapter can distinguish an allowed 65,536-byte input from an oversized one without reading an unbounded file.
+1. Bound the raw read to 262,145 bytes so the adapter can distinguish an allowed 262,144-byte input from an oversized one without reading an unbounded file.
 2. Require strict UTF-8 decoding; do not permit silent replacement of malformed sequences or automatic acceptance of UTF-16/UTF-32.
 3. Count object and array container depth with a token-aware scanner and reject depth above 8. Braces and brackets inside strings must not affect the count.
 4. Detect duplicate object member names before they are collapsed into a runtime map/object.
@@ -138,7 +138,7 @@ Bound both the number of reported diagnostics and the total serialized diagnosti
 
 ## Candidate comparison
 
-| Candidate | Draft 2020-12 | Duplicate names | Exact 64 KiB and depth 8 | Closed objects | Unicode controls | Structured diagnostics | Adapter filesystem fit | Local projection | Overall |
+| Candidate | Draft 2020-12 | Duplicate names | Bounded read 256 KiB and depth 8 | Closed objects | Unicode controls | Structured diagnostics | Adapter filesystem fit | Local projection | Overall |
 |---|---|---|---|---|---|---|---|---|---|
 | **Python 3.14.x + `jsonschema` 4.26.x** | Full support documented; explicit `Draft202012Validator` | Yes through `object_pairs_hook`; not safe by default | Byte cap externally; depth through token-aware pre-parser | Yes through schema | Post-decode scan required | Rich error objects and paths; normalize before reporting | Exclusive `x`, `fsync`, read-back, unlink | Stdlib transactional `sqlite3` | **Recommended** |
 | **Java 25 LTS + networknt 3.x + Jackson 3.1.x** | Draft 2020-12 documented and bundled | Native Jackson strict duplicate detection | External byte cap; native parser depth constraint | Yes through schema | Post-decode scan required | Machine-readable networknt output; normalize before reporting | `CREATE_NEW`, `FileChannel.force`, read-back, delete | Additional embedded DB/JDBC choice or snapshot | **Close second** |
@@ -246,7 +246,7 @@ Caveat: `sqlite3` is an optional CPython module at build time. The runtime compa
 
 **Depth - High confidence with release-fixture verification.** Jackson provides stream-read constraints including maximum nesting depth. The exact configured behavior should be covered by the project's raw fixture corpus.
 
-**Byte size - High confidence only with an external raw-byte guard.** Enforce the exact 64 KiB limit before Jackson. A 2026 Jackson advisory showed that some `maxDocumentLength` parser paths could bypass configured length constraints in Jackson 3.0.0 through 3.1.0; 3.1.1 patched the issue. The networknt POM's Jackson 3.1.4 is beyond the patched version, but the contract should still use its own exact bounded read.[S30]
+**Byte size - High confidence only with an external raw-byte guard.** Enforce a bounded read at 256 KiB (262,144 bytes) before Jackson. A 2026 Jackson advisory showed that some `maxDocumentLength` parser paths could bypass configured length constraints in Jackson 3.0.0 through 3.1.0; 3.1.1 patched the issue. The networknt POM's Jackson 3.1.4 is beyond the patched version, but the contract should still use its own exact bounded read.[S30]
 
 **Controls and bidi - High confidence.** Post-decode scan required, as with every runtime.
 
@@ -447,7 +447,7 @@ Every runtime runner should perform the same conceptual steps:
 
 At minimum, include:
 
-- exactly 64 KiB and 64 KiB plus one byte;
+- raw input beyond the bounded read cap rejected as oversized;
 - malformed UTF-8 and disallowed alternate encodings;
 - depth 8 and depth 9, including braces/brackets inside strings;
 - duplicate object names at the root and nested levels;
