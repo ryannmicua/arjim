@@ -332,13 +332,13 @@ The dependency graph is `U5 -> U1 -> U2 -> U3 -> U4 -> U6 -> U7 -> U8 -> U9 -> U
 | U5 | Conformance envelope | `contracts/.../v1/conformance-case.schema.json`, `expectations.schema.json`, `tests/.../expectations.json` | — |
 | U1 | Version 1 marker contract | `contracts/.../v1/workstream.schema.json`, `tests/.../{valid,invalid,warn,raw}/` | U5 |
 | U2 | Registration states and authority transitions | `contracts/.../v1/registration-protocol.md`, `tests/.../transitions/` | U5, U1 |
-| U3 | Portable results and conformance expectations | `contracts/.../v1/registration-result.schema.json`, `tests/.../transitions/` | U5, U1, U2 |
+| U3 | Portable results and conformance expectations | `contracts/.../v1/registration-result.schema.json`, `contracts/.../v1/marker-observation.schema.json`, `tests/.../transitions/` | U5, U1, U2 |
 | U4 | Python implementation guidance | `contracts/workstream-registration/README.md`, `contracts/workstream-registration/v1/compatibility.md`, repo `README.md` | U5, U1-U3 |
 | U6 | Runtime scaffold and conformance runner | `pyproject.toml`, `src/workstream_registration/conformance_runner.py`, `tests/python/` | U4 |
 | U7 | Raw-input guard | `src/workstream_registration/raw_guard.py`, `tests/python/test_raw_guard.py` | U6, U5 |
 | U8 | Bundled-schema validation and diagnostics | `validation.py`, `diagnostics.py`, `test_validation.py`, `test_diagnostics.py` | U7, U1, U5 |
 | U9 | Registration, filesystem lifecycle, interruption recovery | `filesystem.py`, `registration.py`, `test_filesystem.py`, `test_registration.py` | U8, U2, U3 |
-| U10 | Confirmed unregister and local projection | `unregister.py`, `projection.py`, `test_unregister.py`, `test_projection.py` | U9, U3 |
+| U10 | Confirmed unregister and local projection | `unregister.py`, `projection.py`, `registration.py`, `test_unregister.py`, `test_projection.py`, `test_registration.py` | U9, U3 |
 | U11 | Operator CLI and full conformance | `src/workstream_registration/cli.py`, `src/workstream_registration/conformance_runner.py`, `tests/python/test_cli.py`, `tests/python/test_conformance_runner.py`, `contracts/workstream-registration/v1/compatibility.md` | U10, U4 |
 
 ### U5. Define the conformance envelope
