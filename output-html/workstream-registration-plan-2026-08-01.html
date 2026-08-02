@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How Arjim Will Implement Workstream Registration — Visual Plan</title>
+  <style>
+    :root {
+      --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      --canvas: #f7f3e8;
+      --surface: #fffdf8;
+      --surface-strong: #ffffff;
+      --ink: #15243a;
+      --muted: #647185;
+      --blue: #153d6f;
+      --blue-soft: #dce8f5;
+      --gold: #c7922f;
+      --gold-soft: #f4e4b9;
+      --border: #ccd6e2;
+      --success: #28795a;
+      --success-soft: #dcefe6;
+      --warning: #9a641c;
+      --danger: #a33b3b;
+      --danger-soft: #f3dede;
+      --space-1: .25rem;
+      --space-2: .5rem;
+      --space-3: .75rem;
+      --space-4: 1rem;
+      --space-5: 1.5rem;
+      --space-6: 2rem;
+      --space-7: 3rem;
+      --space-8: 4.5rem;
+      --radius-sm: .5rem;
+      --radius-md: .9rem;
+      --radius-lg: 1.4rem;
+      --shadow: 0 14px 40px rgba(21, 61, 111, .09);
+      --content: 74rem;
+    }
+    * { box-sizing: border-box; }
+    html { color-scheme: light; scroll-behavior: smooth; }
+    body { margin: 0; background: var(--canvas); color: var(--ink); font-family: var(--font-sans); line-height: 1.6; }
+    a { color: var(--blue); text-decoration-thickness: .08em; text-underline-offset: .18em; }
+    a:hover { color: #0d2a4d; }
+    :focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+    .shell { width: min(calc(100% - 2rem), var(--content)); margin-inline: auto; padding-block: var(--space-7); }
+    .eyebrow { color: var(--gold); font-size: .78rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    h1, h2, h3 { color: var(--blue); line-height: 1.15; text-wrap: balance; }
+    h1 { max-width: 22ch; margin: var(--space-2) 0 var(--space-4); font-size: clamp(2.1rem, 5.5vw, 4.2rem); letter-spacing: -.045em; }
+    h2 { margin-top: 0; font-size: clamp(1.35rem, 2.6vw, 1.9rem); }
+    h3 { margin: 0 0 var(--space-2); font-size: 1.02rem; }
+    .lede { max-width: 70ch; color: var(--muted); font-size: clamp(1.02rem, 1.8vw, 1.22rem); }
+    .panel { margin-top: var(--space-6); padding: clamp(1.25rem, 4vw, 2.25rem); background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); box-shadow: var(--shadow); }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: var(--space-4); }
+    .card { padding: var(--space-5); background: var(--surface-strong); border: 1px solid var(--border); border-radius: var(--radius-md); }
+    .card p { margin: 0; color: var(--muted); font-size: .93rem; }
+    .tag { display: inline-flex; padding: .28rem .65rem; background: var(--gold-soft); color: #69450d; border-radius: 999px; font-size: .78rem; font-weight: 750; }
+    .tag-blue { background: var(--blue-soft); color: var(--blue); }
+    .tag-green { background: var(--success-soft); color: var(--success); }
+    .tag-red { background: var(--danger-soft); color: var(--danger); }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: .85rem 1rem; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+    th { color: var(--blue); background: var(--blue-soft); }
+    tr:last-child td { border-bottom: none; }
+
+    .flow { display: flex; flex-wrap: wrap; align-items: stretch; justify-content: center; gap: var(--space-2); }
+    .node { min-width: 9.5rem; max-width: 13rem; padding: var(--space-3) var(--space-4); background: var(--blue-soft); border: 1px solid var(--blue); border-radius: var(--radius-md); text-align: center; font-weight: 700; color: var(--blue); }
+    .node small { display: block; margin-top: .2rem; font-weight: 500; color: var(--muted); line-height: 1.35; }
+    .node.plain { background: var(--surface-strong); font-weight: 600; }
+    .node.gold { background: var(--gold-soft); border-color: var(--gold); color: #69450d; }
+    .node.green { background: var(--success-soft); border-color: var(--success); color: var(--success); }
+    .node.red { background: var(--danger-soft); border-color: var(--danger); color: var(--danger); }
+    .node.wide { min-width: 11.5rem; }
+    .arrow { align-self: center; color: var(--gold); font-size: 1.4rem; font-weight: 900; padding: 0 .1rem; }
+    .diagram-note { margin-top: var(--space-3); color: var(--muted); font-size: .9rem; text-align: center; }
+
+    .step-list { display: grid; gap: var(--space-2); counter-reset: step; }
+    .step { display: grid; grid-template-columns: auto 1fr; gap: var(--space-4); padding: var(--space-4); background: var(--surface-strong); border: 1px solid var(--border); border-radius: var(--radius-md); }
+    .step::before { counter-increment: step; content: counter(step); display: grid; place-items: center; width: 2.2rem; height: 2.2rem; border-radius: 50%; background: var(--blue); color: #fff; font-weight: 800; font-size: .95rem; }
+    .step p { margin: 0; color: var(--muted); font-size: .93rem; }
+    .step strong { color: var(--ink); }
+
+    .timeline { display: grid; gap: var(--space-4); border-left: 3px solid var(--gold); padding-left: var(--space-5); }
+    .timeline article { position: relative; }
+    .timeline article::before { content: ""; position: absolute; left: calc(-1.5rem - 7px); top: .45rem; width: 11px; height: 11px; background: var(--gold); border: 3px solid var(--canvas); border-radius: 50%; }
+    .timeline .phase { color: var(--gold); font-size: .75rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .timeline p { margin: var(--space-1) 0 0; color: var(--muted); font-size: .93rem; }
+
+    .chips { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+    .chip { padding: .4rem .8rem; background: var(--surface-strong); border: 1px solid var(--border); border-radius: 999px; color: var(--muted); font-size: .85rem; }
+    .code { font-family: var(--font-mono); font-size: .86em; background: var(--blue-soft); color: var(--blue); padding: .05em .4em; border-radius: .3rem; }
+    .callout { margin-top: var(--space-4); padding: var(--space-4) var(--space-5); background: var(--gold-soft); border: 1px solid var(--gold); border-left: 5px solid var(--gold); border-radius: var(--radius-sm); color: #69450d; }
+    .callout strong { color: #5c3d0a; }
+    footer { margin-top: var(--space-7); color: var(--muted); font-size: .88rem; }
+    @media (max-width: 40rem) { .shell { padding-block: var(--space-6); } .arrow { transform: rotate(90deg); } }
+    @media print { body { background: white; } .shell { width: 100%; padding: 0; } .panel { box-shadow: none; break-inside: avoid; } }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div class="eyebrow">Implementation plan · Visual explainer</div>
+      <h1>How Arjim learns where each workstream lives</h1>
+      <p class="lede">This plan builds <em>point-and-read registration</em>: you point Arjim at a workspace folder, confirm one draft, and Arjim writes a permanent marker file <em>inside</em> that folder — so the folder always knows itself, on any device, even after a clean rebuild.</p>
+    </header>
+
+    <section class="panel" aria-labelledby="idea-title">
+      <h2 id="idea-title">The big idea in three sentences</h2>
+      <div class="grid">
+        <article class="card">
+          <span class="tag">Truth lives in the folder</span>
+          <h3>The workspace is its own memory</h3>
+          <p>Arjim writes one small marker, <span class="code">.workstream/workstream.json</span>, into the workstream's own folder. The marker survives Arjim being replaced or rebuilt — the folder always knows what it is.</p>
+        </article>
+        <article class="card">
+          <span class="tag">Device state is disposable</span>
+          <h3>Arjim's local index is just a map</h3>
+          <p>On each device, Arjim keeps a small SQLite index of where workstreams live. It is a replaceable copy: delete it, and a <em>rebuild</em> rediscovers everything from the markers. It never becomes the authority.</p>
+        </article>
+        <article class="card">
+          <span class="tag">You approve every write</span>
+          <h3>Draft → confirm → write → verify</h3>
+          <p>Arjim drafts the marker, <strong>you confirm the exact draft</strong>, Arjim writes it, then reads it back and revalidates it. Nothing is ever written or deleted without your confirmation.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="flow-title">
+      <h2 id="flow-title">Registering a new workstream, step by step</h2>
+      <p class="lede">The "new folder" flow — the heart of the plan. Arjim never guesses and never overwrites.</p>
+      <div class="flow">
+        <div class="node">1. Point<span><small>You point Arjim at the workspace folder</small></span></div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="node">2. Inspect<span><small>Read-only check: is a marker already there?</small></span></div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="node">3. Draft<span><small>Identity + label + record homes</small></span></div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="node gold">4. You confirm<span><small>Exact draft shown with a digest</small></span></div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="node">5. Write<span><small>Create-only — fails if anything exists</small></span></div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="node green">6. Read back<span><small>Reopen, revalidate, match identity</small></span></div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="node">7. Link<span><small>Add a local routing entry</small></span></div>
+      </div>
+      <p class="diagram-note">If you reject the draft → nothing is written. If the write succeeds but linking fails → the marker still stands, and a later relink reuses its identity.</p>
+    </section>
+
+    <section class="panel" aria-labelledby="data-title">
+      <h2 id="data-title">Where each piece of data lives</h2>
+      <p class="lede">The plan's core discipline: <strong>durable truth</strong> and <strong>device-local state</strong> never mix.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Piece</th><th>Where it lives</th><th>What it does</th><th>Role</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>The marker</strong><br><span class="code">.workstream/workstream.json</span></td>
+              <td>Inside the workstream folder</td>
+              <td>Holds identity, label, workspace reference, record homes. Readable by any device or assistant.</td>
+              <td><span class="tag tag-green">Durable truth</span></td>
+            </tr>
+            <tr>
+              <td><strong>Local index</strong> (SQLite)</td>
+              <td>Private per-user data on this device</td>
+              <td>Routing map: marker → local path. Rebuildable at any time from markers.</td>
+              <td><span class="tag tag-blue">Replaceable copy</span></td>
+            </tr>
+            <tr>
+              <td><strong>Record homes</strong></td>
+              <td>Real systems and tools (e.g. a task app)</td>
+              <td>Referenced as URIs in the marker. Arjim <em>never</em> opens them, never inspects them for credentials.</td>
+              <td><span class="tag tag-blue">References only</span></td>
+            </tr>
+            <tr>
+              <td><strong>Proxy folder</strong></td>
+              <td>A regular folder you designate</td>
+              <td>Used when the real workspace can't store metadata — the marker lives here, record homes still point to the real system.</td>
+              <td><span class="tag tag-gold">Fallback home</span></td>
+            </tr>
+            <tr>
+              <td><strong>Registry</strong> (future)</td>
+              <td>Outside this scope</td>
+              <td>Read-only discovery aid. Arjim reads registries, never writes them. Not built in v1.</td>
+              <td><span class="tag tag-red">Dormant</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout">
+        <strong>Already registered?</strong> If the folder already holds a valid marker, Arjim simply <em>links</em> it unchanged — no new identity, no confirmation, because nothing is written.
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="unregister-title">
+      <h2 id="unregister-title">Unregistering — deletion that never surprises</h2>
+      <div class="flow">
+        <div class="node">Draft intent<span><small>Bound to the marker's exact identity</small></span></div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="node gold">You confirm<span><small>Exact draft + digest</small></span></div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="node">Re-check marker<span><small>Unchanged? Same identity?</small></span></div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="node">Delete<span><small>Only under a cooperative lock</small></span></div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="node green">Verify absence<span><small>Read back; report <span class="code">unregistered</span></small></span></div>
+      </div>
+      <div class="callout" style="margin-top: var(--space-5);">
+        <strong>If the marker changed since you looked:</strong> Arjim stops, writes nothing, and reports <span class="code">changed-marker-stopped</span>. Re-registration later creates a fresh identity. The small window where another writer could interfere is disclosed as a known limitation — never claimed as a guarantee.
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="rails-title">
+      <h2 id="rails-title">Safety rails baked into the design</h2>
+      <div class="grid">
+        <article class="card"><span class="tag tag-green">Never overwrite</span><h3>Create-only writes</h3><p>If anything already occupies the marker path, registration stops with a distinct outcome. No silent replacement, ever.</p></article>
+        <article class="card"><span class="tag tag-green">Identity is permanent</span><h3>Name is just a label</h3><p>The identity is a generated UUID stored in the marker. Renaming the label changes nothing about who the workstream is.</p></article>
+        <article class="card"><span class="tag tag-green">Bounded input</span><h3>Hostile files can't hurt</h3><p>Markers are capped at 256 KiB, depth 8, and pass strict checks before any schema validation.</p></article>
+        <article class="card"><span class="tag tag-green">No secrets leak</span><h3>Diagnostics are redacted</h3><p>URIs, labels, and local paths are never echoed in output, logs, or errors. Record-home URIs are treated as untrusted data.</p></article>
+        <article class="card"><span class="tag tag-green">Access-gated</span><h3>Only what this device can reach</h3><p>An instance registers only workspaces it can actually access. Inaccessible ones simply stay unregistered on that device.</p></article>
+        <article class="card"><span class="tag tag-green">Fail closed</span><h3>Unknown = stop</h3><p>Invalid, unsupported, or conflicting markers stop for operator resolution. Arjim never "fixes" a marker on its own.</p></article>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="pipeline-title">
+      <h2 id="pipeline-title">How raw marker bytes are checked, in order</h2>
+      <p class="lede">Before a marker is ever parsed as JSON, it must survive this gate — each step rejects hostile or malformed input with a bounded, redacted error.</p>
+      <div class="flow">
+        <div class="node">Raw bytes</div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="node">Read cap<span><small>262,145 bytes max</small></span></div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="node">Strict UTF-8<span><small>No alternate encodings</small></span></div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="node">Depth ≤ 8<span><small>Token-aware scan</small></span></div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="node">No duplicates<span><small>Reject duplicate keys</small></span></div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="node">No NaN/Inf<span><small>Reject non-finite numbers</small></span></div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="node">No controls/bidi<span><small>Scan names and values</small></span></div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="node green">Schema validation<span><small>Draft 2020-12</small></span></div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="node">Redacted outcome<span><small>Stable error codes</small></span></div>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="build-title">
+      <h2 id="build-title">How it will be built — eleven units in order</h2>
+      <p class="lede">Contracts first (what must be true), then the Python implementation (what must run). Each unit depends on the one before it.</p>
+      <div class="timeline">
+        <article>
+          <div class="phase">Contracts — portable data, no code</div>
+          <h3>U5 → U1 → U2 → U3 → U4 · Define what "registered" means</h3>
+          <p>Conformance envelope (fixture format), the marker schema, the state protocol (draft/confirm/write/read-back/link/unregister), the result vocabulary, and plain-language implementation guidance.</p>
+        </article>
+        <article>
+          <div class="phase">Python implementation — runnable behavior</div>
+          <h3>U6 · Scaffold</h3>
+          <p>Pinned CPython 3.14.x + <span class="code">jsonschema</span> 4.26.x project, conformance runner skeleton, SQLite required.</p>
+        </article>
+        <article>
+          <div class="phase">Python implementation</div>
+          <h3>U7 · Raw-input guard</h3>
+          <p>The gate shown above — the first wall against hostile marker files.</p>
+        </article>
+        <article>
+          <div class="phase">Python implementation</div>
+          <h3>U8 · Validation + diagnostics</h3>
+          <p>Bundled-schema validation and bounded, redacted error reporting.</p>
+        </article>
+        <article>
+          <div class="phase">Python implementation</div>
+          <h3>U9 · Registration lifecycle</h3>
+          <p>Inspect, draft, confirm, create-only write, read-back, link — plus recovery from interruptions at any stage.</p>
+        </article>
+        <article>
+          <div class="phase">Python implementation</div>
+          <h3>U10 · Unregister + projection</h3>
+          <p>Confirmed conditional delete, and the replaceable SQLite index with rebuild support.</p>
+        </article>
+        <article>
+          <div class="phase">Python implementation</div>
+          <h3>U11 · CLI + full conformance</h3>
+          <p>The operator surface (<span class="code">register</span>, <span class="code">link</span>, <span class="code">rebuild</span>, <span class="code">unregister</span>, …) and the complete project test corpus — the point-and-read path works end to end.</p>
+        </article>
+      </div>
+      <div class="callout">
+        <strong>Definition of done:</strong> the CLI completes the full write → read-back lifecycle, every mandatory conformance fixture passes, and nothing — no draft, no digest, no secret — survives beyond the process that created it.
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="deferred-title">
+      <h2 id="deferred-title">Deliberately not in this version</h2>
+      <div class="chips">
+        <span class="chip">Machine scan &amp; registry entry paths</span>
+        <span class="chip">Arjim publishing to registries</span>
+        <span class="chip">Workstream status &amp; freshness</span>
+        <span class="chip">Automatic folder rediscovery</span>
+        <span class="chip">Auto-duplicate detection</span>
+        <span class="chip">Any second runtime</span>
+      </div>
+      <p class="lede" style="margin-top: var(--space-4);">Point-and-read registration is the only working v1 entry path. Everything else is designed for later, on top of this foundation — but nothing else is claimed as working.</p>
+    </section>
+
+    <footer>
+      <p>Visual explainer of <em>Plan: Workstream Registration and Discovery (implementation-ready)</em> · Read the full plan on <a href="https://www.proofeditor.ai/d/h1nem0fe?token=37899eaf-8fbd-4e57-8e9a-9025a6c08040">Proof</a> · Local copy: <span class="code">docs/plans/2026-08-01-001-feat-workstream-registration-discovery-plan.md</span></p>
+      <p>Self-contained HTML artifact · Works offline</p>
+    </footer>
+  </main>
+</body>
+</html>
