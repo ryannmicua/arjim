@@ -21,11 +21,11 @@ Seeded from the workstream registration and discovery plan (`docs/plans/2026-08-
 | ID | Title | Impact | Likelihood | Owner | Opened | Mitigation / Notes |
 |---|---|---|---|---|---|---|
 | R-001 | Contract without executable proof | High | Medium | Arjim CE | 2026-08-01 | A malformed schema or contradictory fixture can survive manual review. Mitigation: one expectation manifest, every fixture declares its expected result, and the pinned Python implementation executes the complete project corpus. |
-| R-002 | Path portability | Medium | Medium | Arjim CE | 2026-08-01 | Device paths in the workspace reference would break cross-device identity. Mitigation: fixtures reject device paths in the workspace reference; record-home URIs may be local-resource but stay untrusted, non-dereferenceable data. |
+| R-002 | Path portability | Medium | Medium | Arjim CE | 2026-08-01 | Device paths in the workspace reference would break cross-device identity. Mitigation: fixtures reject device paths in the workspace reference; record-source URIs may be local-resource but stay untrusted, non-dereferenceable data. |
 | R-003 | Resource exhaustion | Medium | Low | Arjim CE | 2026-08-01 | A shared marker can be hostile before schema validation. Mitigation: KTD9 pre-parse and collection bounds, including a coarse 262,145-byte bounded read cap; exact byte-ceiling conformance fixtures deferred to v2 (2026-08-02, X-001). |
 | R-004 | URI overclaim | High | Medium | Arjim CE | 2026-08-01 | Structural validity does not prove access, ownership, or safety. Mitigation: KTD5 prohibits automatic dereference, warns on malformed URIs, and distinguishes `not-checked`, `unsupported`, and inaccessible states. |
 | R-005 | Secret leakage | High | Medium | Arjim CE | 2026-08-01 | URI syntax can contain sensitive-looking content. Mitigation: KTD9 accepts credential-bearing URIs as untrusted data, the Python implementation never inspects or dereferences URI content, never echoes sensitive values, and warns only on malformed syntax. |
-| R-006 | Schema lock-in | Medium | Medium | Arjim CE | 2026-08-01 | A closed provider enum would force schema changes per integration. Mitigation: keep record-home type tokens open as workspace data and report unsupported capability separately in the Python implementation. |
+| R-006 | Schema lock-in | Medium | Medium | Arjim CE | 2026-08-01 | A closed provider enum would force schema changes per integration. Mitigation: keep record-source type tokens open as workspace data and report unsupported capability separately in the Python implementation. |
 
 ### Resolved
 
@@ -41,8 +41,8 @@ Seeded from the workstream registration and discovery plan (`docs/plans/2026-08-
 |---|---|---|---|---|
 | A-001 | `VISION.md` remains product authority. | Arjim CE | 2026-08-01 | Any change to the plan must stay consistent with VISION.md. |
 | A-002 | The operator is the sole v1 human actor. | Arjim CE | 2026-08-01 | No other human roles in scope for v1. |
-| A-003 | Record homes are typed, absolute URI references validated for structure only; any syntactically valid URI is accepted regardless of scheme or credential-bearing components, and malformed ones warn. Provider access and ownership checks are deferred. | Arjim CE | 2026-08-01 | Reflects KD10 resolution. |
-| A-004 | Record-home URIs are accepted as untrusted data even when credential-bearing; the Python implementation never dereferences or inspects them and diagnostics never echo them. The operator decides what the marker may contain. | Arjim CE | 2026-08-01 | Reflects KD10 resolution. |
+| A-003 | Record sources are typed, absolute URI references validated for structure only; any syntactically valid URI is accepted regardless of scheme or credential-bearing components, and malformed ones warn. Provider access and ownership checks are deferred. | Arjim CE | 2026-08-01 | Reflects KD10 resolution. |
+| A-004 | Record-source URIs are accepted as untrusted data even when credential-bearing; the Python implementation never dereferences or inspects them and diagnostics never echo them. The operator decides what the marker may contain. | Arjim CE | 2026-08-01 | Reflects KD10 resolution. |
 | A-005 | Unregister uses the same operator-confirmation authority as registration; the Python implementation does not delete a marker without a confirmed exact identity. | Arjim CE | 2026-08-01 | Reflects KD9 / KTD10. |
 
 ### Resolved
@@ -63,7 +63,7 @@ Seeded from the workstream registration and discovery plan (`docs/plans/2026-08-
 
 | ID | Title | Severity | Opened | Resolved | Resolution |
 |---|---|---|---|---|---|
-| I-001 | URI validity and secret policy conflict | P1 | 2026-08-01 | 2026-08-01 | v1 accepts any syntactically valid record-home URI regardless of scheme or credential-bearing components; malformed URIs warn without invalidating the marker (KD10, KTD5, KTD9). Unsupported providers remain valid data with non-dereferenceable capability; diagnostics never echo URI content, labels, or secrets; the Python implementation does not inspect URI content. |
+| I-001 | URI validity and secret policy conflict | P1 | 2026-08-01 | 2026-08-01 | v1 accepts any syntactically valid record-source URI regardless of scheme or credential-bearing components; malformed URIs warn without invalidating the marker (KD10, KTD5, KTD9). Unsupported providers remain valid data with non-dereferenceable capability; diagnostics never echo URI content, labels, or secrets; the Python implementation does not inspect URI content. |
 | I-002 | Create-only consistency domain | P1 | 2026-08-01 | 2026-08-01 | v1 permits weaker storage — no strongly consistent exclusive creation — and accepts that two distinct valid identities may exist for one target. The projection reports a `conflict` when a captured target already holds a different identity, without changing the marker (KTD10). Cross-instance duplicate detection and resolution are out of scope: duplicate workstreams are left to the operator, who owns any multiple copies (2026-08-02 operator decision). |
 
 ## Dependencies (D)

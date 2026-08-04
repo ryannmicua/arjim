@@ -23,7 +23,7 @@ I do not want another dashboard or system that I have to maintain. I want an ass
 
 **Workspace** is where a workstream keeps its lasting records. It may include files and connected systems such as Planner, SharePoint, email, or a repository. It tells Arjim where each authoritative record lives.
 
-Arjim is responsible for a workstream once it is registered and Arjim knows its workspace and authoritative record homes.
+Arjim is responsible for a workstream once it is registered and Arjim knows its workspace and authoritative record sources.
 
 ## Near-term promise
 
@@ -46,7 +46,7 @@ When priorities conflict, protect trust first. Then improve awareness, add actio
 
 When something across any workstream needs my decision, approval, or help, Arjim tells me. It brings these items together into one "this needs me" view.
 
-Arjim reports "nothing pending" only after checking every required record home. The answer shows when the checks ran and which checks failed or could not run. An incomplete check is reported as unknown, not nothing.
+Arjim reports "nothing pending" only after checking every required record source. The answer shows when the checks ran and which checks failed or could not run. An incomplete check is reported as unknown, not nothing.
 
 **Why I want this:** Right now, I have to visit each workstream or wait for a notification from one of its tools. Things slip when I am busy.
 
@@ -58,7 +58,7 @@ Arjim reports "nothing pending" only after checking every required record home. 
 
 Arjim tells me how my workstreams are going without waiting for me to ask.
 
-It gives me one management view: which workstreams are active, where each one stands, what changed since the last successful check, and which record homes could not be checked.
+It gives me one management view: which workstreams are active, where each one stands, what changed since the last successful check, and which record sources could not be checked.
 
 **Why I want this:** Today, asking "how is it going?" means opening each workstream. I do not always remember what is active.
 
@@ -84,7 +84,7 @@ Arjim may keep a working copy, but it is never the only home for information I n
 
 Arjim handles the management side of a registered workstream: set it up, check its status, change its location or ownership when authorized, and close it. I should not have to open a different app for each step.
 
-When a decision or approval needs to be official, Arjim files it in the workstream's designated record home, such as Planner, SharePoint, or email.
+When a decision or approval needs to be official, Arjim files it in the workstream's designated record source, such as Planner, SharePoint, or email.
 
 **Why I want this:** Today I mentally track which tool holds each workstream. Managing work across several places adds overhead to everything I manage.
 
@@ -114,9 +114,9 @@ This is a later outcome. The cross-device mechanism is not designed yet.
 
 Other people may use their own digital assistants on the same workstreams. Their assistants and Arjim can communicate directly, much like human operators. They can share status, request action, coordinate timing, clarify ownership, and hand work to one another.
 
-Direct communication helps the assistants coordinate, but it does not replace the workspace. Any decision, approval, commitment, handoff, or change that needs to last must be recorded in the workstream's designated authoritative record home.
+Direct communication helps the assistants coordinate, but it does not replace the workspace. Any decision, approval, commitment, handoff, or change that needs to last must be recorded in the workstream's designated authoritative record source.
 
-Each assistant keeps its own working copy. The workspace and its designated record homes remain the durable source of truth. No assistant cache or conversation transcript becomes authoritative by itself.
+Each assistant keeps its own working copy. The workspace and its designated record sources remain the durable source of truth. No assistant cache or conversation transcript becomes authoritative by itself.
 
 **Why I want this:** I work with other people. Our assistants should be able to coordinate routine management work without requiring every exchange to pass through us.
 
@@ -135,13 +135,13 @@ Arjim distinguishes between:
 - Current information
 - Stale information
 - Nothing found after a complete check
-- A required record home it could not access
-- A required record home it does not know how to check
+- A required record source it could not access
+- A required record source it does not know how to check
 - A check it has not performed
 
 Unknown is never reported as nothing.
 
-A check is complete only when every required record home for that answer was checked within its defined freshness window.
+A check is complete only when every required record source for that answer was checked within its defined freshness window.
 
 ### 2. Arjim acts only with authority
 
@@ -176,19 +176,19 @@ Before automation begins, the first pilot records how I currently manage my work
 ### Awareness and coverage
 
 - Every registered workstream marked active appears in the portfolio view.
-- Every workstream status and portfolio answer shows when it was checked, which required record homes were checked, and which checks failed or were skipped.
-- Arjim reports "nothing pending" only when every required record home was checked successfully within its defined freshness window.
-- Every item that needs me identifies the workstream, record home, requested action, and due date when one exists.
+- Every workstream status and portfolio answer shows when it was checked, which required record sources were checked, and which checks failed or were skipped.
+- Arjim reports "nothing pending" only when every required record source was checked successfully within its defined freshness window.
+- Every item that needs me identifies the workstream, record source, requested action, and due date when one exists.
 
 ### Reduced management effort
 
 - Routine visits to tools that hold authoritative records just to check status decrease by at least 75% from the 30-day baseline.
 - I can answer "what am I working on?", "what needs me?", and "what changed?" from one Arjim view without opening another tool.
-- For every registered workstream, Arjim can identify its purpose, lifecycle state, workspace, authoritative record homes, and designated decision record home without relying on my memory.
+- For every registered workstream, Arjim can identify its purpose, lifecycle state, workspace, authoritative record sources, and designated decision record source without relying on my memory.
 
 ### Durable memory
 
-- A clean rebuild reconstructs the registered-workstream inventory and its authoritative record homes from the workspaces without copying Arjim's previous working cache.
+- A clean rebuild reconstructs the registered-workstream inventory and its authoritative record sources from the workspaces without copying Arjim's previous working cache.
 - No decision, approval, or agreed scope exists only inside Arjim or an assistant conversation without being clearly reported as unprotected.
 - A wipe-and-rebuild test reports every missing, inaccessible, or unsupported workspace record instead of silently omitting it.
 
@@ -203,9 +203,9 @@ Before automation begins, the first pilot records how I currently manage my work
 - A newly authorized device can discover every registered workstream available through its configured roots and connections without copying another device's cache.
 - Two authorized assistants reading the same authoritative record identify the same record and version. Any difference in freshness, access, or supported capability is shown.
 - Two assistants can exchange a request or handoff, record the accepted outcome in the workspace, and recover that outcome later without relying on the conversation transcript.
-- A change made through another assistant appears after the next successful check of its authoritative record home and remains attributable to the responsible operator and acting assistant.
+- A change made through another assistant appears after the next successful check of its authoritative record source and remains attributable to the responsible operator and acting assistant.
 
-These are starting targets, not permanent promises. After the pilot, adjust them based on how I actually work, the limits of each record home, and realistic freshness windows.
+These are starting targets, not permanent promises. After the pilot, adjust them based on how I actually work, the limits of each record source, and realistic freshness windows.
 
 ## How to use this vision
 

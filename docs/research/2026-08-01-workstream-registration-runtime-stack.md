@@ -38,10 +38,10 @@ This assessment does not reopen any of the following decisions:
 - JSON Schema Draft 2020-12 is the declared schema dialect.
 - A runtime must declare compatibility with the validation profile and pass the portable fixture corpus before claiming compliance.
 - The marker remains one closed JSON document at `.workstream/workstream.json` within a workspace folder.
-- The fixed raw-input limits remain: a 256 KiB (262,144-byte) bounded read cap, maximum JSON container depth 8, 256-byte label, 64-byte ASCII type token, 2,048-byte ASCII record-home URI, and at most 32 record homes. Exact byte-ceiling conformance fixtures are deferred (2026-08-02, RAID X-001).
+- The fixed raw-input limits remain: a 256 KiB (262,144-byte) bounded read cap, maximum JSON container depth 8, 256-byte label, 64-byte ASCII type token, 2,048-byte ASCII record-source URI, and at most 32 record sources. Exact byte-ceiling conformance fixtures are deferred (2026-08-02, RAID X-001).
 - Registration remains inspect, Arjim-drafted self-description, exact operator confirmation, create-only write, read-back verification, then replaceable local link projection.
 - Unregistration remains an exact-identity-bound confirmed conditional delete, complete only after read-back verifies absence.
-- Record-home URIs remain untrusted, are never dereferenced, and may contain credentials.
+- Record-source URIs remain untrusted, are never dereferenced, and may contain credentials.
 - Diagnostics must not echo URIs, labels, secrets, or local device paths.
 - The marker's workspace reference remains the literal `.`.
 
@@ -107,7 +107,7 @@ For this contract:
 
 - Do not enable generic URI `format` assertion merely as a hardening measure.
 - Do not reject a URI because it has a credential-bearing authority component.
-- Do not dereference any record-home URI.
+- Do not dereference any record-source URI.
 - Enforce only the schema's settled structural and length constraints plus any explicitly fixture-defined string policy.
 
 This avoids turning valid untrusted data into an implementation-dependent rejection.
@@ -455,7 +455,7 @@ At minimum, include:
 - raw unescaped controls and escaped controls that decode into strings;
 - every fixture-defined bidirectional-control code point in keys and values;
 - unknown/additional properties at every closed-object level;
-- label, type-token, URI, and record-home boundary cases;
+- label, type-token, URI, and record-source boundary cases;
 - a credential-bearing URI that must be accepted as untrusted data;
 - a URI with an unsupported or unusual scheme that must not be dereferenced;
 - exact literal `.` workspace reference cases;
@@ -480,7 +480,7 @@ Current exact Bowtie pass percentages for the shortlisted pinned configurations 
 1. Bundle all trusted schemas and meta-schemas needed by the declared profile.
 2. Disable network retrieval for `$ref` resolution. An untrusted marker must never cause HTTP, file, classpath, package, or other unintended resource access.
 3. Keep Draft 2020-12 `format` assertion disabled unless the declared validation profile explicitly requires it.
-4. Never dereference record-home URIs.
+4. Never dereference record-source URIs.
 5. Do not canonicalize away credential-bearing URI components merely to validate them.
 6. Reject malformed raw input before schema validation.
 7. Do not log raw marker bytes, decoded values, native validation messages, or local paths.

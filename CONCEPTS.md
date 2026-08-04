@@ -4,40 +4,65 @@ Shared domain vocabulary for this project — entities, named processes, and sta
 
 ## Workstream
 
-Anything Arjim manages as one unit — a project, recurring responsibility, operational process, shared initiative, or other ongoing work. A workstream exists as a durable registration only once it is registered and Arjim knows its workspace and authoritative record homes.
+Anything Arjim manages as one unit — a project, recurring responsibility, operational process, shared initiative, or other ongoing work. A workstream exists as a durable registration only once it is registered and Arjim knows its workspace and authoritative record sources.
 
 ## Workspace
 
 Where a workstream keeps its lasting records — a folder plus the connected systems (Planner, SharePoint, email, repository) that hold its authoritative state. It tells Arjim where each authoritative record lives. The workspace is the durable source of truth; assistant working copies and device-local state never become authoritative.
 
-## Marker
+## Regular workspace
 
-The durable, assistant-neutral registration record a registered workstream holds in its workspace. It is one closed JSON document containing the workstream's self-description: an Arjim-generated permanent identity, a mutable operator-facing label, the workspace reference, and its record homes.
+The location where a workstream actually lives — the folder that holds its lasting records (or holds the workspace reference that identifies them). A regular workspace is the direct counterpart of a proxy workspace.
 
-The marker is the registration authority. Registration writes it only after the operator confirms the exact draft, uses create-only semantics so it never silently replaces an existing marker, and completes only when read-back verifies its identity. Local inventory is a replaceable projection; the marker is not.
+## Proxy workspace
 
-## Record home
+A workspace that points to another workstream because that workstream cannot hold its own metadata. The manifest records proxy kind and lives in the proxy; its record sources reference the real system or tool where the workstream's records are maintained.
 
-A typed URI reference to the authoritative location of a workstream's lasting records (a system or tool such as Planner, SharePoint, or email). Record homes are accepted as untrusted data: adapters never dereference them, never inspect them for credentials or tokens, and diagnostics never echo them. Validity is syntactic only; an unsupported scheme stays valid but non-dereferenceable.
+## Workstream manifest
+
+The durable, assistant-neutral document through which Arjim and other assistants discover and recognize a workstream. It is one closed JSON document containing the workstream's self-description: an Arjim-generated permanent identity, a mutable operator-facing label, the workspace reference, and its record sources. Its canonical path is `.workstream/manifest.json`.
+
+The manifest is the registration authority. Registration writes it only after the operator confirms the exact draft, uses create-only semantics so it never silently replaces an existing manifest, and completes only when read-back verifies the recorded workstream identity. Local inventory is a replaceable projection; the manifest is not.
+
+Manifest terminology:
+
+- **Manifest** — the everyday short form of **workstream manifest**. Use the full term on first mention or when it must stand on its own.
+- **Manifest file** — the physical JSON file. Use this term when discussing filesystem behavior such as creation, locking, deletion, permissions, or read-back.
+- **Manifest path** — the fixed location `.workstream/manifest.json` within a workspace.
+- **Manifest contents** — the data recorded in the manifest, including the workstream identity, operator-facing label, workspace relationship, and record sources.
+- **Workstream manifest schema** — the versioned contract that defines the allowed structure and values of a manifest.
+- **Manifest version** — the schema version that a reader uses to select the correct validation contract.
+- **Workstream identity** — the permanent identifier recorded in the manifest. It identifies the workstream across devices, assistants, workspace moves, and local projection rebuilds.
+- **Manifest presence** — whether a manifest exists at the manifest path. Presence makes the workspace a registration or discovery candidate but does not by itself establish a valid registration.
+- **Manifest validity** — whether the manifest satisfies its raw-input limits and schema.
+- **Supported manifest** — a valid manifest whose version the current reader understands. An unsupported version is not interpreted as registration authority by that reader.
+
+## Record source
+
+The authoritative location where a workstream's records are maintained — a typed URI reference to a system or tool such as Planner, SharePoint, or email (in the data-vault sense: the provenance of the workstream's truth). Record sources are accepted as untrusted data: adapters never dereference them, never inspect them for credentials or tokens, and diagnostics never echo them. Validity is syntactic only; an unsupported scheme stays valid but non-dereferenceable.
+
+## Point-and-read registration
+
+The v1 entry path by which an operator registers a workstream: point Arjim at the workspace, inspect, draft, confirm, write, read back, and link. The term is internal plan vocabulary; it never reaches the operator-facing surface (which simply says register, link, rebuild, unregister).
 
 ## Local link projection
 
-Replaceable, device-local routing state derived by reading workspace markers, so an assistant can find registered workstreams without a remembered map of tools. It never becomes registration authority: deleting local routing state never unregisters a workstream, and a rebuild begins from the markers.
+Replaceable, device-local routing state derived by reading workstream manifests, so an assistant can find registered workstreams without a remembered map of tools. It never becomes registration authority: deleting local routing state never unregisters a workstream, and a rebuild begins from the manifests.
 
 ## Registration
 
-The confirmed process that makes a workspace a registered workstream: inspect the workspace, draft the self-description, obtain the operator's exact confirmation, write the marker with create-only semantics, verify it by read-back, then derive the local link. Nothing is written before exact confirmation, and no existing marker is ever replaced.
+The confirmed process that makes a workspace a registered workstream: inspect the workspace, draft the self-description, obtain the operator's exact confirmation, write the manifest with create-only semantics, verify it by read-back, then derive the local link. Nothing is written before exact confirmation, and no existing manifest is ever replaced.
 
 ## Unregistration
 
-The confirmed process that retires a registration: draft an unregister intent bound to the marker's exact identity, obtain confirmation, conditionally delete the marker only if it still matches, and complete only when read-back verifies absence. It is the durable way to resolve a duplicate registration or retire a workstream.
+The confirmed process that retires a registration: draft an unregister intent bound to the exact workstream identity recorded in the manifest, obtain confirmation, conditionally delete the manifest only if it still matches, and complete only when read-back verifies absence. It is the durable way to resolve a duplicate registration or retire a workstream.
 
 ## Relationships
 
-- A **Workstream** is registered in a **Workspace**, which holds its **Marker**.
-- A **Marker** references **Record homes**; the record homes, not the marker, point to where the workstream's lasting records live.
-- The **Local link projection** is derived from **Markers** and never outranks them.
+- A **Workstream** is registered in a **Workspace** (a **Regular workspace** directly, or through a **Proxy workspace** when the workstream cannot hold its own metadata), which holds its **Workstream manifest**.
+- A **Workstream manifest** references **Record sources**; the record sources, not the manifest, point to where the workstream's lasting records live.
+- The **Local link projection** is derived from **Workstream manifests** and never outranks them.
 
 ## Flagged ambiguities
 
-- "record home" and "workspace reference" were used interchangeably — they are distinct. The workspace reference is the literal `.` in the marker identifying the workspace itself; a record home is a URI to a separate authoritative system and is never a workspace reference.
+- "record source" and "workspace reference" were used interchangeably — they are distinct. The workspace reference is the literal `.` in the manifest identifying the workspace itself; a record source is a URI to a separate authoritative system and is never a workspace reference.
