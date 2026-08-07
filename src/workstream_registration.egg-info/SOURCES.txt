@@ -1,9 +1,0 @@
-README.md
-pyproject.toml
-src/workstream_registration/__init__.py
-src/workstream_registration/conformance_runner.py
-src/workstream_registration.egg-info/PKG-INFO
-src/workstream_registration.egg-info/SOURCES.txt
-src/workstream_registration.egg-info/dependency_links.txt
-src/workstream_registration.egg-info/requires.txt
-src/workstream_registration.egg-info/top_level.txt

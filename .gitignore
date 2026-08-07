@@ -40,3 +40,6 @@ temp/
 *.local
 config.local.*
 !.compound-engineering/config.local.example.yaml
+
+# build artifacts
+*.egg-info/
