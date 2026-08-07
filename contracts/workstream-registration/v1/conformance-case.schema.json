@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.workstream-registration/v1/conformance-case.schema.json",
+  "title": "WorkstreamRegistrationConformanceCase",
+  "x-surface": "conformance-case",
+  "x-surface-version": "1",
+  "description": "Fixture envelope for the Workstream Registration v1 conformance corpus (U5, PLAN:341-352). One case per fixture file under tests/contracts/workstream-registration/{valid,invalid,warn,raw,transitions}/. Two case kinds are separated: parsed-value cases carry the decoded JSON document under test in `payload`; raw-byte cases carry base64-encoded raw bytes in `payload_base64` and the decoded bytes are explicitly NOT parsed as JSON documents (PLAN:349) - they are fed to the raw-input guard (KTD11, PLAN:196), which may reject them at any phase. Each case must have exactly one structurally valid expectation entry in expectations.json (gate G2, PLAN:486).",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]{0,63}$",
+      "description": "Stable lowercase-kebab case identifier. Unique across the corpus; the matching manifest entry carries the same id (unambiguous manifest link, gate G2)."
+    },
+    "kind": {
+      "enum": [
+        "parsed-value",
+        "raw-byte"
+      ],
+      "description": "parsed-value: the document under test is decoded JSON embedded as `payload`. raw-byte: the input is raw bytes carried as base64 in `payload_base64`; the decoded payload is never parsed as a JSON document (PLAN:349)."
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "payload": {
+      "description": "Only with kind=parsed-value. The JSON document under test (any JSON value: a marker, an invalid candidate, or a non-object document). Required by the kind allOf below; forbidden with kind=raw-byte."
+    },
+    "payload_base64": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 400000,
+      "pattern": "^[A-Za-z0-9+/]*={0,2}$",
+      "description": "Only with kind=raw-byte. Standard base64 of the raw input bytes; the decoded bytes may be malformed UTF-8, oversized, duplicate-keyed, over-deep, or otherwise not a JSON document (KTD11, PLAN:196). Length bound covers the 262,145-byte read-cap boundary (349,529 base64 chars) plus oversized cases; the exact byte ceiling is enforced by the raw guard, not this schema."
+    },
+    "inputs": {
+      "description": "Optional, transition-case surface (U2, PLAN:374): scenario inputs such as draft, confirmation state, marker/parent presence, target handle, and lock state. The plan leaves this surface open at U5 - U2 defines its vocabulary when the transition fixtures land (U2, PLAN:374-378); the envelope stays closed everywhere else."
+    }
+  },
+  "required": [
+    "id",
+    "kind"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "parsed-value"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "required": [
+          "payload"
+        ],
+        "not": {
+          "required": [
+            "payload_base64"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "raw-byte"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "required": [
+          "payload_base64"
+        ],
+        "not": {
+          "required": [
+            "payload"
+          ]
+        }
+      }
+    }
+  ],
+  "additionalProperties": false
+}

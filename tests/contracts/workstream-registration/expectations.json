@@ -1,0 +1,47 @@
+{
+  "manifest_version": "1.0.0",
+  "contract": "workstream-registration/v1",
+  "description": "Expectation manifest (fixture index) for the Workstream Registration v1 conformance corpus. One entry per case file under tests/contracts/workstream-registration/{valid,invalid,warn,raw,transitions}/; each entry declares its category (mandatory/capability/warning), expected result, and R#/AE# coverage tags. Later units append entries: U1 adds marker fixtures, U2 adds transition fixtures, U3 completes the result and transition corpus. Paths are relative to this file's directory.",
+  "entries": [],
+  "canaries": {
+    "fake-token-1": {
+      "kind": "token",
+      "values": [
+        "wst_live_9f2k3LmN4pQr5sT6uV7wX8yZ1aB2cD"
+      ]
+    },
+    "fake-token-2": {
+      "kind": "token",
+      "values": [
+        "ghp_J0kF2x9Qz8LmN4pR6sT7uV3wX5yZ2bC"
+      ]
+    },
+    "userinfo-uri-1": {
+      "kind": "userinfo-uri",
+      "values": [
+        "https://svc-account:fake-secret-token-9Xz2@records.example.org/projects/workstream-01",
+        "ssh://deploy:sup3r-fake-secret@git.example.org/workstream-registration.git"
+      ]
+    },
+    "userinfo-uri-2": {
+      "kind": "userinfo-uri",
+      "values": [
+        "https://redacted:redacted-fake-secret@sharepoint.example.org/sites/records/workstream-02"
+      ]
+    },
+    "key-shaped-1": {
+      "kind": "key-shaped",
+      "values": [
+        "-----BEGIN OPENSSH PRIVATE KEY-----",
+        "AKIAFAKEKEYEXAMPLE01"
+      ]
+    },
+    "key-shaped-2": {
+      "kind": "key-shaped",
+      "values": [
+        "-----BEGIN PRIVATE KEY-----",
+        "sk_fake_7O8x2P4mN9vQ0cW2eR5tY6uI8oP0aSd3"
+      ]
+    }
+  }
+}
