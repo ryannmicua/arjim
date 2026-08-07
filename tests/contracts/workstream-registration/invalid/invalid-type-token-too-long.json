@@ -1,0 +1,18 @@
+{
+  "id": "invalid-type-token-too-long",
+  "kind": "parsed-value",
+  "description": "Type token beyond 64 characters (PLAN:364): 65 ASCII characters, maxLength 64.",
+  "payload": {
+    "version": 1,
+    "identity": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "label": "Overlong type token",
+    "kind": "direct",
+    "workspace": ".",
+    "record_sources": [
+      {
+        "type": "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy",
+        "uri": "https://records.example.invalid/long-token"
+      }
+    ]
+  }
+}

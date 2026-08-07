@@ -1,0 +1,18 @@
+{
+  "id": "canary-key-shaped-2",
+  "kind": "parsed-value",
+  "description": "Canary fixture (REV:58): exact key-shaped-2 group values (BEGIN PRIVATE KEY line as label, sk_-shaped string in a URI); labels and URIs remain data.",
+  "payload": {
+    "version": 1,
+    "identity": "1a2b3c4d-5e6f-47a8-9b0c-1d2e3f4a5b6c",
+    "label": "-----BEGIN PRIVATE KEY-----",
+    "kind": "direct",
+    "workspace": ".",
+    "record_sources": [
+      {
+        "type": "vault/secret",
+        "uri": "https://vault.example.invalid/secret/sk_fake_7O8x2P4mN9vQ0cW2eR5tY6uI8oP0aSd3"
+      }
+    ]
+  }
+}

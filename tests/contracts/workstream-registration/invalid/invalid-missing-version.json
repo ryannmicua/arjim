@@ -1,0 +1,17 @@
+{
+  "id": "invalid-missing-version",
+  "kind": "parsed-value",
+  "description": "Missing version (PLAN:364): required version field absent; readers dispatch on version before the closed schema.",
+  "payload": {
+    "identity": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "label": "No version",
+    "kind": "direct",
+    "workspace": ".",
+    "record_sources": [
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/version"
+      }
+    ]
+  }
+}

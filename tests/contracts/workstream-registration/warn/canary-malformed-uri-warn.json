@@ -1,0 +1,18 @@
+{
+  "id": "canary-malformed-uri-warn",
+  "kind": "parsed-value",
+  "description": "Canary fixture (REV:58): malformed URI (embedded space) carrying the exact fake-token-1 group value; expected valid-with-warnings, no-echo across all output surfaces.",
+  "payload": {
+    "version": 1,
+    "identity": "1a2b3c4d-5e6f-47a8-9b0c-1d2e3f4a5b6c",
+    "label": "Canary warned URI",
+    "kind": "direct",
+    "workspace": ".",
+    "record_sources": [
+      {
+        "type": "records/web",
+        "uri": "https://records.example.invalid/shared drive wst_live_9f2k3LmN4pQr5sT6uV7wX8yZ1aB2cD"
+      }
+    ]
+  }
+}

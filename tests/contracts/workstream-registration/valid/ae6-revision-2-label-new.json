@@ -1,0 +1,18 @@
+{
+  "id": "ae6-revision-2-label-new",
+  "kind": "parsed-value",
+  "description": "AE6 revision 2 (PLAN:131): same identity as ae6-revision-1-label-old, differing only in label; both valid. Covers R5, R14.",
+  "payload": {
+    "version": 1,
+    "identity": "9d4e3f2a-7b6c-4d8e-9f0a-1b2c3d4e5f60",
+    "label": "Design System Notes (renamed)",
+    "kind": "direct",
+    "workspace": ".",
+    "record_sources": [
+      {
+        "type": "vcs/git",
+        "uri": "https://git.example.org/team/design-system-notes.git"
+      }
+    ]
+  }
+}

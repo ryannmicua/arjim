@@ -1,0 +1,6 @@
+{
+  "id": "raw-bom-prefix",
+  "kind": "raw-byte",
+  "description": "BOM-prefixed raw input (PLAN:364): UTF-8 BOM signature before an otherwise valid marker; rejected as an encoding artifact at the utf8 phase.",
+  "payload_base64": "77u/eyJ2ZXJzaW9uIjoxLCJpZGVudGl0eSI6ImY0N2FjMTBiLTU4Y2MtNDM3Mi1hNTY3LTBlMDJiMmMzZDQ3OSIsImxhYmVsIjoiYm9tIGNhc2UiLCJraW5kIjoiZGlyZWN0Iiwid29ya3NwYWNlIjoiLiIsInJlY29yZF9zb3VyY2VzIjpbeyJ0eXBlIjoiZXhhbXBsZS9ib20iLCJ1cmkiOiJodHRwczovL3JlY29yZHMuZXhhbXBsZS5pbnZhbGlkL2JvbSJ9XX0="
+}

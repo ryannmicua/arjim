@@ -1,0 +1,22 @@
+{
+  "id": "warn-malformed-uri-record-source",
+  "kind": "parsed-value",
+  "description": "Malformed record-source URI warns (PLAN:362; AE9 PLAN:134): URIs with spaces or an unclosed bracket are not RFC 3986 well-formed; the marker stays valid with structured warnings. Schema accepts ASCII content; the warning capability lands with a later unit.",
+  "payload": {
+    "version": 1,
+    "identity": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "label": "Warned record source",
+    "kind": "direct",
+    "workspace": ".",
+    "record_sources": [
+      {
+        "type": "records/web",
+        "uri": "https://records.example.org/team notes from the sync"
+      },
+      {
+        "type": "example/records",
+        "uri": "http://[unclosed-bracket"
+      }
+    ]
+  }
+}

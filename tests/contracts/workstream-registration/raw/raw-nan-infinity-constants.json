@@ -1,0 +1,6 @@
+{
+  "id": "raw-nan-infinity-constants",
+  "kind": "raw-byte",
+  "description": "Non-finite constants (PLAN:364; KTD11 PLAN:196): NaN and infinities are not JSON; rejected at the nonfinite phase.",
+  "payload_base64": "eyJhIjpOYU4sImIiOkluZmluaXR5LCJjIjotSW5maW5pdHl9"
+}

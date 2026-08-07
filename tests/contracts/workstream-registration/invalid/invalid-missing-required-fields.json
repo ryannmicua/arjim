@@ -1,0 +1,8 @@
+{
+  "id": "invalid-missing-required-fields",
+  "kind": "parsed-value",
+  "description": "Missing required fields (PLAN:364): object carries only version; identity, label, kind, workspace, and record_sources are required.",
+  "payload": {
+    "version": 1
+  }
+}

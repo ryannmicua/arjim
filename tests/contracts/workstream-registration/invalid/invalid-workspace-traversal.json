@@ -1,0 +1,18 @@
+{
+  "id": "invalid-workspace-traversal",
+  "kind": "parsed-value",
+  "description": "Traversal workspace reference (PLAN:364): '..' traversal is not the literal '.' (KTD4, PLAN:189).",
+  "payload": {
+    "version": 1,
+    "identity": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "label": "Traversal reference",
+    "kind": "direct",
+    "workspace": "../traversal",
+    "record_sources": [
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/ws-trav"
+      }
+    ]
+  }
+}

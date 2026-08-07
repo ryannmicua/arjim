@@ -1,0 +1,22 @@
+{
+  "id": "invalid-duplicate-record-sources",
+  "kind": "parsed-value",
+  "description": "Duplicate record sources (PLAN:364): two identical typed URI references; uniqueItems rejects.",
+  "payload": {
+    "version": 1,
+    "identity": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "label": "Duplicate record sources",
+    "kind": "direct",
+    "workspace": ".",
+    "record_sources": [
+      {
+        "type": "sharepoint/team-site",
+        "uri": "https://sharepoint.example.org/sites/dup"
+      },
+      {
+        "type": "sharepoint/team-site",
+        "uri": "https://sharepoint.example.org/sites/dup"
+      }
+    ]
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "id": "raw-depth-9-rejected",
+  "kind": "raw-byte",
+  "description": "Depth 9 raw input (PLAN:364): container depth above the max of 8 (KTD11, PLAN:196); rejected at the depth phase.",
+  "payload_base64": "W1tbW1tbW1tbMF1dXV1dXV1dXQ=="
+}

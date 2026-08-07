@@ -1,0 +1,6 @@
+{
+  "id": "raw-trailing-content",
+  "kind": "raw-byte",
+  "description": "Trailing content after the JSON document (PLAN:364): a well-formed marker followed by non-whitespace junk; passes the named guard scans, fails parse/validation (schema phase, invalid).",
+  "payload_base64": "eyJ2ZXJzaW9uIjoxLCJpZGVudGl0eSI6ImY0N2FjMTBiLTU4Y2MtNDM3Mi1hNTY3LTBlMDJiMmMzZDQ3OSIsImxhYmVsIjoidHJhaWxpbmcgY2FzZSIsImtpbmQiOiJkaXJlY3QiLCJ3b3Jrc3BhY2UiOiIuIiwicmVjb3JkX3NvdXJjZXMiOlt7InR5cGUiOiJleGFtcGxlL3RyYWlsIiwidXJpIjoiaHR0cHM6Ly9yZWNvcmRzLmV4YW1wbGUuaW52YWxpZC90cmFpbGluZyJ9XX0gRVhUUkEgSlVOSw=="
+}

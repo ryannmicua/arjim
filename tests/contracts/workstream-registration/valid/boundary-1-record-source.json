@@ -1,0 +1,18 @@
+{
+  "id": "boundary-1-record-source",
+  "kind": "parsed-value",
+  "description": "Boundary-valid (PLAN:362, 364): record_sources at the minimum of 1.",
+  "payload": {
+    "version": 1,
+    "identity": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "label": "Single record source",
+    "kind": "direct",
+    "workspace": ".",
+    "record_sources": [
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/single"
+      }
+    ]
+  }
+}

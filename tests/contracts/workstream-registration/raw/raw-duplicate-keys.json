@@ -1,0 +1,6 @@
+{
+  "id": "raw-duplicate-keys",
+  "kind": "raw-byte",
+  "description": "Duplicate JSON names (PLAN:364; KTD11 PLAN:196): same key twice at the root; rejected at the duplicates phase.",
+  "payload_base64": "eyJ2ZXJzaW9uIjoxLCJ2ZXJzaW9uIjoyfQ=="
+}
