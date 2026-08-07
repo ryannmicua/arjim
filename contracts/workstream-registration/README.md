@@ -72,9 +72,9 @@ The conformance corpus lives under `tests/contracts/workstream-registration/`, i
 - `raw/` (9) — raw-byte inputs for the raw guard: oversized input, malformed UTF-8, BOM prefix, trailing content, duplicate keys, depth 8/9, NaN/infinity, control characters.
 - `transitions/` (40) — protocol and result cases: every result outcome plus transition scenarios carrying the `inputs` vocabulary (scenario, observed state, draft, bound identity, confirmation, lock, projection, twist).
 
-## 5. Intended Python package layout — NOT yet implemented
+## 5. Python package layout — implemented
 
-No Python code exists yet, and none should be claimed until the implementation units land. The intended layout is:
+The layout below is implemented and passes the complete project corpus on the tested profile (see `v1/compatibility.md`):
 
 ```text
 src/workstream_registration/
