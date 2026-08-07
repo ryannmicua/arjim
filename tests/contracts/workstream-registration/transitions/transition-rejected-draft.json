@@ -4,7 +4,7 @@
   "description": "U2 rejected draft (PLAN:374; AE4 PLAN:129): the operator rejects the exact draft; no marker and no local link are produced. Outcome: cancelled.",
   "payload": {
     "version": 1,
-    "identity": "9f8e7d6c-5b4a-4c3d-2e1f-0a9b8c7d6e5f",
+    "identity": "9f8e7d6c-5b4a-4c3d-8e1f-0a9b8c7d6e5f",
     "label": "Never Confirmed",
     "kind": "direct",
     "workspace": ".",
