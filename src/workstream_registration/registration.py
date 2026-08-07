@@ -84,6 +84,7 @@ __all__ = [
     "draft",
     "envelope_digest",
     "get_projection_hook",
+    "install_default_projection_hook",
     "inspect",
     "inspection_result",
     "link",
@@ -350,6 +351,20 @@ def set_projection_hook(fn: Callable[[ProjectionInput], ProjectionResult] | None
 
 def get_projection_hook() -> Callable[[ProjectionInput], ProjectionResult] | None:
     return _projection_hook
+
+
+def install_default_projection_hook() -> None:
+    """Wire the real projection implementation (U10, PLAN:463) as the hook.
+
+    Deliberately not installed at import time: an unset hook keeps the U9
+    mapping to ``registered-unlinked`` / stopped (PLAN:451). The CLI (U11) and
+    integration entry points call this once before the first operation; the
+    store directory follows ``projection.default_store_dir`` (env-overridable
+    for tests).
+    """
+    from workstream_registration.projection import Projection
+
+    set_projection_hook(Projection().update)
 
 
 def _marker_present(workspace_path: Path) -> bool:
