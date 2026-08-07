@@ -1,0 +1,44 @@
+{
+  "id": "transition-registered-unlinked",
+  "kind": "parsed-value",
+  "description": "U2 registered-unlinked (PLAN:374; AE7 PLAN:132): marker written and read-back verified, but the local projection/link update failed; the marker remains authoritative. U10 owns the projection-failure mapping; the state is fixed here. Outcome: registered-unlinked.",
+  "payload": {
+    "version": 1,
+    "identity": "c9d8e7f6-5a4b-4c2d-8e1f-0a9b8c7d6e5f",
+    "label": "Linked Later",
+    "kind": "direct",
+    "workspace": ".",
+    "record_sources": [
+      {
+        "type": "vcs/git",
+        "uri": "https://git.example.org/team/linked-later.git"
+      }
+    ]
+  },
+  "inputs": {
+    "scenario": "register",
+    "observed": {
+      "workspace_identity": "ws-identity-06",
+      "parent": "absent",
+      "marker": "absent",
+      "marker_identity": null
+    },
+    "draft": {
+      "version": 1,
+      "identity": "c9d8e7f6-5a4b-4c2d-8e1f-0a9b8c7d6e5f",
+      "label": "Linked Later",
+      "kind": "direct",
+      "workspace": ".",
+      "record_sources": [
+        {
+          "type": "vcs/git",
+          "uri": "https://git.example.org/team/linked-later.git"
+        }
+      ]
+    },
+    "confirmation": "exact",
+    "lock": "acquired",
+    "projection": "unlinked",
+    "twist": "none"
+  }
+}

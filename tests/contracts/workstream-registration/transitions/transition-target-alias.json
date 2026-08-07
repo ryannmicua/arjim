@@ -1,0 +1,44 @@
+{
+  "id": "transition-target-alias",
+  "kind": "parsed-value",
+  "description": "U2 target alias (PLAN:378; PLAN:200): a symlink alias resolves to a different captured identity than the marker's target; aliases are equivalent only when identities match, so this fails closed with no write. Outcome: stopped.",
+  "payload": {
+    "version": 1,
+    "identity": "44444444-5555-4666-8777-888888888888",
+    "label": "Alias Workspace",
+    "kind": "direct",
+    "workspace": ".",
+    "record_sources": [
+      {
+        "type": "sharepoint/team-site",
+        "uri": "https://sharepoint.example.org/sites/alias-workspace"
+      }
+    ]
+  },
+  "inputs": {
+    "scenario": "register",
+    "observed": {
+      "workspace_identity": "ws-identity-10",
+      "parent": "absent",
+      "marker": "absent",
+      "marker_identity": null
+    },
+    "draft": {
+      "version": 1,
+      "identity": "44444444-5555-4666-8777-888888888888",
+      "label": "Alias Workspace",
+      "kind": "direct",
+      "workspace": ".",
+      "record_sources": [
+        {
+          "type": "sharepoint/team-site",
+          "uri": "https://sharepoint.example.org/sites/alias-workspace"
+        }
+      ]
+    },
+    "confirmation": "absent",
+    "lock": "absent",
+    "projection": "none",
+    "twist": "target-alias-mismatch"
+  }
+}

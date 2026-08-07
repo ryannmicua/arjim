@@ -1,0 +1,44 @@
+{
+  "id": "transition-rejected-draft",
+  "kind": "parsed-value",
+  "description": "U2 rejected draft (PLAN:374; AE4 PLAN:129): the operator rejects the exact draft; no marker and no local link are produced. Outcome: cancelled.",
+  "payload": {
+    "version": 1,
+    "identity": "9f8e7d6c-5b4a-4c3d-2e1f-0a9b8c7d6e5f",
+    "label": "Never Confirmed",
+    "kind": "direct",
+    "workspace": ".",
+    "record_sources": [
+      {
+        "type": "sharepoint/team-site",
+        "uri": "https://sharepoint.example.org/sites/never-confirmed"
+      }
+    ]
+  },
+  "inputs": {
+    "scenario": "register",
+    "observed": {
+      "workspace_identity": "ws-identity-04",
+      "parent": "absent",
+      "marker": "absent",
+      "marker_identity": null
+    },
+    "draft": {
+      "version": 1,
+      "identity": "9f8e7d6c-5b4a-4c3d-2e1f-0a9b8c7d6e5f",
+      "label": "Never Confirmed",
+      "kind": "direct",
+      "workspace": ".",
+      "record_sources": [
+        {
+          "type": "sharepoint/team-site",
+          "uri": "https://sharepoint.example.org/sites/never-confirmed"
+        }
+      ]
+    },
+    "confirmation": "rejected",
+    "lock": "absent",
+    "projection": "none",
+    "twist": "none"
+  }
+}

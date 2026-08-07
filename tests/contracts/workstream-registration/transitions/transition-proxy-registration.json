@@ -1,0 +1,44 @@
+{
+  "id": "transition-proxy-registration",
+  "kind": "parsed-value",
+  "description": "U2 proxy registration (AE3 PLAN:128): operator-designated proxy workspace holds a proxy-kind marker whose record sources point to the real system; exact confirmation; read-back verified. Outcome: registered.",
+  "payload": {
+    "version": 1,
+    "identity": "6b3c92e4-71a0-4f5d-9e10-8a2d1c5f7b06",
+    "label": "Field Trip Planning (proxy)",
+    "kind": "proxy",
+    "workspace": ".",
+    "record_sources": [
+      {
+        "type": "sharepoint/site",
+        "uri": "https://sharepoint.example.org/sites/field-trip-planning"
+      }
+    ]
+  },
+  "inputs": {
+    "scenario": "register",
+    "observed": {
+      "workspace_identity": "ws-identity-proxy-02",
+      "parent": "absent",
+      "marker": "absent",
+      "marker_identity": null
+    },
+    "draft": {
+      "version": 1,
+      "identity": "6b3c92e4-71a0-4f5d-9e10-8a2d1c5f7b06",
+      "label": "Field Trip Planning (proxy)",
+      "kind": "proxy",
+      "workspace": ".",
+      "record_sources": [
+        {
+          "type": "sharepoint/site",
+          "uri": "https://sharepoint.example.org/sites/field-trip-planning"
+        }
+      ]
+    },
+    "confirmation": "exact",
+    "lock": "acquired",
+    "projection": "linked",
+    "twist": "none"
+  }
+}

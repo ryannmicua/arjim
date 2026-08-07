@@ -1,0 +1,44 @@
+{
+  "id": "transition-changed-draft",
+  "kind": "parsed-value",
+  "description": "U2 changed draft (PLAN:378; F4 PLAN:83): a material draft change invalidates the confirmation before consumption; a new draft is required; no write occurs. Outcome: cancelled.",
+  "payload": {
+    "version": 1,
+    "identity": "11111111-2222-4333-8444-555555555555",
+    "label": "Draft One",
+    "kind": "direct",
+    "workspace": ".",
+    "record_sources": [
+      {
+        "type": "sharepoint/team-site",
+        "uri": "https://sharepoint.example.org/sites/draft-one"
+      }
+    ]
+  },
+  "inputs": {
+    "scenario": "register",
+    "observed": {
+      "workspace_identity": "ws-identity-07",
+      "parent": "absent",
+      "marker": "absent",
+      "marker_identity": null
+    },
+    "draft": {
+      "version": 1,
+      "identity": "11111111-2222-4333-8444-555555555555",
+      "label": "Draft One (revised)",
+      "kind": "direct",
+      "workspace": ".",
+      "record_sources": [
+        {
+          "type": "sharepoint/team-site",
+          "uri": "https://sharepoint.example.org/sites/draft-one-revised"
+        }
+      ]
+    },
+    "confirmation": "mismatched",
+    "lock": "absent",
+    "projection": "none",
+    "twist": "draft-changed"
+  }
+}

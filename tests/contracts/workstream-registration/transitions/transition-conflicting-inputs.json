@@ -1,0 +1,44 @@
+{
+  "id": "transition-conflicting-inputs",
+  "kind": "parsed-value",
+  "description": "U2 conflicting inputs (PLAN:378; PLAN:528): write and read-back verified, but the projection update reports a conflict — the captured target already holds a different identity; the marker is unchanged and the projection does not link it. Outcome: conflict.",
+  "payload": {
+    "version": 1,
+    "identity": "cccccccc-dddd-4eee-8fff-000000000000",
+    "label": "Target Conflict",
+    "kind": "direct",
+    "workspace": ".",
+    "record_sources": [
+      {
+        "type": "vcs/git",
+        "uri": "https://git.example.org/team/target-conflict.git"
+      }
+    ]
+  },
+  "inputs": {
+    "scenario": "register",
+    "observed": {
+      "workspace_identity": "ws-identity-16",
+      "parent": "absent",
+      "marker": "absent",
+      "marker_identity": null
+    },
+    "draft": {
+      "version": 1,
+      "identity": "cccccccc-dddd-4eee-8fff-000000000000",
+      "label": "Target Conflict",
+      "kind": "direct",
+      "workspace": ".",
+      "record_sources": [
+        {
+          "type": "vcs/git",
+          "uri": "https://git.example.org/team/target-conflict.git"
+        }
+      ]
+    },
+    "confirmation": "exact",
+    "lock": "acquired",
+    "projection": "conflict",
+    "twist": "none"
+  }
+}

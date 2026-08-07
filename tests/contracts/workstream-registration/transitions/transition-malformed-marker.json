@@ -1,0 +1,27 @@
+{
+  "id": "transition-malformed-marker",
+  "kind": "parsed-value",
+  "description": "U2 malformed input (PLAN:378; AE5 PLAN:130): a marker is present at the marker path but invalid (missing required fields); it is never overwritten; inspection reports occupied-invalid. Outcome: occupied-invalid.",
+  "payload": {
+    "version": 1,
+    "identity": "88888888-9999-4aaa-8bbb-cccccccccccc",
+    "kind": "direct",
+    "workspace": "."
+  },
+  "inputs": {
+    "scenario": "inspect",
+    "observed": {
+      "workspace_identity": "ws-identity-14",
+      "parent": {
+        "identity": "parent-identity-14"
+      },
+      "marker": "invalid",
+      "marker_identity": "88888888-9999-4aaa-8bbb-cccccccccccc"
+    },
+    "draft": null,
+    "confirmation": "absent",
+    "lock": "absent",
+    "projection": "none",
+    "twist": "none"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "id": "transition-redirected-path",
+  "kind": "parsed-value",
+  "description": "U2 redirected path (PLAN:378; KTD6/PLAN:200): a redirected marker component resolves to a different identity than the captured tuple; the confirmation is invalid and the inspection fails closed; no write. Outcome: stopped.",
+  "payload": {
+    "version": 1,
+    "identity": "33333333-4444-4555-8666-777777777777",
+    "label": "Redirected Path",
+    "kind": "direct",
+    "workspace": ".",
+    "record_sources": [
+      {
+        "type": "sharepoint/team-site",
+        "uri": "https://sharepoint.example.org/sites/redirected-path"
+      }
+    ]
+  },
+  "inputs": {
+    "scenario": "register",
+    "observed": {
+      "workspace_identity": "ws-identity-09",
+      "parent": "absent",
+      "marker": "absent",
+      "marker_identity": null
+    },
+    "draft": {
+      "version": 1,
+      "identity": "33333333-4444-4555-8666-777777777777",
+      "label": "Redirected Path",
+      "kind": "direct",
+      "workspace": ".",
+      "record_sources": [
+        {
+          "type": "sharepoint/team-site",
+          "uri": "https://sharepoint.example.org/sites/redirected-path"
+        }
+      ]
+    },
+    "confirmation": "absent",
+    "lock": "absent",
+    "projection": "none",
+    "twist": "redirected-marker-component"
+  }
+}

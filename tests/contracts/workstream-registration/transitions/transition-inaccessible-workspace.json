@@ -1,0 +1,32 @@
+{
+  "id": "transition-inaccessible-workspace",
+  "kind": "parsed-value",
+  "description": "U2 inaccessible input (PLAN:378; R8-R9): the workspace location cannot be accessed; the instance registers only workspaces it can access, so the operation stops with a distinct non-success outcome and no write. Outcome: stopped.",
+  "payload": {
+    "version": 1,
+    "identity": "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee",
+    "label": "Inaccessible",
+    "kind": "direct",
+    "workspace": ".",
+    "record_sources": [
+      {
+        "type": "sharepoint/team-site",
+        "uri": "https://sharepoint.example.org/sites/inaccessible"
+      }
+    ]
+  },
+  "inputs": {
+    "scenario": "register",
+    "observed": {
+      "workspace_identity": null,
+      "parent": "absent",
+      "marker": "absent",
+      "marker_identity": null
+    },
+    "draft": null,
+    "confirmation": "absent",
+    "lock": "absent",
+    "projection": "none",
+    "twist": "inaccessible-workspace"
+  }
+}

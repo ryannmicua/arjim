@@ -1,0 +1,34 @@
+{
+  "id": "transition-existing-marker",
+  "kind": "parsed-value",
+  "description": "U2 existing marker (PLAN:374; AE2 PLAN:127): a valid supported marker is linked unchanged — no confirmation, no write, no identity regeneration. Outcome: linked-existing.",
+  "payload": {
+    "version": 1,
+    "identity": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "label": "Quarterly Planning",
+    "kind": "direct",
+    "workspace": ".",
+    "record_sources": [
+      {
+        "type": "sharepoint/team-site",
+        "uri": "https://sharepoint.example.org/sites/quarterly-planning"
+      }
+    ]
+  },
+  "inputs": {
+    "scenario": "link",
+    "observed": {
+      "workspace_identity": "ws-identity-01",
+      "parent": {
+        "identity": "parent-identity-01"
+      },
+      "marker": "valid",
+      "marker_identity": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+    },
+    "draft": null,
+    "confirmation": "absent",
+    "lock": "absent",
+    "projection": "linked",
+    "twist": "none"
+  }
+}

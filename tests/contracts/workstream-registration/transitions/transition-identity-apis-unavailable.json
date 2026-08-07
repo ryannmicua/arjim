@@ -1,0 +1,32 @@
+{
+  "id": "transition-identity-apis-unavailable",
+  "kind": "parsed-value",
+  "description": "U2 fail-closed target handle (PLAN:200): the declared filesystem profile's identity APIs are unavailable, so the stable target handle cannot be captured; inspection fails closed with no draft and no write. Outcome: stopped.",
+  "payload": {
+    "version": 1,
+    "identity": "bbbbbbbb-cccc-4ddd-8eee-ffffffffffff",
+    "label": "No Identity API",
+    "kind": "direct",
+    "workspace": ".",
+    "record_sources": [
+      {
+        "type": "sharepoint/team-site",
+        "uri": "https://sharepoint.example.org/sites/no-identity-api"
+      }
+    ]
+  },
+  "inputs": {
+    "scenario": "register",
+    "observed": {
+      "workspace_identity": null,
+      "parent": "absent",
+      "marker": "absent",
+      "marker_identity": null
+    },
+    "draft": null,
+    "confirmation": "absent",
+    "lock": "absent",
+    "projection": "none",
+    "twist": "identity-apis-unavailable"
+  }
+}

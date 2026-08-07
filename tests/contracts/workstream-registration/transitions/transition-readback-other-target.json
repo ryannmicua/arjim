@@ -1,0 +1,44 @@
+{
+  "id": "transition-readback-other-target",
+  "kind": "parsed-value",
+  "description": "U2 read-back from another target (PLAN:378, 452): after the write, read-back resolves from a different target than the confirmed one; exact-identity verification fails and the identity is never regenerated. Outcome: written-unverified.",
+  "payload": {
+    "version": 1,
+    "identity": "66666666-7777-4888-8999-000000000000",
+    "label": "Readback Elsewhere",
+    "kind": "direct",
+    "workspace": ".",
+    "record_sources": [
+      {
+        "type": "sharepoint/team-site",
+        "uri": "https://sharepoint.example.org/sites/readback-elsewhere"
+      }
+    ]
+  },
+  "inputs": {
+    "scenario": "register",
+    "observed": {
+      "workspace_identity": "ws-identity-12",
+      "parent": "absent",
+      "marker": "absent",
+      "marker_identity": null
+    },
+    "draft": {
+      "version": 1,
+      "identity": "66666666-7777-4888-8999-000000000000",
+      "label": "Readback Elsewhere",
+      "kind": "direct",
+      "workspace": ".",
+      "record_sources": [
+        {
+          "type": "sharepoint/team-site",
+          "uri": "https://sharepoint.example.org/sites/readback-elsewhere"
+        }
+      ]
+    },
+    "confirmation": "exact",
+    "lock": "acquired",
+    "projection": "none",
+    "twist": "read-back-other-target"
+  }
+}
