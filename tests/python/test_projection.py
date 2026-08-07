@@ -285,6 +285,32 @@ class TestOwnerOnlyEnforcement:
             assert "builTIN\\users" not in lowered
             assert "\\users:" not in lowered
 
+    def test_verify_round_trip_on_real_enforced_owner_only_directory(self, tmp_path: Path) -> None:
+        directory = tmp_path / "enforced"
+        directory.mkdir()
+        proj._enforce_owner_only_windows(directory)
+        proj._verify_owner_only_windows(directory)
+
+    def test_inherited_ace_detected_and_gated_by_allow_inherited(
+        self, tmp_path: Path, monkeypatch
+    ) -> None:
+        principal = _windows_principal()
+
+        class _FakeIcacls:
+            returncode = 0
+            stdout = f"{tmp_path}:\n{principal}:(I)(OI)(CI)(F)\n"
+
+        real_run = proj.subprocess.run
+        monkeypatch.setattr(
+            proj.subprocess, "run",
+            lambda *a, **k: real_run(*a, **k)
+            if a and a[0] == ["whoami"]
+            else _FakeIcacls(),
+        )
+        with pytest.raises(proj.ProjectionStoreError):
+            proj._verify_owner_only_windows(tmp_path)
+        proj._verify_owner_only_windows(tmp_path, allow_inherited=True)
+
     def test_verification_before_use_fails_closed_on_weaker_pre_existing(
         self, tmp_path: Path
     ) -> None:

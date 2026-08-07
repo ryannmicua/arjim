@@ -100,7 +100,7 @@ _STATE_LINKED = "linked"
 
 _SIDECAR_SUFFIXES = ("-wal", "-shm", "-journal")
 
-_ACE_RE = re.compile(r"^(.+?):(\([^)]*\))+$")
+_ACE_RE = re.compile(r"^(.+?):((?:\([^)]*\))+)$")
 _ACE_GROUP_RE = re.compile(r"\(([^)]*)\)")
 
 _ICACLS_TIMEOUT_SECONDS = 60
