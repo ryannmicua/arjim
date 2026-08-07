@@ -17,6 +17,9 @@ dev = [
     "pytest",
 ]
 
+[project.scripts]
+workstream-registration = "workstream_registration.cli:main"
+
 [tool.setuptools.packages.find]
 where = ["src"]
 
