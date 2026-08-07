@@ -1,6 +1,6 @@
 # Quickstart: Workstream Registration
 
-Point-and-read workstream registration is the v1 entry path of Arjim's workstream management: you point the Python CLI at a workspace, confirm one exact draft, and a durable marker at `.workstream/workstream.json` becomes the registration record that survives any assistant, device, or local-state rebuild. This guide takes you through a first registration in about five minutes.
+Workstream registration is the v1 entry path of Arjim's workstream management: you point the Python CLI at a workspace, confirm one exact draft, and a durable marker at `.workstream/manifest.json` becomes the registration record that survives any assistant, device, or local-state rebuild. This guide takes you through a first registration in about five minutes.
 
 ## Prerequisites
 
@@ -29,7 +29,7 @@ Check the CLI is installed before continuing:
 ```text
 > workstream-registration --help
 
-workstream-registration - point-and-read workstream registration (v1)
+workstream-registration - workstream registration (v1)
 usage: workstream-registration [--json] <command> [args]
 commands:
   register <workspace> --label <label> --record-source <type>=<uri>... [--kind direct|proxy]
@@ -50,7 +50,7 @@ commands:
 
 preview: register
   workspace: docs-demo
-  marker path: docs-demo\.workstream\workstream.json
+  marker path: docs-demo\.workstream\manifest.json
   label: Docs demo
   kind: direct
   record_sources: 1
@@ -78,15 +78,15 @@ The clean cancel paths are typing anything other than the exact `confirm <digest
 
 ## 3. Verify the marker file
 
-Registration is complete only after read-back verification. The marker itself is a single compact JSON document at `.workstream/workstream.json`:
+Registration is complete only after read-back verification. The marker itself is a single compact JSON document at `.workstream/manifest.json`:
 
 ```text
-> type docs-demo\.workstream\workstream.json
+> type docs-demo\.workstream\manifest.json
 
 {"version":1,"identity":"615518c7-5331-4af7-a896-6cf4767d767f","label":"Docs demo","kind":"direct","workspace":".","record_sources":[{"type":"planner","uri":"https://tasks.example.invalid/docs-demo"}]}
 ```
 
-(On POSIX shells use `cat docs-demo/.workstream/workstream.json`.)
+(On POSIX shells use `cat docs-demo/.workstream/manifest.json`.)
 
 The fields are frozen by the v1 marker contract: `version` (1), `identity` (RFC 4122 v4 UUID), `label`, `kind` (`direct` or `proxy`), the literal workspace reference `.`, and 1–32 typed `record_sources`. The `identity` above matches the one printed at registration.
 
@@ -126,7 +126,7 @@ After any cancel, re-run `register` — it starts fresh from a new inspection an
 
 preview: unregister
   workspace: docs-demo
-  marker path: docs-demo\.workstream\workstream.json
+  marker path: docs-demo\.workstream\manifest.json
   identity: 615518c7-5331-4af7-a896-6cf4767d767f
   label: Docs demo
   kind: direct

@@ -4,7 +4,7 @@ Versioned contracts for the Arjim workstream registration and discovery feature:
 
 ## 1. What these contracts are
 
-This directory holds the portable, versioned contracts for **point-and-read workstream registration**: an operator points the Python CLI at a workspace, confirms one exact draft, and a durable marker at `.workstream/workstream.json` becomes the registration record that survives any assistant, device, or local-state rebuild. Each contract surface is versioned independently (JSON Schema Draft 2020-12; marker version `1`); a reader dispatches on the version before applying the closed schema.
+This directory holds the portable, versioned contracts for **point-and-read workstream registration**: an operator points the Python CLI at a workspace, confirms one exact draft, and a durable marker at `.workstream/manifest.json` becomes the registration record that survives any assistant, device, or local-state rebuild. Each contract surface is versioned independently (JSON Schema Draft 2020-12; marker version `1`); a reader dispatches on the version before applying the closed schema.
 
 Executable behavior is not part of this directory. The Python implementation belongs under `src/workstream_registration/` and is not yet implemented (section 5). These contracts define what that implementation must honor.
 
@@ -12,7 +12,7 @@ Executable behavior is not part of this directory. The Python implementation bel
 
 ### Active in this version
 
-- The v1 marker schema and the marker path `.workstream/workstream.json` — the only v1 marker that makes a workspace a registration or discovery candidate.
+- The v1 marker schema and the marker path `.workstream/manifest.json` — the only v1 marker that makes a workspace a registration or discovery candidate.
 - Registration and unregister authority: inspect, draft, exact-draft confirmation, create-only write, read-back, linking, confirmed conditional delete, retries, and partial success.
 - Portable contracts: result vocabulary, warning and error taxonomy, schemas, protocol text, and conformance fixtures.
 - One Python 3.14.x implementation with `jsonschema` 4.26.x: raw-input guard, bundled Draft 2020-12 validation, normalized bounded diagnostics, create-only write and read-back, confirmed conditional delete, replaceable SQLite projection, operator CLI, and conformance runner.
@@ -44,7 +44,7 @@ The files form the pipeline **fixture envelope → manifest → marker → proto
 
 ### `contracts/workstream-registration/v1/workstream.schema.json` — the marker
 
-- **Purpose:** the marker contract — the durable, assistant-neutral self-description written at `.workstream/workstream.json`.
+- **Purpose:** the marker contract — the durable, assistant-neutral self-description written at `.workstream/manifest.json` (2026-08-07 operator decision, digest 2026080702).
 - **Role in the pipeline:** the registration authority. Closed fields: required integer `version` (v1 allowed value `1`), `identity` (RFC 4122 v4 lowercase UUID), required non-empty `label` (256-byte cap), required `kind` (`direct|proxy`), literal `.` workspace reference, and 1-32 typed `record_sources` (ASCII type token up to 64 characters, ASCII URI up to 2,048).
 
 ### `contracts/workstream-registration/v1/registration-protocol.md`
@@ -161,7 +161,7 @@ A fresh implementer verifies each of the following; every listed repository path
    - `contracts/workstream-registration/v1/registration-protocol.md`
    - `contracts/workstream-registration/v1/registration-result.schema.json`
    - `contracts/workstream-registration/v1/compatibility.md`
-2. **Marker path:** `.workstream/workstream.json` — the durable marker location within a workspace; the only marker that makes a workspace a registration or discovery candidate.
+2. **Marker path:** `.workstream/manifest.json` — the durable marker location within a workspace; the only marker that makes a workspace a registration or discovery candidate.
 3. **Runner invocation:** `python -m workstream_registration.conformance_runner`.
 4. **Compliance bar:** the runner exits 0 with every mandatory fixture executed exactly once across all expectation categories (indexed by `tests/contracts/workstream-registration/expectations.json`), and the full `pytest` suite passes on the pinned runtime.
 5. **Support profile:** CPython 3.14.x with `jsonschema` 4.26.x, stdlib `sqlite3` required, and the tested filesystem profile per `contracts/workstream-registration/v1/compatibility.md`.
@@ -178,7 +178,7 @@ Referenced corpus paths (all exist in the working tree):
 ## 11. Five factual questions — answerable from these contracts alone
 
 1. (a) What is the identity field name in the marker? → **`identity`** (RFC 4122 v4 lowercase UUID; see `workstream.schema.json`).
-2. (b) Where is the marker written? → **`.workstream/workstream.json`** within the workspace.
+2. (b) Where is the marker written? → **`.workstream/manifest.json`** within the workspace.
 3. (c) How is the conformance runner invoked? → **`python -m workstream_registration.conformance_runner`**.
 4. (d) What is the compliance bar? → **Runner exit 0 with every mandatory fixture executed exactly once across all expectation categories, plus a green `pytest` suite on the pinned runtime.**
 5. (e) What is the support profile? → **CPython 3.14.x, `jsonschema` 4.26.x, stdlib `sqlite3` required, tested filesystem profile in `v1/compatibility.md`.**

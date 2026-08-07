@@ -31,10 +31,10 @@ Invariants that hold for every transition in this document:
 
 ## 2. Vocabulary
 
-- **Marker** — the durable document at `.workstream/workstream.json` (R10, PLAN:111;
-  KTD2, PLAN:187). Registration authority.
-- **Marker path** — the fixed location `.workstream/workstream.json` within a workspace
-  (CONCEPTS.md:31). Frozen; do not reopen (PLAN:551).
+- **Marker** — the durable document at `.workstream/manifest.json` (R10, PLAN:111;
+  KTD2, PLAN:187; 2026-08-07 operator decision, digest 2026080702). Registration authority.
+- **Marker path** — the fixed location `.workstream/manifest.json` within a workspace
+  (CONCEPTS.md:31). Frozen (2026-08-07 operator decision, digest 2026080702).
 - **`.workstream` parent** — the directory that holds the marker and the lock file.
 - **Stable target handle** — the identity anchor for confirmation; defined in section 3
   (PLAN:200).
@@ -128,7 +128,7 @@ is authoritative for transition validity; the prose is the normative explanation
 
 - **Entry conditions:** Exact confirmation consumed and the per-workspace lock held
   (section 6). The first and only state in which a marker write may occur.
-- **Side effects:** Exclusive-create of the final marker at `.workstream/workstream.json`
+- **Side effects:** Exclusive-create of the final marker at `.workstream/manifest.json`
   (no replacement), complete write of the bounded document, flush, request
   synchronization, close; reopen, re-run raw-guard + schema validation, verify exact
   identity (read-back); then projection update (KTD13, PLAN:198). The lock is released on
@@ -277,7 +277,7 @@ is authoritative for transition validity; the prose is the normative explanation
 
 - **Entry conditions:** Confirmed conditional delete completed and absence read-back
   verified (AE8, PLAN:133; KTD10, PLAN:195).
-- **Side effects:** The marker is absent at `.workstream/workstream.json`; the local
+- **Side effects:** The marker is absent at `.workstream/manifest.json`; the local
   projection entry may be removed. Deleting projection state never unregisters and is
   independent of this outcome (PLAN:319).
 - **Allowed transitions:** None.

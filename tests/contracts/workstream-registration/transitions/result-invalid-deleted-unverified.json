@@ -20,7 +20,7 @@
         {
           "phase": "read-back",
           "code": "ABSENCE_READ_BACK_FAILED",
-          "safe_path": ".workstream/workstream.json"
+          "safe_path": ".workstream/manifest.json"
         }
       ]
     }

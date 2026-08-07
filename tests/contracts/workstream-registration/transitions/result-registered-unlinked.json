@@ -21,7 +21,7 @@
         {
           "phase": "projection",
           "code": "PROJECTION_LINK_FAILED",
-          "safe_path": ".workstream/workstream.json"
+          "safe_path": ".workstream/manifest.json"
         }
       ]
     }

@@ -20,7 +20,7 @@
         {
           "phase": "operation",
           "code": "CONFIRMATION_REJECTED",
-          "safe_path": ".workstream/workstream.json"
+          "safe_path": ".workstream/manifest.json"
         }
       ]
     }

@@ -1,6 +1,6 @@
 # Workstream Registration — Operator Guide
 
-The operator guide for point-and-read workstream registration (v1): the durable workspace marker, the seven commands, the confirmation protocol, the result vocabulary and exit codes, and the boundaries of what this version does and does not do. All commands, output shapes, and exit codes in this guide were verified against the installed CLI on the tested profile (Windows NTFS, CPython 3.14.6). Paths, target handles, digests, and identities are shown with placeholders where machine-specific; digest values are example output and differ on every invocation.
+The operator guide for workstream registration (v1): the durable workspace marker, the seven commands, the confirmation protocol, the result vocabulary and exit codes, and the boundaries of what this version does and does not do. All commands, output shapes, and exit codes in this guide were verified against the installed CLI on the tested profile (Windows NTFS, CPython 3.14.6). Paths, target handles, digests, and identities are shown with placeholders where machine-specific; digest values are example output and differ on every invocation.
 
 ## Contents
 
@@ -19,13 +19,13 @@ The operator guide for point-and-read workstream registration (v1): the durable 
 
 ## 1. Purpose
 
-Point-and-read registration is the v1 entry path by which a workspace becomes a registered workstream. You point the CLI at a workspace, inspect it, confirm one exact draft, and the CLI writes a durable marker at `.workstream/workstream.json`. The marker is the registration record, and it is the point of the feature:
+Workstream registration is the v1 entry path by which a workspace becomes a registered workstream. You point the CLI at a workspace, inspect it, confirm one exact draft, and the CLI writes a durable marker at `.workstream/manifest.json`. The marker is the registration record, and it is the point of the feature:
 
 - **It survives any assistant, device, or local-state rebuild.** The marker is a plain JSON document inside the workspace. It does not live inside a chat history, an assistant cache, or a tool-specific store, so wiping or replacing any local state does not destroy the registration.
 - **It preserves identity across rebuilds.** The marker carries a permanent workstream identity (RFC 4122 v4 UUID) that is never regenerated. Re-linking, rebuilding, and recovery after read-back failures all recover the existing identity; a second identity is never created for the same registration.
 - **It is assistant-neutral.** Any reader that understands the v1 marker contract can recognize the workspace. Nothing about the marker binds it to a particular assistant or runtime.
 
-The CLI is the only working entry path in this version. There is no machine scan, no registry consumption, and no auto-discovery: every command operates on explicit operator-supplied paths. Registration is point-and-read — you point, you confirm, it reads back.
+The CLI is the only working entry path in this version. There is no machine scan, no registry consumption, and no auto-discovery: every command operates on explicit operator-supplied paths. Registration is workstream registration — you point, you confirm, it reads back.
 
 **Why confirmation exists.** Nothing is written before the operator confirms the exact draft. Confirmation is the boundary between "a draft exists in memory" and "the workspace is now a registered workstream," and it exists because a marker is authoritative: it makes the workspace a discovery candidate for any conforming reader, and an unconfirmed or wrong draft must never become that. The same rule applies in reverse to unregistration: deleting the marker retires the registration, so the delete is a confirmed conditional delete bound to the exact identity observed at inspection.
 
@@ -33,7 +33,7 @@ The CLI is the only working entry path in this version. There is no machine scan
 
 ### Marker
 
-The durable, assistant-neutral document at `.workstream/workstream.json` within a workspace. It is the registration authority. Its fields are closed by the v1 marker contract:
+The durable, assistant-neutral document at `.workstream/manifest.json` within a workspace. It is the registration authority. Its fields are closed by the v1 marker contract:
 
 | Field | Rule |
 |---|---|
@@ -57,7 +57,7 @@ Marker terminology that matters when reading output and errors:
 - **Marker presence** — whether a marker exists at the marker path. Presence makes the workspace a registration or discovery candidate but does not by itself establish a valid registration.
 - **Marker validity** — whether the marker satisfies its raw-input limits and schema (raw guard first, then Draft 2020-12 validation, then version dispatch).
 - **Supported marker** — a valid marker whose version the current reader understands. An unsupported version is not interpreted as registration authority by that reader; inspection reports it as `occupied-invalid`.
-- **Marker path** — the fixed location `.workstream/workstream.json`. Frozen; it is the only marker that makes a workspace a registration or discovery candidate.
+- **Marker path** — the fixed location `.workstream/manifest.json`. Frozen (2026-08-07 operator decision, digest 2026080702); it is the only marker that makes a workspace a registration or discovery candidate.
 
 ### Stable target handle
 
@@ -161,7 +161,7 @@ All commands accept `--json` before or after the command name to emit the stable
 
 preview: register
   workspace: <workspace>
-  marker path: <workspace>\.workstream\workstream.json
+  marker path: <workspace>\.workstream\manifest.json
   label: Q3 planning
   kind: direct
   record_sources: 2
@@ -217,7 +217,7 @@ identity: <uuid>
 > workstream-registration unregister <workspace>
 preview: unregister
   workspace: <workspace>
-  marker path: <workspace>\.workstream\workstream.json
+  marker path: <workspace>\.workstream\manifest.json
   identity: <uuid>
   label: Q3 planning
   kind: direct
@@ -240,7 +240,7 @@ The delete is conditional: the marker is re-read and compared after lock acquisi
 ```text
 preview: register
   workspace: <workspace>
-  marker path: <workspace>\.workstream\workstream.json
+  marker path: <workspace>\.workstream\manifest.json
   label: Q3 planning
   kind: direct
   record_sources: 2
@@ -314,11 +314,11 @@ Fields:
 Verified examples of the two diagnostics-bearing envelopes:
 
 ```json
-{"version":1,"outcome":"cancelled","validity":"not-applicable","effects":{"marker_written":false,"marker_deleted":false,"read_back_verified":false,"absence_verified":false,"linked":false,"projection":"none"},"diagnostics":{"count":1,"items":[{"phase":"operation","code":"CONFIRMATION_REJECTED","safe_path":".workstream/workstream.json"}]}}
+{"version":1,"outcome":"cancelled","validity":"not-applicable","effects":{"marker_written":false,"marker_deleted":false,"read_back_verified":false,"absence_verified":false,"linked":false,"projection":"none"},"diagnostics":{"count":1,"items":[{"phase":"operation","code":"CONFIRMATION_REJECTED","safe_path":".workstream/manifest.json"}]}}
 ```
 
 ```json
-{"version":1,"outcome":"occupied-invalid","validity":"invalid","effects":{"marker_written":false,"marker_deleted":false,"read_back_verified":false,"absence_verified":false,"linked":false,"projection":"none"},"diagnostics":{"count":1,"items":[{"phase":"schema","code":"SCHEMA_INVALID","safe_path":".workstream/workstream.json"}]}}
+{"version":1,"outcome":"occupied-invalid","validity":"invalid","effects":{"marker_written":false,"marker_deleted":false,"read_back_verified":false,"absence_verified":false,"linked":false,"projection":"none"},"diagnostics":{"count":1,"items":[{"phase":"schema","code":"SCHEMA_INVALID","safe_path":".workstream/manifest.json"}]}}
 ```
 
 Linking a valid marker reports the read-verified, projection-linked shape (identical for `inspect` on a registered workspace):
@@ -327,7 +327,7 @@ Linking a valid marker reports the read-verified, projection-linked shape (ident
 {"version":1,"outcome":"linked-existing","validity":"valid","effects":{"marker_written":false,"marker_deleted":false,"read_back_verified":true,"absence_verified":false,"linked":true,"projection":"linked"},"identity":"<uuid>"}
 ```
 
-**Diagnostics.** `diagnostics` is `{count, items: [...]}`; each item carries a `phase` (raw-guard phases `read`/`utf8`/`depth`/`duplicates`/`nonfinite`/`controls`, then `schema`, `write`, `read-back`, `link`, `projection`, `operation`), a stable `code`, and a bounded `safe_path` (the marker path, e.g. `.workstream/workstream.json`). Codes are a closed enum — the operator-relevant ones:
+**Diagnostics.** `diagnostics` is `{count, items: [...]}`; each item carries a `phase` (raw-guard phases `read`/`utf8`/`depth`/`duplicates`/`nonfinite`/`controls`, then `schema`, `write`, `read-back`, `link`, `projection`, `operation`), a stable `code`, and a bounded `safe_path` (the marker path, e.g. `.workstream/manifest.json`). Codes are a closed enum — the operator-relevant ones:
 
 | Code | When you see it |
 |---|---|
@@ -355,7 +355,7 @@ The envelope's `capabilities` field is part of the closed schema but is omitted 
 
 ## 8. Scope boundaries
 
-This version is **point-and-read only**, and the contracts claim nothing beyond it. Explicitly **not** functional in this version:
+This version is **workstream registration only**, and the contracts claim nothing beyond it. Explicitly **not** functional in this version:
 
 - **Machine scan of workspaces.** `register`, `link`, `rebuild`, `unregister`, `inspect`, `resolve-invalid`, and `recover-lock` operate on explicit operator-supplied paths only; this version never auto-discovers roots. The operator must know where each workspace lives, including any proxy workspace: v1 cannot recover locations it is never pointed at.
 - **Registry consumption.** Registry publishing by Arjim is designed but deferred. Registries are read-only discovery aids: they point to metadata, never hold it.

@@ -27,7 +27,7 @@
         {
           "phase": "write",
           "code": "WRITE_FAILED",
-          "safe_path": ".workstream/workstream.json",
+          "safe_path": ".workstream/manifest.json",
           "label": "Quarterly Planning",
           "affected_local_path": "C:\\Users\\operator\\workspaces\\quarterly-planning\\records\\archive\\quarterly-planning-2026-records-directory-path-element"
         }

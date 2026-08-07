@@ -74,7 +74,7 @@ __all__ = [
 ]
 
 PHASE_SCHEMA = "schema"
-SAFE_PATH_MARKER = ".workstream/workstream.json"
+SAFE_PATH_MARKER = ".workstream/manifest.json"
 
 # Caps from registration-result.schema.json (KTD12, PLAN:197).
 MAX_DIAGNOSTIC_COUNT = 32            # count maximum + items maxItems (lines 813-816, 820)

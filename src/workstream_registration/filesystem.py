@@ -85,7 +85,7 @@ __all__ = [
 ]
 
 PARENT_DIRNAME = ".workstream"
-MARKER_FILENAME = "workstream.json"
+MARKER_FILENAME = "manifest.json"
 LOCK_FILENAME = ".registration.lock"
 
 MAX_READ_BYTES = 262_144
@@ -145,7 +145,7 @@ def parent_path(workspace_path: Path) -> Path:
 
 
 def marker_path(workspace_path: Path) -> Path:
-    """The fixed marker path ``.workstream/workstream.json`` (frozen, PLAN:551)."""
+    """The fixed marker path ``.workstream/manifest.json`` (frozen, 2026-08-07 decision, digest 2026080702)."""
     return parent_path(workspace_path) / MARKER_FILENAME
 
 

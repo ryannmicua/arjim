@@ -20,162 +20,162 @@
         {
           "phase": "operation",
           "code": "READ_LIMIT",
-          "safe_path": ".workstream/workstream.json"
+          "safe_path": ".workstream/manifest.json"
         },
         {
           "phase": "operation",
           "code": "UTF8_INVALID",
-          "safe_path": ".workstream/workstream.json"
+          "safe_path": ".workstream/manifest.json"
         },
         {
           "phase": "operation",
           "code": "DEPTH_LIMIT",
-          "safe_path": ".workstream/workstream.json"
+          "safe_path": ".workstream/manifest.json"
         },
         {
           "phase": "operation",
           "code": "DUPLICATE_KEYS",
-          "safe_path": ".workstream/workstream.json"
+          "safe_path": ".workstream/manifest.json"
         },
         {
           "phase": "operation",
           "code": "NON_FINITE",
-          "safe_path": ".workstream/workstream.json"
+          "safe_path": ".workstream/manifest.json"
         },
         {
           "phase": "operation",
           "code": "CONTROL_CHARACTER",
-          "safe_path": ".workstream/workstream.json"
+          "safe_path": ".workstream/manifest.json"
         },
         {
           "phase": "operation",
           "code": "SCHEMA_INVALID",
-          "safe_path": ".workstream/workstream.json"
+          "safe_path": ".workstream/manifest.json"
         },
         {
           "phase": "operation",
           "code": "UNSUPPORTED_VERSION",
-          "safe_path": ".workstream/workstream.json"
+          "safe_path": ".workstream/manifest.json"
         },
         {
           "phase": "operation",
           "code": "MARKER_INVALID",
-          "safe_path": ".workstream/workstream.json"
+          "safe_path": ".workstream/manifest.json"
         },
         {
           "phase": "operation",
           "code": "WORKSPACE_INACCESSIBLE",
-          "safe_path": ".workstream/workstream.json"
+          "safe_path": ".workstream/manifest.json"
         },
         {
           "phase": "operation",
           "code": "IDENTITY_API_UNAVAILABLE",
-          "safe_path": ".workstream/workstream.json"
+          "safe_path": ".workstream/manifest.json"
         },
         {
           "phase": "operation",
           "code": "PATH_REDIRECTED",
-          "safe_path": ".workstream/workstream.json"
+          "safe_path": ".workstream/manifest.json"
         },
         {
           "phase": "operation",
           "code": "TARGET_ALIAS_MISMATCH",
-          "safe_path": ".workstream/workstream.json"
+          "safe_path": ".workstream/manifest.json"
         },
         {
           "phase": "operation",
           "code": "WRITE_FAILED",
-          "safe_path": ".workstream/workstream.json"
+          "safe_path": ".workstream/manifest.json"
         },
         {
           "phase": "operation",
           "code": "CONFIRMATION_REJECTED",
-          "safe_path": ".workstream/workstream.json"
+          "safe_path": ".workstream/manifest.json"
         },
         {
           "phase": "operation",
           "code": "CONFIRMATION_MISMATCH",
-          "safe_path": ".workstream/workstream.json"
+          "safe_path": ".workstream/manifest.json"
         },
         {
           "phase": "operation",
           "code": "CONFIRMATION_EXPIRED",
-          "safe_path": ".workstream/workstream.json"
+          "safe_path": ".workstream/manifest.json"
         },
         {
           "phase": "operation",
           "code": "DRAFT_CHANGED",
-          "safe_path": ".workstream/workstream.json"
+          "safe_path": ".workstream/manifest.json"
         },
         {
           "phase": "operation",
           "code": "TARGET_CHANGED",
-          "safe_path": ".workstream/workstream.json"
+          "safe_path": ".workstream/manifest.json"
         },
         {
           "phase": "operation",
           "code": "LOCK_UNAVAILABLE",
-          "safe_path": ".workstream/workstream.json"
+          "safe_path": ".workstream/manifest.json"
         },
         {
           "phase": "operation",
           "code": "READ_BACK_FAILED",
-          "safe_path": ".workstream/workstream.json"
+          "safe_path": ".workstream/manifest.json"
         },
         {
           "phase": "operation",
           "code": "READ_BACK_TARGET_MISMATCH",
-          "safe_path": ".workstream/workstream.json"
+          "safe_path": ".workstream/manifest.json"
         },
         {
           "phase": "operation",
           "code": "PROJECTION_LINK_FAILED",
-          "safe_path": ".workstream/workstream.json"
+          "safe_path": ".workstream/manifest.json"
         },
         {
           "phase": "operation",
           "code": "PROJECTION_CONFLICT",
-          "safe_path": ".workstream/workstream.json"
+          "safe_path": ".workstream/manifest.json"
         },
         {
           "phase": "operation",
           "code": "DELETE_FAILED",
-          "safe_path": ".workstream/workstream.json"
+          "safe_path": ".workstream/manifest.json"
         },
         {
           "phase": "operation",
           "code": "ABSENCE_READ_BACK_FAILED",
-          "safe_path": ".workstream/workstream.json"
+          "safe_path": ".workstream/manifest.json"
         },
         {
           "phase": "operation",
           "code": "MARKER_CHANGED",
-          "safe_path": ".workstream/workstream.json"
+          "safe_path": ".workstream/manifest.json"
         },
         {
           "phase": "operation",
           "code": "IDENTITY_MISMATCH",
-          "safe_path": ".workstream/workstream.json"
+          "safe_path": ".workstream/manifest.json"
         },
         {
           "phase": "operation",
           "code": "SAFE_INTERNAL_ERROR",
-          "safe_path": ".workstream/workstream.json"
+          "safe_path": ".workstream/manifest.json"
         },
         {
           "phase": "operation",
           "code": "READ_LIMIT",
-          "safe_path": ".workstream/workstream.json"
+          "safe_path": ".workstream/manifest.json"
         },
         {
           "phase": "operation",
           "code": "UTF8_INVALID",
-          "safe_path": ".workstream/workstream.json"
+          "safe_path": ".workstream/manifest.json"
         },
         {
           "phase": "operation",
           "code": "DEPTH_LIMIT",
-          "safe_path": ".workstream/workstream.json"
+          "safe_path": ".workstream/manifest.json"
         }
       ]
     }

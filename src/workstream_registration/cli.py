@@ -670,7 +670,7 @@ def _cmd_recover_lock(args: dict[str, Any], stdin: TextIO, stdout: TextIO, stder
 
 def _usage() -> str:
     return (
-        "workstream-registration - point-and-read workstream registration (v1)\n"
+        "workstream-registration - workstream registration (v1)\n"
         "usage: workstream-registration [--json] <command> [args]\n"
         "commands:\n"
         "  register <workspace> --label <label> --record-source <type>=<uri>... [--kind direct|proxy]\n"

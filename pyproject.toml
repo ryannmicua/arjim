@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "workstream-registration"
 version = "0.1.0"
-description = "Contract-driven point-and-read workstream registration: conformance scaffold and runner"
+description = "Contract-driven workstream registration: conformance scaffold and runner"
 readme = "README.md"
 requires-python = ">=3.14,<3.15"
 dependencies = [
