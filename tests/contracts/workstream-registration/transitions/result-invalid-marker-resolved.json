@@ -1,0 +1,28 @@
+{
+  "id": "result-invalid-marker-resolved",
+  "kind": "parsed-value",
+  "description": "U3 result fixture: invalid-marker-resolved (PLAN:391). Confirmed resolution delete with absence read-back verified; the path is free for a new registration; no identity claim (PLAN:451; protocol 4.14).",
+  "payload": {
+    "version": 1,
+    "outcome": "invalid-marker-resolved",
+    "validity": "not-applicable",
+    "effects": {
+      "marker_written": false,
+      "marker_deleted": true,
+      "read_back_verified": false,
+      "absence_verified": true,
+      "linked": false,
+      "projection": "none"
+    }
+  },
+  "inputs": {
+    "scenario": "inspect",
+    "observed": {
+      "marker": "invalid"
+    },
+    "confirmation": "exact",
+    "lock": "acquired",
+    "projection": "none",
+    "twist": "none"
+  }
+}

@@ -969,6 +969,257 @@
         "R15",
         "R4"
       ]
+    },
+    {
+      "id": "result-registered",
+      "fixture": "transitions/result-registered.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "registered"
+      },
+      "covers": [
+        "AE1",
+        "R3",
+        "R4"
+      ]
+    },
+    {
+      "id": "result-linked-existing",
+      "fixture": "transitions/result-linked-existing.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "linked-existing"
+      },
+      "covers": [
+        "AE2",
+        "R4",
+        "R14"
+      ]
+    },
+    {
+      "id": "result-cancelled",
+      "fixture": "transitions/result-cancelled.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "cancelled"
+      },
+      "covers": [
+        "AE4",
+        "R3",
+        "R4"
+      ]
+    },
+    {
+      "id": "result-stopped",
+      "fixture": "transitions/result-stopped.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "stopped"
+      },
+      "covers": [
+        "AE5",
+        "R8",
+        "R9"
+      ]
+    },
+    {
+      "id": "result-written-unverified",
+      "fixture": "transitions/result-written-unverified.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "written-unverified"
+      },
+      "covers": [
+        "R3",
+        "R4",
+        "R14"
+      ]
+    },
+    {
+      "id": "result-registered-unlinked",
+      "fixture": "transitions/result-registered-unlinked.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "registered-unlinked"
+      },
+      "covers": [
+        "AE7",
+        "R4",
+        "R13"
+      ]
+    },
+    {
+      "id": "result-unregistered",
+      "fixture": "transitions/result-unregistered.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "unregistered"
+      },
+      "covers": [
+        "AE8",
+        "R15"
+      ]
+    },
+    {
+      "id": "result-occupied-invalid",
+      "fixture": "transitions/result-occupied-invalid.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "occupied-invalid"
+      },
+      "covers": [
+        "AE5",
+        "R9",
+        "R10"
+      ]
+    },
+    {
+      "id": "result-invalid-marker-resolved",
+      "fixture": "transitions/result-invalid-marker-resolved.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "invalid-marker-resolved"
+      },
+      "covers": [
+        "AE5",
+        "R9",
+        "R10"
+      ]
+    },
+    {
+      "id": "result-invalid-deleted-unverified",
+      "fixture": "transitions/result-invalid-deleted-unverified.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "invalid-deleted-unverified"
+      },
+      "covers": [
+        "AE5",
+        "R9",
+        "R10"
+      ]
+    },
+    {
+      "id": "result-changed-marker-stopped",
+      "fixture": "transitions/result-changed-marker-stopped.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "changed-marker-stopped"
+      },
+      "covers": [
+        "R15"
+      ]
+    },
+    {
+      "id": "result-conflict",
+      "fixture": "transitions/result-conflict.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "conflict"
+      },
+      "covers": [
+        "R4",
+        "R9"
+      ]
+    },
+    {
+      "id": "result-valid-with-warnings",
+      "fixture": "transitions/result-valid-with-warnings.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid-with-warnings",
+        "outcome": "linked-existing",
+        "warnings": [
+          "source-0-non-dereferenceable"
+        ]
+      },
+      "covers": [
+        "AE9",
+        "R2",
+        "R7",
+        "R8",
+        "R9",
+        "R11"
+      ]
+    },
+    {
+      "id": "result-contradiction-unverified-identity",
+      "fixture": "transitions/result-contradiction-unverified-identity.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "invalid",
+        "outcome": "written-unverified"
+      },
+      "covers": [
+        "AE5",
+        "R9"
+      ]
+    },
+    {
+      "id": "result-contradiction-invalid-promoted",
+      "fixture": "transitions/result-contradiction-invalid-promoted.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "invalid",
+        "outcome": "registered"
+      },
+      "covers": [
+        "AE5",
+        "R9"
+      ]
+    },
+    {
+      "id": "result-contradiction-unregistered-write",
+      "fixture": "transitions/result-contradiction-unregistered-write.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "invalid",
+        "outcome": "unregistered"
+      },
+      "covers": [
+        "AE5",
+        "R9"
+      ]
+    },
+    {
+      "id": "result-diagnostic-size-caps",
+      "fixture": "transitions/result-diagnostic-size-caps.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "stopped"
+      },
+      "covers": [
+        "R8",
+        "R9",
+        "R10"
+      ]
+    },
+    {
+      "id": "result-diagnostic-count-cap",
+      "fixture": "transitions/result-diagnostic-count-cap.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "stopped"
+      },
+      "covers": [
+        "R8",
+        "R9",
+        "R10"
+      ]
     }
   ],
   "canaries": {

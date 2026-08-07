@@ -1,0 +1,40 @@
+{
+  "id": "result-registered",
+  "kind": "parsed-value",
+  "description": "U3 result fixture: registered (PLAN:391). Write completed, read-back verified, projection linked (AE1 PLAN:126; protocol 4.6). Validity valid; verified identity carried; capability status reported per record source without URI content.",
+  "payload": {
+    "version": 1,
+    "outcome": "registered",
+    "validity": "valid",
+    "effects": {
+      "marker_written": true,
+      "marker_deleted": false,
+      "read_back_verified": true,
+      "absence_verified": false,
+      "linked": true,
+      "projection": "linked"
+    },
+    "identity": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "capabilities": [
+      {
+        "source_index": 0,
+        "status": "not-checked"
+      },
+      {
+        "source_index": 1,
+        "status": "unsupported",
+        "code": "UNSUPPORTED_SCHEME"
+      }
+    ]
+  },
+  "inputs": {
+    "scenario": "register",
+    "observed": {
+      "marker": "absent"
+    },
+    "confirmation": "exact",
+    "lock": "acquired",
+    "projection": "linked",
+    "twist": "none"
+  }
+}

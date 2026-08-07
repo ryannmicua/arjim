@@ -1,0 +1,37 @@
+{
+  "id": "result-valid-with-warnings",
+  "kind": "parsed-value",
+  "description": "U3 result fixture: warning-bearing valid outcome (PLAN:391). A record source reports non-dereferenceable capability with a structured warning; the marker remains valid and readable; no dereference, no URI content anywhere in the envelope (AE9 PLAN:134; PLAN:305, 527).",
+  "payload": {
+    "version": 1,
+    "outcome": "linked-existing",
+    "validity": "valid-with-warnings",
+    "effects": {
+      "marker_written": false,
+      "marker_deleted": false,
+      "read_back_verified": true,
+      "absence_verified": false,
+      "linked": true,
+      "projection": "linked"
+    },
+    "identity": "6ba7b810-9dad-41d1-80b4-00c04fd430c8",
+    "capabilities": [
+      {
+        "source_index": 0,
+        "status": "unsupported",
+        "code": "UNSUPPORTED_SCHEME"
+      }
+    ],
+    "warnings": [
+      "source-0-non-dereferenceable"
+    ]
+  },
+  "inputs": {
+    "scenario": "link",
+    "observed": {
+      "marker": "valid"
+    },
+    "projection": "linked",
+    "twist": "none"
+  }
+}

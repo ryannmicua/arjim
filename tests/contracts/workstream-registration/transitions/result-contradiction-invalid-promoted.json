@@ -1,0 +1,29 @@
+{
+  "id": "result-contradiction-invalid-promoted",
+  "kind": "parsed-value",
+  "description": "U3 contradictory result fixture (PLAN:391): claims outcome registered while declaring validity invalid - an invalid marker promoted to registration authority. The envelope must reject this: registered requires a valid-class marker (PLAN:389; AE1 PLAN:126).",
+  "payload": {
+    "version": 1,
+    "outcome": "registered",
+    "validity": "invalid",
+    "effects": {
+      "marker_written": true,
+      "marker_deleted": false,
+      "read_back_verified": true,
+      "absence_verified": false,
+      "linked": true,
+      "projection": "linked"
+    },
+    "identity": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+  },
+  "inputs": {
+    "scenario": "register",
+    "observed": {
+      "marker": "absent"
+    },
+    "confirmation": "exact",
+    "lock": "acquired",
+    "projection": "linked",
+    "twist": "none"
+  }
+}

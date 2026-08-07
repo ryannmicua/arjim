@@ -1,0 +1,38 @@
+{
+  "id": "result-invalid-deleted-unverified",
+  "kind": "parsed-value",
+  "description": "U3 result fixture: invalid-deleted-unverified (PLAN:391). Resolution delete succeeded but absence read-back failed; the marker may or may not be absent; recovery is re-inspection; no identity claim (PLAN:451; protocol 4.15).",
+  "payload": {
+    "version": 1,
+    "outcome": "invalid-deleted-unverified",
+    "validity": "not-applicable",
+    "effects": {
+      "marker_written": false,
+      "marker_deleted": true,
+      "read_back_verified": false,
+      "absence_verified": false,
+      "linked": false,
+      "projection": "none"
+    },
+    "diagnostics": {
+      "count": 1,
+      "items": [
+        {
+          "phase": "read-back",
+          "code": "ABSENCE_READ_BACK_FAILED",
+          "safe_path": ".workstream/workstream.json"
+        }
+      ]
+    }
+  },
+  "inputs": {
+    "scenario": "inspect",
+    "observed": {
+      "marker": "invalid"
+    },
+    "confirmation": "exact",
+    "lock": "acquired",
+    "projection": "none",
+    "twist": "none"
+  }
+}

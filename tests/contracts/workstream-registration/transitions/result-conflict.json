@@ -1,0 +1,39 @@
+{
+  "id": "result-conflict",
+  "kind": "parsed-value",
+  "description": "U3 result fixture: conflict (PLAN:391). Projection write-time conflict: the captured target already holds a different identity; the marker is unchanged and remains authoritative; the projection does not link it; the only in-scope duplicate signal (PLAN:528, 542, 556; protocol 4.17).",
+  "payload": {
+    "version": 1,
+    "outcome": "conflict",
+    "validity": "valid",
+    "effects": {
+      "marker_written": true,
+      "marker_deleted": false,
+      "read_back_verified": true,
+      "absence_verified": false,
+      "linked": false,
+      "projection": "conflict"
+    },
+    "identity": "1c5f6a2b-8d4e-4f0a-9b3c-7a1e2f4d5c6b",
+    "diagnostics": {
+      "count": 1,
+      "items": [
+        {
+          "phase": "projection",
+          "code": "PROJECTION_CONFLICT",
+          "safe_path": ".workstream/workstream.json"
+        }
+      ]
+    }
+  },
+  "inputs": {
+    "scenario": "register",
+    "observed": {
+      "marker": "absent"
+    },
+    "confirmation": "exact",
+    "lock": "acquired",
+    "projection": "conflict",
+    "twist": "none"
+  }
+}

@@ -1,0 +1,191 @@
+{
+  "id": "result-diagnostic-count-cap",
+  "kind": "parsed-value",
+  "description": "U3 diagnostic count-cap fixture (PLAN:391): diagnostics at the maxItems/count cap of 32 with stable codes, bounded safe paths, no URI content, no secrets (KTD12 PLAN:197).",
+  "payload": {
+    "version": 1,
+    "outcome": "stopped",
+    "validity": "not-applicable",
+    "effects": {
+      "marker_written": false,
+      "marker_deleted": false,
+      "read_back_verified": false,
+      "absence_verified": false,
+      "linked": false,
+      "projection": "none"
+    },
+    "diagnostics": {
+      "count": 32,
+      "items": [
+        {
+          "phase": "operation",
+          "code": "READ_LIMIT",
+          "safe_path": ".workstream/workstream.json"
+        },
+        {
+          "phase": "operation",
+          "code": "UTF8_INVALID",
+          "safe_path": ".workstream/workstream.json"
+        },
+        {
+          "phase": "operation",
+          "code": "DEPTH_LIMIT",
+          "safe_path": ".workstream/workstream.json"
+        },
+        {
+          "phase": "operation",
+          "code": "DUPLICATE_KEYS",
+          "safe_path": ".workstream/workstream.json"
+        },
+        {
+          "phase": "operation",
+          "code": "NON_FINITE",
+          "safe_path": ".workstream/workstream.json"
+        },
+        {
+          "phase": "operation",
+          "code": "CONTROL_CHARACTER",
+          "safe_path": ".workstream/workstream.json"
+        },
+        {
+          "phase": "operation",
+          "code": "SCHEMA_INVALID",
+          "safe_path": ".workstream/workstream.json"
+        },
+        {
+          "phase": "operation",
+          "code": "UNSUPPORTED_VERSION",
+          "safe_path": ".workstream/workstream.json"
+        },
+        {
+          "phase": "operation",
+          "code": "MARKER_INVALID",
+          "safe_path": ".workstream/workstream.json"
+        },
+        {
+          "phase": "operation",
+          "code": "WORKSPACE_INACCESSIBLE",
+          "safe_path": ".workstream/workstream.json"
+        },
+        {
+          "phase": "operation",
+          "code": "IDENTITY_API_UNAVAILABLE",
+          "safe_path": ".workstream/workstream.json"
+        },
+        {
+          "phase": "operation",
+          "code": "PATH_REDIRECTED",
+          "safe_path": ".workstream/workstream.json"
+        },
+        {
+          "phase": "operation",
+          "code": "TARGET_ALIAS_MISMATCH",
+          "safe_path": ".workstream/workstream.json"
+        },
+        {
+          "phase": "operation",
+          "code": "WRITE_FAILED",
+          "safe_path": ".workstream/workstream.json"
+        },
+        {
+          "phase": "operation",
+          "code": "CONFIRMATION_REJECTED",
+          "safe_path": ".workstream/workstream.json"
+        },
+        {
+          "phase": "operation",
+          "code": "CONFIRMATION_MISMATCH",
+          "safe_path": ".workstream/workstream.json"
+        },
+        {
+          "phase": "operation",
+          "code": "CONFIRMATION_EXPIRED",
+          "safe_path": ".workstream/workstream.json"
+        },
+        {
+          "phase": "operation",
+          "code": "DRAFT_CHANGED",
+          "safe_path": ".workstream/workstream.json"
+        },
+        {
+          "phase": "operation",
+          "code": "TARGET_CHANGED",
+          "safe_path": ".workstream/workstream.json"
+        },
+        {
+          "phase": "operation",
+          "code": "LOCK_UNAVAILABLE",
+          "safe_path": ".workstream/workstream.json"
+        },
+        {
+          "phase": "operation",
+          "code": "READ_BACK_FAILED",
+          "safe_path": ".workstream/workstream.json"
+        },
+        {
+          "phase": "operation",
+          "code": "READ_BACK_TARGET_MISMATCH",
+          "safe_path": ".workstream/workstream.json"
+        },
+        {
+          "phase": "operation",
+          "code": "PROJECTION_LINK_FAILED",
+          "safe_path": ".workstream/workstream.json"
+        },
+        {
+          "phase": "operation",
+          "code": "PROJECTION_CONFLICT",
+          "safe_path": ".workstream/workstream.json"
+        },
+        {
+          "phase": "operation",
+          "code": "DELETE_FAILED",
+          "safe_path": ".workstream/workstream.json"
+        },
+        {
+          "phase": "operation",
+          "code": "ABSENCE_READ_BACK_FAILED",
+          "safe_path": ".workstream/workstream.json"
+        },
+        {
+          "phase": "operation",
+          "code": "MARKER_CHANGED",
+          "safe_path": ".workstream/workstream.json"
+        },
+        {
+          "phase": "operation",
+          "code": "IDENTITY_MISMATCH",
+          "safe_path": ".workstream/workstream.json"
+        },
+        {
+          "phase": "operation",
+          "code": "SAFE_INTERNAL_ERROR",
+          "safe_path": ".workstream/workstream.json"
+        },
+        {
+          "phase": "operation",
+          "code": "READ_LIMIT",
+          "safe_path": ".workstream/workstream.json"
+        },
+        {
+          "phase": "operation",
+          "code": "UTF8_INVALID",
+          "safe_path": ".workstream/workstream.json"
+        },
+        {
+          "phase": "operation",
+          "code": "DEPTH_LIMIT",
+          "safe_path": ".workstream/workstream.json"
+        }
+      ]
+    }
+  },
+  "inputs": {
+    "scenario": "inspect",
+    "observed": {
+      "marker": "absent"
+    },
+    "projection": "none",
+    "twist": "none"
+  }
+}

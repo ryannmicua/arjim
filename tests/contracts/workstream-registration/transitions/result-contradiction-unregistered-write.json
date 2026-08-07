@@ -1,0 +1,28 @@
+{
+  "id": "result-contradiction-unregistered-write",
+  "kind": "parsed-value",
+  "description": "U3 contradictory result fixture (PLAN:391): claims outcome unregistered (delete with verified absence) while reporting marker_written true. The envelope must reject this: unregistered requires marker_deleted true with marker_written false (AE8 PLAN:133; protocol 4.12).",
+  "payload": {
+    "version": 1,
+    "outcome": "unregistered",
+    "validity": "not-applicable",
+    "effects": {
+      "marker_written": true,
+      "marker_deleted": true,
+      "read_back_verified": false,
+      "absence_verified": true,
+      "linked": false,
+      "projection": "none"
+    }
+  },
+  "inputs": {
+    "scenario": "unregister",
+    "observed": {
+      "marker": "valid"
+    },
+    "confirmation": "exact",
+    "lock": "acquired",
+    "projection": "none",
+    "twist": "none"
+  }
+}

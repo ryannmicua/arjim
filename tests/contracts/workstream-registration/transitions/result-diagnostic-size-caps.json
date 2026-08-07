@@ -1,0 +1,47 @@
+{
+  "id": "result-diagnostic-size-caps",
+  "kind": "parsed-value",
+  "description": "U3 diagnostic caps fixture (PLAN:391): bounded diagnostic fields at their length caps - safe_path 256 chars, label 256 chars, affected_local_path 1024 chars - with a stable code and no URI content, no property names, no instance values, no secrets (KTD12 PLAN:197).",
+  "payload": {
+    "version": 1,
+    "outcome": "stopped",
+    "validity": "not-applicable",
+    "effects": {
+      "marker_written": false,
+      "marker_deleted": false,
+      "read_back_verified": false,
+      "absence_verified": false,
+      "linked": false,
+      "projection": "none"
+    },
+    "diagnostics": {
+      "count": 2,
+      "items": [
+        {
+          "phase": "operation",
+          "code": "WRITE_FAILED",
+          "safe_path": ".workstream/.registration.lock",
+          "label": "Quarterly Planning",
+          "affected_local_path": "C:\\Users\\operator\\workspaces\\quarterly-planning\\records\\archive\\quarterly-planning-2026-records-directory-path-element"
+        },
+        {
+          "phase": "write",
+          "code": "WRITE_FAILED",
+          "safe_path": ".workstream/workstream.json",
+          "label": "Quarterly Planning",
+          "affected_local_path": "C:\\Users\\operator\\workspaces\\quarterly-planning\\records\\archive\\quarterly-planning-2026-records-directory-path-element"
+        }
+      ]
+    }
+  },
+  "inputs": {
+    "scenario": "register",
+    "observed": {
+      "marker": "absent"
+    },
+    "confirmation": "exact",
+    "lock": "absent",
+    "projection": "none",
+    "twist": "none"
+  }
+}
