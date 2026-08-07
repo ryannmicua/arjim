@@ -469,6 +469,13 @@ class Projection:
                 target_handle=target,
                 ordinal=input.ordinal,
             )
+        except sqlite3.IntegrityError:
+            return ProjectionResult(
+                status=STATUS_CONFLICT,
+                identity=identity,
+                target_handle=target,
+                ordinal=input.ordinal,
+            )
         except Exception:
             return ProjectionResult(
                 status=STATUS_PROJECTION_FAILED,

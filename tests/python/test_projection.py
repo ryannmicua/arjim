@@ -201,6 +201,43 @@ class TestUpdateBoundary:
         assert projection.update(other).status == "conflict"
         assert fs.read_marker(ws) == before
 
+    def test_race_between_select_and_insert_maps_to_conflict(
+        self, tmp_path: Path, monkeypatch
+    ) -> None:
+        ws = tmp_path / "ws"
+        ws.mkdir()
+        projection = proj.Projection(store_dir=tmp_path / "store")
+        assert projection.update(_input(ws)).status == "linked"
+        real_connect = __import__("sqlite3").connect
+
+        class _BlindSelect:
+            def __init__(self, real):
+                object.__setattr__(self, "_real", real)
+
+            def __getattr__(self, name):
+                return getattr(self._real, name)
+
+            def execute(self, *a, **k):
+                if a and a[0].startswith("SELECT identity FROM projection"):
+                    return self._real.execute("SELECT 1 WHERE 0")
+                return self._real.execute(*a, **k)
+
+            def close(self):
+                self._real.close()
+
+        monkeypatch.setattr(
+            proj.sqlite3, "connect",
+            lambda *a, **k: _BlindSelect(real_connect(*a, **k)),
+        )
+        other = _input(ws, identity="dddddddd-eeee-4fff-8000-111111111111", label="Other")
+        result = projection.update(other)
+        assert result.status == "conflict"
+        assert result.identity == "dddddddd-eeee-4fff-8000-111111111111"
+        monkeypatch.undo()
+        rows = projection.list_projection()
+        assert len(rows) == 1
+        assert rows[0]["identity"] == MARKER["identity"]
+
     def test_remove_returns_registered_unlinked(self, tmp_path: Path) -> None:
         ws = tmp_path / "ws"
         ws.mkdir()
