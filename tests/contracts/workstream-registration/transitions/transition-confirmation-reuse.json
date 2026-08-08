@@ -1,0 +1,44 @@
+{
+  "id": "transition-confirmation-reuse",
+  "kind": "parsed-value",
+  "description": "U2 confirmation reuse (PLAN:378; KTD6): a confirmation digest from a previous invocation (or second write attempt) cannot be reused — the HMAC key is process-ephemeral and unused confirmation expires; no write occurs. Outcome: cancelled.",
+  "payload": {
+    "version": 1,
+    "identity": "77777777-8888-4999-8aaa-bbbbbbbbbbbb",
+    "label": "Reused Digest",
+    "kind": "direct",
+    "workspace": ".",
+    "record_sources": [
+      {
+        "type": "sharepoint/team-site",
+        "uri": "https://sharepoint.example.org/sites/reused-digest"
+      }
+    ]
+  },
+  "inputs": {
+    "scenario": "register",
+    "observed": {
+      "workspace_identity": "ws-identity-13",
+      "parent": "absent",
+      "marker": "absent",
+      "marker_identity": null
+    },
+    "draft": {
+      "version": 1,
+      "identity": "77777777-8888-4999-8aaa-bbbbbbbbbbbb",
+      "label": "Reused Digest",
+      "kind": "direct",
+      "workspace": ".",
+      "record_sources": [
+        {
+          "type": "sharepoint/team-site",
+          "uri": "https://sharepoint.example.org/sites/reused-digest"
+        }
+      ]
+    },
+    "confirmation": "reused",
+    "lock": "absent",
+    "projection": "none",
+    "twist": "second-write-attempt"
+  }
+}

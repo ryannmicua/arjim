@@ -1,0 +1,44 @@
+{
+  "id": "transition-new-registration",
+  "kind": "parsed-value",
+  "description": "U2 new registration (PLAN:374; AE1 PLAN:126): unmarked workspace with no .workstream parent; exact confirmation; write/read-back verified; projection linked. Outcome: registered.",
+  "payload": {
+    "version": 1,
+    "identity": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "label": "Quarterly Planning",
+    "kind": "direct",
+    "workspace": ".",
+    "record_sources": [
+      {
+        "type": "sharepoint/team-site",
+        "uri": "https://sharepoint.example.org/sites/quarterly-planning"
+      }
+    ]
+  },
+  "inputs": {
+    "scenario": "register",
+    "observed": {
+      "workspace_identity": "ws-identity-01",
+      "parent": "absent",
+      "marker": "absent",
+      "marker_identity": null
+    },
+    "draft": {
+      "version": 1,
+      "identity": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+      "label": "Quarterly Planning",
+      "kind": "direct",
+      "workspace": ".",
+      "record_sources": [
+        {
+          "type": "sharepoint/team-site",
+          "uri": "https://sharepoint.example.org/sites/quarterly-planning"
+        }
+      ]
+    },
+    "confirmation": "exact",
+    "lock": "acquired",
+    "projection": "linked",
+    "twist": "none"
+  }
+}

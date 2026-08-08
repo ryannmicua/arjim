@@ -1,0 +1,18 @@
+{
+  "id": "marker-version-1-allowed",
+  "kind": "parsed-value",
+  "description": "The allowed v1 version value (PLAN:554): integer 1, the only value this closed schema accepts.",
+  "payload": {
+    "version": 1,
+    "identity": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "label": "Version one marker",
+    "kind": "direct",
+    "workspace": ".",
+    "record_sources": [
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/version-1"
+      }
+    ]
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "id": "raw-depth-8-accepted",
+  "kind": "raw-byte",
+  "description": "Depth 8 raw input (PLAN:364): at the depth max, accepted by the raw guard; not a marker document, so schema validation fails (schema phase, invalid).",
+  "payload_base64": "W1tbW1tbW1swXV1dXV1dXV0="
+}

@@ -1,0 +1,36 @@
+{
+  "id": "result-occupied-invalid",
+  "kind": "parsed-value",
+  "description": "U3 result fixture: occupied-invalid (PLAN:391). Inspection found an invalid marker at the marker path; never overwritten; no separate invalid-marker outcome (KTD13 PLAN:198; PLAN:556; CONCEPTS.md:62; protocol 4.13).",
+  "payload": {
+    "version": 1,
+    "outcome": "occupied-invalid",
+    "validity": "invalid",
+    "effects": {
+      "marker_written": false,
+      "marker_deleted": false,
+      "read_back_verified": false,
+      "absence_verified": false,
+      "linked": false,
+      "projection": "none"
+    },
+    "diagnostics": {
+      "count": 1,
+      "items": [
+        {
+          "phase": "schema",
+          "code": "SCHEMA_INVALID",
+          "safe_path": ".workstream/manifest.json"
+        }
+      ]
+    }
+  },
+  "inputs": {
+    "scenario": "inspect",
+    "observed": {
+      "marker": "invalid"
+    },
+    "projection": "none",
+    "twist": "none"
+  }
+}

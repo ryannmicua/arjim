@@ -14,18 +14,20 @@ Risks, Assumptions, Issues, and Dependencies register. Each register has an **Ac
 
 Seeded from the workstream registration and discovery plan (`docs/plans/2026-08-01-001-feat-workstream-registration-discovery-plan.md`).
 
+Updated 2026-08-08: D-003 resolved; mitigations for R-001–R-006 confirmed implemented and verified by the terminal review pass (362 tests, 87/87 conformance).
+
 ## Risks (R)
 
 ### Active
 
 | ID | Title | Impact | Likelihood | Owner | Opened | Mitigation / Notes |
 |---|---|---|---|---|---|---|
-| R-001 | Contract without executable proof | High | Medium | Arjim CE | 2026-08-01 | A malformed schema or contradictory fixture can survive manual review. Mitigation: one expectation manifest, every fixture declares its expected result, and the pinned Python implementation executes the complete project corpus. |
-| R-002 | Path portability | Medium | Medium | Arjim CE | 2026-08-01 | Device paths in the workspace reference would break cross-device identity. Mitigation: fixtures reject device paths in the workspace reference; record-source URIs may be local-resource but stay untrusted, non-dereferenceable data. |
-| R-003 | Resource exhaustion | Medium | Low | Arjim CE | 2026-08-01 | A shared marker can be hostile before schema validation. Mitigation: KTD9 pre-parse and collection bounds, including a coarse 262,145-byte bounded read cap; exact byte-ceiling conformance fixtures deferred to v2 (2026-08-02, X-001). |
-| R-004 | URI overclaim | High | Medium | Arjim CE | 2026-08-01 | Structural validity does not prove access, ownership, or safety. Mitigation: KTD5 prohibits automatic dereference, warns on malformed URIs, and distinguishes `not-checked`, `unsupported`, and inaccessible states. |
-| R-005 | Secret leakage | High | Medium | Arjim CE | 2026-08-01 | URI syntax can contain sensitive-looking content. Mitigation: KTD9 accepts credential-bearing URIs as untrusted data, the Python implementation never inspects or dereferences URI content, never echoes sensitive values, and warns only on malformed syntax. |
-| R-006 | Schema lock-in | Medium | Medium | Arjim CE | 2026-08-01 | A closed provider enum would force schema changes per integration. Mitigation: keep record-source type tokens open as workspace data and report unsupported capability separately in the Python implementation. |
+| R-001 | Contract without executable proof | High | Medium | Arjim CE | 2026-08-01 | A malformed schema or contradictory fixture can survive manual review. Mitigation: one expectation manifest, every fixture declares its expected result, and the pinned Python implementation executes the complete project corpus. **Implemented and verified 2026-08-08 (87/87 conformance).** |
+| R-002 | Path portability | Medium | Medium | Arjim CE | 2026-08-01 | Device paths in the workspace reference would break cross-device identity. Mitigation: fixtures reject device paths in the workspace reference; record-source URIs may be local-resource but stay untrusted, non-dereferenceable data. **Implemented and verified 2026-08-08.** |
+| R-003 | Resource exhaustion | Medium | Low | Arjim CE | 2026-08-01 | A shared marker can be hostile before schema validation. Mitigation: KTD9 pre-parse and collection bounds, including a coarse 262,145-byte bounded read cap; exact byte-ceiling conformance fixtures deferred to v2 (2026-08-02, X-001). **Implemented and verified 2026-08-08 (bounded read enforced in the runner).** |
+| R-004 | URI overclaim | High | Medium | Arjim CE | 2026-08-01 | Structural validity does not prove access, ownership, or safety. Mitigation: KTD5 prohibits automatic dereference, warns on malformed URIs, and distinguishes `not-checked`, `unsupported`, and inaccessible states. **Implemented and verified 2026-08-08.** |
+| R-005 | Secret leakage | High | Medium | Arjim CE | 2026-08-01 | URI syntax can contain sensitive-looking content. Mitigation: KTD9 accepts credential-bearing URIs as untrusted data, the Python implementation never inspects or dereferences URI content, never echoes sensitive values, and warns only on malformed syntax. **Implemented and verified 2026-08-08 (no URI content or secrets echoed by diagnostics).** |
+| R-006 | Schema lock-in | Medium | Medium | Arjim CE | 2026-08-01 | A closed provider enum would force schema changes per integration. Mitigation: keep record-source type tokens open as workspace data and report unsupported capability separately in the Python implementation. **Implemented and verified 2026-08-08.** |
 
 ### Resolved
 
@@ -72,7 +74,6 @@ Seeded from the workstream registration and discovery plan (`docs/plans/2026-08-
 
 | ID | Dependency | Owner | Opened | Notes |
 |---|---|---|---|---|
-| D-003 | Exact Python dependency patch and filesystem profile selection. | Arjim CE | 2026-08-01 | CPython 3.14.x, `jsonschema` 4.26.x, `Draft202012Validator`, and SQLite are resolved; U6 records exact patches and the tested local filesystem profile before compatibility is claimed (KTD1, KTD11). |
 | D-002 | `VISION.md` as product authority. | Arjim CE | 2026-08-01 | The plan defers to VISION.md for durable memory, access honesty, authority, and rebuildability. |
 
 ### Resolved
@@ -80,6 +81,7 @@ Seeded from the workstream registration and discovery plan (`docs/plans/2026-08-
 | ID | Dependency | Opened | Resolved | Resolution |
 |---|---|---|---|---|
 | D-001 | Future runtime and validation library selection. | 2026-08-01 | 2026-08-02 | Runtime selection is resolved to CPython 3.14.x with `jsonschema` 4.26.x, explicit `Draft202012Validator`, and stdlib `sqlite3`; exact patch pins and the supported local filesystem are tracked separately as D-003. |
+| D-003 | Exact Python dependency patch and filesystem profile selection. | 2026-08-01 | 2026-08-08 | Pins recorded at U6 and finalized at U11 (PLAN:477): CPython 3.14.6, `jsonschema` 4.26.0, stdlib `sqlite3` 3.50.4, enforced by `pyproject.toml`; tested filesystem profile is Windows NTFS with fail-closed POSIX branches (per `contracts/workstream-registration/v1/compatibility.md`). Verified on this host 2026-08-08 (362 tests, 87/87 conformance). |
 
 ## Deferred (X)
 

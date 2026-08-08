@@ -1,0 +1,18 @@
+{
+  "id": "canary-userinfo-uri-2",
+  "kind": "parsed-value",
+  "description": "Canary fixture (REV:58): exact userinfo-uri-2 group value as a record-source URI; valid and undereferenced.",
+  "payload": {
+    "version": 1,
+    "identity": "1a2b3c4d-5e6f-47a8-9b0c-1d2e3f4a5b6c",
+    "label": "Canary userinfo URIs two",
+    "kind": "direct",
+    "workspace": ".",
+    "record_sources": [
+      {
+        "type": "records/web",
+        "uri": "https://redacted:redacted-fake-secret@sharepoint.example.org/sites/records/workstream-02"
+      }
+    ]
+  }
+}

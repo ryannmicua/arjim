@@ -1,0 +1,19 @@
+{
+  "id": "invalid-unknown-field",
+  "kind": "parsed-value",
+  "description": "Unknown field (PLAN:364): additional property not in the closed schema; additionalProperties:false rejects.",
+  "payload": {
+    "version": 1,
+    "identity": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "label": "Unknown field",
+    "kind": "direct",
+    "workspace": ".",
+    "record_sources": [
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/unknown"
+      }
+    ],
+    "purpose": "quarterly planning"
+  }
+}

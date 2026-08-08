@@ -1,0 +1,18 @@
+{
+  "id": "canary-fake-token-1",
+  "kind": "parsed-value",
+  "description": "Canary fixture (REV:58; spec:327-329): fake token-shaped value from canary group fake-token-1 embedded in the label; value is clearly fake.",
+  "payload": {
+    "version": 1,
+    "identity": "1a2b3c4d-5e6f-47a8-9b0c-1d2e3f4a5b6c",
+    "label": "wst_live_9f2k3LmN4pQr5sT6uV7wX8yZ1aB2cD",
+    "kind": "direct",
+    "workspace": ".",
+    "record_sources": [
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/canary-token-1"
+      }
+    ]
+  }
+}

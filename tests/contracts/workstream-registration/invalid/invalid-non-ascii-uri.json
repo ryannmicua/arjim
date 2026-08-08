@@ -1,0 +1,18 @@
+{
+  "id": "invalid-non-ascii-uri",
+  "kind": "parsed-value",
+  "description": "Non-ASCII URI (PLAN:364, 167): record-source URIs are RFC 3986 ASCII; raw non-ASCII is invalid (percent-encoding required).",
+  "payload": {
+    "version": 1,
+    "identity": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "label": "Non-ASCII URI",
+    "kind": "direct",
+    "workspace": ".",
+    "record_sources": [
+      {
+        "type": "example/records",
+        "uri": "https://records.example.org/caf\u00e9"
+      }
+    ]
+  }
+}

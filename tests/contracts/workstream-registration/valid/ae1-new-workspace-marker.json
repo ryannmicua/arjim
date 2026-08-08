@@ -1,0 +1,22 @@
+{
+  "id": "ae1-new-workspace-marker",
+  "kind": "parsed-value",
+  "description": "AE1 new-workspace marker (PLAN:126): a valid confirmed draft for an unmarked direct workspace; read-back matches confirmed data and identity is stable. Covers R1-R5.",
+  "payload": {
+    "version": 1,
+    "identity": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "label": "Quarterly Planning",
+    "kind": "direct",
+    "workspace": ".",
+    "record_sources": [
+      {
+        "type": "sharepoint/team-site",
+        "uri": "https://sharepoint.example.org/sites/quarterly-planning"
+      },
+      {
+        "type": "vcs/git",
+        "uri": "https://git.example.org/team/quarterly-planning.git"
+      }
+    ]
+  }
+}

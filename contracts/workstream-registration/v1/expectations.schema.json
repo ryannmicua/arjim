@@ -1,0 +1,215 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.workstream-registration/v1/expectations.schema.json",
+  "title": "WorkstreamRegistrationExpectations",
+  "x-surface": "expectations",
+  "x-surface-version": "1",
+  "description": "Expectation manifest contract for the Workstream Registration v1 conformance corpus (U5, PLAN:341-352; KTD8 PLAN:193). The manifest file tests/contracts/workstream-registration/expectations.json is the single fixture index: every conformance case has exactly one structurally valid expectation entry (gate G2, PLAN:486) and no entry is missing, duplicated, or orphaned (gate G5, PLAN:489). Three expectation categories are distinct (PLAN:349): mandatory protocol assertions (blocking; the Python implementation must pass the mandatory corpus before claiming protocol compliance, KTD8), Python capability assertions (blocking assertions about the Python implementation on the declared profile - no-echo, caps, capability status), and non-blocking warnings (reported, never fail conformance by themselves; valid-with-warnings is distinct from failure, PLAN:349, 351).",
+  "type": "object",
+  "properties": {
+    "manifest_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "description": "Semantic version of the manifest format. U5 defines 1.0.0; a breaking format change bumps this version and the runner dispatches on it."
+    },
+    "contract": {
+      "const": "workstream-registration/v1",
+      "description": "The contract surface this manifest indexes; independent surface versions per KTD3 (PLAN:188)."
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 1024
+    },
+    "entries": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "$ref": "#/$defs/entry"
+      },
+      "description": "One entry per fixture file. Uniqueness of id and fixture paths is asserted by the runner (gate G5); JSON Schema cannot express cross-entry or cross-file uniqueness."
+    },
+    "canaries": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[a-z][a-z0-9-]{0,31}$"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/canary-group"
+      },
+      "description": "The canary corpus (REV:58): named groups of fake tokens, userinfo URIs, and key-shaped strings that no-echo assertions search every output surface (stdout, stderr, logs, tracebacks, --json, dependency-error paths) for (PLAN:306, 476; TS-D11). Fixture entries that embed canary values are tagged with the group names (spec:327-329); later units add concrete canary fixture files whose payloads carry these exact values."
+    }
+  },
+  "required": [
+    "manifest_version",
+    "contract",
+    "entries",
+    "canaries"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "entry": {
+      "type": "object",
+      "required": [
+        "id",
+        "fixture",
+        "category",
+        "expected",
+        "covers"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,63}$",
+          "description": "Must equal the id of the fixture case at `fixture`; the runner asserts this match (unambiguous manifest link, gate G2)."
+        },
+        "fixture": {
+          "type": "string",
+          "pattern": "^(valid|invalid|warn|raw|transitions)/[A-Za-z0-9._-]+\\.json$",
+          "maxLength": 256,
+          "description": "Case file path relative to tests/contracts/workstream-registration/. Directory per fixture kind (PLAN:254-258). The runner asserts the path exists, parses, and conforms to conformance-case.schema.json (gate G1/G2)."
+        },
+        "category": {
+          "enum": [
+            "mandatory",
+            "capability",
+            "warning"
+          ],
+          "description": "mandatory: blocking protocol assertion - the case must reach the expected outcome or conformance fails (KTD8, PLAN:193). capability: blocking Python capability assertion - the implementation must satisfy it on the declared profile, reported separately from protocol results (KTD8; PLAN:349). warning: non-blocking observation - reported, never fails conformance by itself (PLAN:349). Per-entry marking makes the 'exactly once, across all expectation categories' corpus semantics expressible (spec WATCH-1, spec:736-739; PLAN:476)."
+        },
+        "expected": {
+          "$ref": "#/$defs/expected",
+          "description": "The case's expected result; every fixture declares its expected result (PLAN:302)."
+        },
+        "covers": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^(R(?:[1-9]|1[0-5])|AE[1-9])$"
+          },
+          "description": "Machine-readable requirement/acceptance-example coverage tags (REV:67): R1-R15 and AE1-AE9. The conformance runner computes the requirement-coverage report from these tags (TS-D2/TS-D3, spec:596-597)."
+        },
+        "canaries": {
+          "type": "array",
+          "maxItems": 16,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]{0,31}$"
+          },
+          "description": "Names of canary groups from the manifest `canaries` map whose values appear in this fixture's payload; the runner scans all output surfaces for those values when executing this case (spec:327-329)."
+        }
+      },
+      "additionalProperties": false
+    },
+    "expected": {
+      "type": "object",
+      "properties": {
+        "validity": {
+          "enum": [
+            "valid",
+            "valid-with-warnings",
+            "invalid"
+          ],
+          "description": "Document-level outcome after raw guard + Draft 2020-12 validation (U1/U8). valid-with-warnings is distinct from failure: the document validates but produces structured warnings (e.g., malformed record-source URI, AE9, PLAN:362). invalid: rejected by the raw guard or the closed schema (AE5)."
+        },
+        "outcome": {
+          "enum": [
+            "registered",
+            "linked-existing",
+            "cancelled",
+            "stopped",
+            "written-unverified",
+            "registered-unlinked",
+            "unregistered",
+            "occupied-invalid",
+            "invalid-marker-resolved",
+            "invalid-deleted-unverified",
+            "changed-marker-stopped",
+            "conflict"
+          ],
+          "description": "Protocol/result vocabulary name (PLAN:391, 556): result and transition case outcomes (U2/U3). The list is frozen at PLAN:391/PLAN:556; there is deliberately no `invalid-marker` outcome (PLAN:556; CONCEPTS.md:62). `conflict` is the projection write-time conflict outcome (PLAN:463, 528, 556)."
+        },
+        "phase": {
+          "enum": [
+            "read",
+            "utf8",
+            "depth",
+            "duplicates",
+            "nonfinite",
+            "controls",
+            "schema"
+          ],
+          "description": "Raw-guard termination phase for raw-byte cases (PLAN:219-230, KTD11 PLAN:196): read = 262,145-byte read cap; utf8 = strict UTF-8; depth = token-aware depth scan (max 8); duplicates = duplicate-name rejection; nonfinite = NaN/infinity rejection; controls = controls + Bidi_Control scan; schema = passed the raw guard, continues to Draft 2020-12 validation (then `validity` applies). U7 asserts every raw case terminates at its expected phase with a stable code (spec:443-444)."
+        },
+        "code": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_-]{0,63}$",
+          "description": "Stable diagnostic code (KTD12, PLAN:197) for a raw-guard or validation rejection. Filled by U7/U8 when the phase/code vocabulary lands; optional at U5."
+        },
+        "warnings": {
+          "type": "array",
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          },
+          "description": "Expected structured warnings accompanying a valid-with-warnings outcome or a warning-bearing transition outcome (U3, PLAN:391)."
+        }
+      },
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": [
+            "validity"
+          ]
+        },
+        {
+          "required": [
+            "outcome"
+          ]
+        },
+        {
+          "required": [
+            "phase"
+          ]
+        }
+      ],
+      "description": "At least one of validity/outcome/phase is required; combinations are allowed (e.g., a raw case that passes the guard declares phase=schema plus validity; a transition case declares outcome plus optional validity)."
+    },
+    "canary-group": {
+      "type": "object",
+      "required": [
+        "kind",
+        "values"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "token",
+            "userinfo-uri",
+            "key-shaped"
+          ],
+          "description": "Canary shape (REV:58): token = fake access-token-shaped string; userinfo-uri = URI carrying a userinfo component; key-shaped = private-key-shaped string."
+        },
+        "values": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 16,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 4,
+            "maxLength": 256
+          },
+          "description": "The concrete fake values. No-echo assertions search all output surfaces for these exact strings (PLAN:306, 476)."
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

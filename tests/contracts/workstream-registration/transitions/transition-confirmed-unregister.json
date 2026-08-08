@@ -1,0 +1,35 @@
+{
+  "id": "transition-confirmed-unregister",
+  "kind": "parsed-value",
+  "description": "U2 confirmed unregister (PLAN:374; AE8 PLAN:133): confirmation bound to exact identity + stable target + observed presence; cooperative lock; post-lock and pre-delete re-reads match; conditional delete; absence read-back verified. Outcome: unregistered.",
+  "payload": {
+    "version": 1,
+    "identity": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "label": "Quarterly Planning",
+    "kind": "direct",
+    "workspace": ".",
+    "record_sources": [
+      {
+        "type": "sharepoint/team-site",
+        "uri": "https://sharepoint.example.org/sites/quarterly-planning"
+      }
+    ]
+  },
+  "inputs": {
+    "scenario": "unregister",
+    "observed": {
+      "workspace_identity": "ws-identity-01",
+      "parent": {
+        "identity": "parent-identity-01"
+      },
+      "marker": "valid",
+      "marker_identity": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+    },
+    "draft": null,
+    "bound_identity": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "confirmation": "exact",
+    "lock": "acquired",
+    "projection": "none",
+    "twist": "none"
+  }
+}

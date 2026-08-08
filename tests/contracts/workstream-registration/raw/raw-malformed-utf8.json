@@ -1,0 +1,6 @@
+{
+  "id": "raw-malformed-utf8",
+  "kind": "raw-byte",
+  "description": "Malformed UTF-8 raw input (PLAN:364): invalid byte sequences; rejected at the utf8 phase.",
+  "payload_base64": "eyJhIjoi//4ifQ=="
+}

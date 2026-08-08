@@ -1,0 +1,29 @@
+{
+  "id": "result-contradiction-unverified-identity",
+  "kind": "parsed-value",
+  "description": "U3 contradictory result fixture (PLAN:391): claims written-unverified (read-back failed) while carrying a verified identity. The envelope must reject this: verified identity requires a valid-class marker with a verified read-back; written-unverified requires read_back_verified false and validity not-applicable (PLAN:389; protocol 4.10).",
+  "payload": {
+    "version": 1,
+    "outcome": "written-unverified",
+    "validity": "valid",
+    "effects": {
+      "marker_written": true,
+      "marker_deleted": false,
+      "read_back_verified": false,
+      "absence_verified": false,
+      "linked": false,
+      "projection": "none"
+    },
+    "identity": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+  },
+  "inputs": {
+    "scenario": "register",
+    "observed": {
+      "marker": "absent"
+    },
+    "confirmation": "exact",
+    "lock": "acquired",
+    "projection": "none",
+    "twist": "read-back-other-target"
+  }
+}

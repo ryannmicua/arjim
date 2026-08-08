@@ -1,0 +1,1266 @@
+{
+  "manifest_version": "1.0.0",
+  "contract": "workstream-registration/v1",
+  "description": "Expectation manifest (fixture index) for the Workstream Registration v1 conformance corpus. One entry per case file under tests/contracts/workstream-registration/{valid,invalid,warn,raw,transitions}/; each entry declares its category (mandatory/capability/warning), expected result, and R#/AE# coverage tags. Later units append entries: U1 adds marker fixtures, U2 adds transition fixtures, U3 completes the result and transition corpus. Paths are relative to this file's directory.",
+  "entries": [
+    {
+      "id": "ae1-new-workspace-marker",
+      "fixture": "valid/ae1-new-workspace-marker.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid"
+      },
+      "covers": [
+        "AE1",
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "R5"
+      ]
+    },
+    {
+      "id": "ae3-proxy-marker",
+      "fixture": "valid/ae3-proxy-marker.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid"
+      },
+      "covers": [
+        "AE3",
+        "R6",
+        "R7"
+      ]
+    },
+    {
+      "id": "ae6-revision-1-label-old",
+      "fixture": "valid/ae6-revision-1-label-old.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid"
+      },
+      "covers": [
+        "AE6",
+        "R5",
+        "R14"
+      ]
+    },
+    {
+      "id": "ae6-revision-2-label-new",
+      "fixture": "valid/ae6-revision-2-label-new.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid"
+      },
+      "covers": [
+        "AE6",
+        "R5",
+        "R14"
+      ]
+    },
+    {
+      "id": "ae9-userinfo-uri-record-source",
+      "fixture": "valid/ae9-userinfo-uri-record-source.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid"
+      },
+      "covers": [
+        "AE9",
+        "R2",
+        "R7",
+        "R8",
+        "R9",
+        "R11"
+      ]
+    },
+    {
+      "id": "boundary-label-256-bytes",
+      "fixture": "valid/boundary-label-256-bytes.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid"
+      },
+      "covers": [
+        "R2",
+        "R9",
+        "R10"
+      ]
+    },
+    {
+      "id": "boundary-type-token-64-chars",
+      "fixture": "valid/boundary-type-token-64-chars.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid"
+      },
+      "covers": [
+        "R2",
+        "R7",
+        "R9",
+        "R10"
+      ]
+    },
+    {
+      "id": "boundary-uri-2048-chars",
+      "fixture": "valid/boundary-uri-2048-chars.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid"
+      },
+      "covers": [
+        "R2",
+        "R7",
+        "R9",
+        "R10"
+      ]
+    },
+    {
+      "id": "boundary-32-record-sources",
+      "fixture": "valid/boundary-32-record-sources.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid"
+      },
+      "covers": [
+        "R2",
+        "R7",
+        "R9",
+        "R10"
+      ]
+    },
+    {
+      "id": "boundary-1-record-source",
+      "fixture": "valid/boundary-1-record-source.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid"
+      },
+      "covers": [
+        "R2",
+        "R7",
+        "R9",
+        "R10"
+      ]
+    },
+    {
+      "id": "marker-version-1-allowed",
+      "fixture": "valid/marker-version-1-allowed.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid"
+      },
+      "covers": [
+        "R2",
+        "R9",
+        "R10"
+      ]
+    },
+    {
+      "id": "canary-fake-token-1",
+      "fixture": "valid/canary-fake-token-1.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid"
+      },
+      "covers": [
+        "AE1",
+        "R2"
+      ],
+      "canaries": [
+        "fake-token-1"
+      ]
+    },
+    {
+      "id": "canary-fake-token-2",
+      "fixture": "valid/canary-fake-token-2.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid"
+      },
+      "covers": [
+        "AE1",
+        "R2"
+      ],
+      "canaries": [
+        "fake-token-2"
+      ]
+    },
+    {
+      "id": "canary-userinfo-uri-1",
+      "fixture": "valid/canary-userinfo-uri-1.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid"
+      },
+      "covers": [
+        "AE9",
+        "R2",
+        "R7",
+        "R8",
+        "R9",
+        "R11"
+      ],
+      "canaries": [
+        "userinfo-uri-1"
+      ]
+    },
+    {
+      "id": "canary-userinfo-uri-2",
+      "fixture": "valid/canary-userinfo-uri-2.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid"
+      },
+      "covers": [
+        "AE9",
+        "R2",
+        "R7",
+        "R8",
+        "R9",
+        "R11"
+      ],
+      "canaries": [
+        "userinfo-uri-2"
+      ]
+    },
+    {
+      "id": "canary-key-shaped-1",
+      "fixture": "valid/canary-key-shaped-1.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid"
+      },
+      "covers": [
+        "AE1",
+        "R2"
+      ],
+      "canaries": [
+        "key-shaped-1"
+      ]
+    },
+    {
+      "id": "canary-key-shaped-2",
+      "fixture": "valid/canary-key-shaped-2.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid"
+      },
+      "covers": [
+        "AE1",
+        "R2"
+      ],
+      "canaries": [
+        "key-shaped-2"
+      ]
+    },
+    {
+      "id": "instruction-like-label-remains-data",
+      "fixture": "valid/instruction-like-label-remains-data.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid"
+      },
+      "covers": [
+        "R2",
+        "R5"
+      ]
+    },
+    {
+      "id": "invalid-unknown-field",
+      "fixture": "invalid/invalid-unknown-field.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "invalid"
+      },
+      "covers": [
+        "AE5",
+        "R9",
+        "R10"
+      ]
+    },
+    {
+      "id": "invalid-malformed-uuid",
+      "fixture": "invalid/invalid-malformed-uuid.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "invalid"
+      },
+      "covers": [
+        "AE5",
+        "R9",
+        "R10"
+      ]
+    },
+    {
+      "id": "invalid-malformed-kind",
+      "fixture": "invalid/invalid-malformed-kind.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "invalid"
+      },
+      "covers": [
+        "AE5",
+        "R9",
+        "R10"
+      ]
+    },
+    {
+      "id": "invalid-missing-version",
+      "fixture": "invalid/invalid-missing-version.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "invalid"
+      },
+      "covers": [
+        "AE5",
+        "R9",
+        "R10"
+      ]
+    },
+    {
+      "id": "invalid-unsupported-version-2",
+      "fixture": "invalid/invalid-unsupported-version-2.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "invalid"
+      },
+      "covers": [
+        "AE5",
+        "R9"
+      ]
+    },
+    {
+      "id": "invalid-device-path-workspace-windows",
+      "fixture": "invalid/invalid-device-path-workspace-windows.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "invalid"
+      },
+      "covers": [
+        "AE5",
+        "R9",
+        "R13",
+        "R14"
+      ]
+    },
+    {
+      "id": "invalid-device-path-workspace-absolute",
+      "fixture": "invalid/invalid-device-path-workspace-absolute.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "invalid"
+      },
+      "covers": [
+        "AE5",
+        "R9",
+        "R13",
+        "R14"
+      ]
+    },
+    {
+      "id": "invalid-workspace-traversal",
+      "fixture": "invalid/invalid-workspace-traversal.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "invalid"
+      },
+      "covers": [
+        "AE5",
+        "R9",
+        "R13",
+        "R14"
+      ]
+    },
+    {
+      "id": "invalid-duplicate-record-sources",
+      "fixture": "invalid/invalid-duplicate-record-sources.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "invalid"
+      },
+      "covers": [
+        "AE5",
+        "R9",
+        "R10"
+      ]
+    },
+    {
+      "id": "invalid-empty-record-sources",
+      "fixture": "invalid/invalid-empty-record-sources.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "invalid"
+      },
+      "covers": [
+        "AE5",
+        "R9",
+        "R10"
+      ]
+    },
+    {
+      "id": "invalid-empty-label",
+      "fixture": "invalid/invalid-empty-label.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "invalid"
+      },
+      "covers": [
+        "AE5",
+        "R9",
+        "R10"
+      ]
+    },
+    {
+      "id": "invalid-label-controls",
+      "fixture": "invalid/invalid-label-controls.json",
+      "category": "mandatory",
+      "expected": {
+        "phase": "controls",
+        "validity": "invalid"
+      },
+      "covers": [
+        "AE5",
+        "R9",
+        "R10"
+      ]
+    },
+    {
+      "id": "invalid-label-too-long",
+      "fixture": "invalid/invalid-label-too-long.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "invalid"
+      },
+      "covers": [
+        "AE5",
+        "R9",
+        "R10"
+      ]
+    },
+    {
+      "id": "invalid-non-ascii-type-token",
+      "fixture": "invalid/invalid-non-ascii-type-token.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "invalid"
+      },
+      "covers": [
+        "AE5",
+        "R7",
+        "R9",
+        "R10"
+      ]
+    },
+    {
+      "id": "invalid-non-ascii-uri",
+      "fixture": "invalid/invalid-non-ascii-uri.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "invalid"
+      },
+      "covers": [
+        "AE5",
+        "R7",
+        "R9",
+        "R10"
+      ]
+    },
+    {
+      "id": "invalid-uri-too-long",
+      "fixture": "invalid/invalid-uri-too-long.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "invalid"
+      },
+      "covers": [
+        "AE5",
+        "R7",
+        "R9",
+        "R10"
+      ]
+    },
+    {
+      "id": "invalid-type-token-too-long",
+      "fixture": "invalid/invalid-type-token-too-long.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "invalid"
+      },
+      "covers": [
+        "AE5",
+        "R7",
+        "R9",
+        "R10"
+      ]
+    },
+    {
+      "id": "invalid-missing-required-fields",
+      "fixture": "invalid/invalid-missing-required-fields.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "invalid"
+      },
+      "covers": [
+        "AE5",
+        "R9",
+        "R10"
+      ]
+    },
+    {
+      "id": "warn-malformed-uri-record-source",
+      "fixture": "warn/warn-malformed-uri-record-source.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid-with-warnings"
+      },
+      "covers": [
+        "AE9",
+        "R2",
+        "R7",
+        "R8",
+        "R9",
+        "R11"
+      ]
+    },
+    {
+      "id": "canary-malformed-uri-warn",
+      "fixture": "warn/canary-malformed-uri-warn.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid-with-warnings"
+      },
+      "covers": [
+        "AE9",
+        "R2",
+        "R7",
+        "R8",
+        "R9",
+        "R11"
+      ],
+      "canaries": [
+        "fake-token-1"
+      ]
+    },
+    {
+      "id": "raw-oversize-input",
+      "fixture": "raw/raw-oversize-input.json",
+      "category": "mandatory",
+      "expected": {
+        "phase": "read"
+      },
+      "covers": [
+        "AE5",
+        "R8",
+        "R9",
+        "R10"
+      ]
+    },
+    {
+      "id": "raw-malformed-utf8",
+      "fixture": "raw/raw-malformed-utf8.json",
+      "category": "mandatory",
+      "expected": {
+        "phase": "utf8"
+      },
+      "covers": [
+        "AE5",
+        "R8",
+        "R9",
+        "R10"
+      ]
+    },
+    {
+      "id": "raw-bom-prefix",
+      "fixture": "raw/raw-bom-prefix.json",
+      "category": "mandatory",
+      "expected": {
+        "phase": "utf8"
+      },
+      "covers": [
+        "AE5",
+        "R8",
+        "R9",
+        "R10"
+      ]
+    },
+    {
+      "id": "raw-trailing-content",
+      "fixture": "raw/raw-trailing-content.json",
+      "category": "mandatory",
+      "expected": {
+        "phase": "schema",
+        "validity": "invalid"
+      },
+      "covers": [
+        "AE5",
+        "R8",
+        "R9",
+        "R10"
+      ]
+    },
+    {
+      "id": "raw-duplicate-keys",
+      "fixture": "raw/raw-duplicate-keys.json",
+      "category": "mandatory",
+      "expected": {
+        "phase": "duplicates"
+      },
+      "covers": [
+        "AE5",
+        "R8",
+        "R9",
+        "R10"
+      ]
+    },
+    {
+      "id": "raw-depth-9-rejected",
+      "fixture": "raw/raw-depth-9-rejected.json",
+      "category": "mandatory",
+      "expected": {
+        "phase": "depth"
+      },
+      "covers": [
+        "AE5",
+        "R8",
+        "R9",
+        "R10"
+      ]
+    },
+    {
+      "id": "raw-depth-8-accepted",
+      "fixture": "raw/raw-depth-8-accepted.json",
+      "category": "mandatory",
+      "expected": {
+        "phase": "schema",
+        "validity": "invalid"
+      },
+      "covers": [
+        "AE5",
+        "R8",
+        "R9",
+        "R10"
+      ]
+    },
+    {
+      "id": "raw-control-characters",
+      "fixture": "raw/raw-control-characters.json",
+      "category": "mandatory",
+      "expected": {
+        "phase": "controls"
+      },
+      "covers": [
+        "AE5",
+        "R8",
+        "R9",
+        "R10"
+      ]
+    },
+    {
+      "id": "raw-nan-infinity-constants",
+      "fixture": "raw/raw-nan-infinity-constants.json",
+      "category": "mandatory",
+      "expected": {
+        "phase": "nonfinite"
+      },
+      "covers": [
+        "AE5",
+        "R8",
+        "R9",
+        "R10"
+      ]
+    },
+    {
+      "id": "transition-new-registration",
+      "fixture": "transitions/transition-new-registration.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "registered"
+      },
+      "covers": [
+        "AE1",
+        "R1",
+        "R3",
+        "R4",
+        "R8",
+        "R10",
+        "R14"
+      ]
+    },
+    {
+      "id": "transition-proxy-registration",
+      "fixture": "transitions/transition-proxy-registration.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "registered"
+      },
+      "covers": [
+        "AE3",
+        "R1",
+        "R3",
+        "R4",
+        "R10"
+      ]
+    },
+    {
+      "id": "transition-existing-marker",
+      "fixture": "transitions/transition-existing-marker.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "linked-existing"
+      },
+      "covers": [
+        "AE2",
+        "R4",
+        "R14"
+      ]
+    },
+    {
+      "id": "transition-interrupted-parent-retry",
+      "fixture": "transitions/transition-interrupted-parent-retry.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "registered"
+      },
+      "covers": [
+        "R3",
+        "R4",
+        "R14"
+      ]
+    },
+    {
+      "id": "transition-rejected-draft",
+      "fixture": "transitions/transition-rejected-draft.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "cancelled"
+      },
+      "covers": [
+        "AE4",
+        "R3",
+        "R4"
+      ]
+    },
+    {
+      "id": "transition-stale-confirmation",
+      "fixture": "transitions/transition-stale-confirmation.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "cancelled"
+      },
+      "covers": [
+        "R3",
+        "R4"
+      ]
+    },
+    {
+      "id": "transition-registered-unlinked",
+      "fixture": "transitions/transition-registered-unlinked.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "registered-unlinked"
+      },
+      "covers": [
+        "AE7",
+        "R4",
+        "R13"
+      ]
+    },
+    {
+      "id": "transition-confirmed-unregister",
+      "fixture": "transitions/transition-confirmed-unregister.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "unregistered"
+      },
+      "covers": [
+        "AE8",
+        "R15"
+      ]
+    },
+    {
+      "id": "transition-changed-draft",
+      "fixture": "transitions/transition-changed-draft.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "cancelled"
+      },
+      "covers": [
+        "R3",
+        "R4"
+      ]
+    },
+    {
+      "id": "transition-changed-target",
+      "fixture": "transitions/transition-changed-target.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "cancelled"
+      },
+      "covers": [
+        "R3",
+        "R4",
+        "R9"
+      ]
+    },
+    {
+      "id": "transition-redirected-path",
+      "fixture": "transitions/transition-redirected-path.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "stopped"
+      },
+      "covers": [
+        "R9",
+        "R14"
+      ]
+    },
+    {
+      "id": "transition-target-alias",
+      "fixture": "transitions/transition-target-alias.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "stopped"
+      },
+      "covers": [
+        "R9",
+        "R14"
+      ]
+    },
+    {
+      "id": "transition-concurrent-create",
+      "fixture": "transitions/transition-concurrent-create.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "linked-existing"
+      },
+      "covers": [
+        "R4",
+        "R14"
+      ]
+    },
+    {
+      "id": "transition-readback-other-target",
+      "fixture": "transitions/transition-readback-other-target.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "written-unverified"
+      },
+      "covers": [
+        "R3",
+        "R14"
+      ]
+    },
+    {
+      "id": "transition-confirmation-reuse",
+      "fixture": "transitions/transition-confirmation-reuse.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "cancelled"
+      },
+      "covers": [
+        "R3",
+        "R4"
+      ]
+    },
+    {
+      "id": "transition-malformed-marker",
+      "fixture": "transitions/transition-malformed-marker.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "invalid",
+        "outcome": "occupied-invalid"
+      },
+      "covers": [
+        "AE5",
+        "R9",
+        "R10"
+      ]
+    },
+    {
+      "id": "transition-unsupported-version",
+      "fixture": "transitions/transition-unsupported-version.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "invalid",
+        "outcome": "occupied-invalid"
+      },
+      "covers": [
+        "AE5",
+        "R9",
+        "R10"
+      ]
+    },
+    {
+      "id": "transition-inaccessible-workspace",
+      "fixture": "transitions/transition-inaccessible-workspace.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "stopped"
+      },
+      "covers": [
+        "R8",
+        "R9"
+      ]
+    },
+    {
+      "id": "transition-identity-apis-unavailable",
+      "fixture": "transitions/transition-identity-apis-unavailable.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "stopped"
+      },
+      "covers": [
+        "R9",
+        "R14"
+      ]
+    },
+    {
+      "id": "transition-conflicting-inputs",
+      "fixture": "transitions/transition-conflicting-inputs.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "conflict"
+      },
+      "covers": [
+        "R4",
+        "R9"
+      ]
+    },
+    {
+      "id": "transition-unregister-identity-mismatch",
+      "fixture": "transitions/transition-unregister-identity-mismatch.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "changed-marker-stopped"
+      },
+      "covers": [
+        "R15"
+      ]
+    },
+    {
+      "id": "transition-unregister-marker-replaced",
+      "fixture": "transitions/transition-unregister-marker-replaced.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "changed-marker-stopped"
+      },
+      "covers": [
+        "R15",
+        "R4"
+      ]
+    },
+    {
+      "id": "result-registered",
+      "fixture": "transitions/result-registered.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "registered"
+      },
+      "covers": [
+        "AE1",
+        "R3",
+        "R4"
+      ]
+    },
+    {
+      "id": "result-linked-existing",
+      "fixture": "transitions/result-linked-existing.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "linked-existing"
+      },
+      "covers": [
+        "AE2",
+        "R4",
+        "R14"
+      ]
+    },
+    {
+      "id": "result-cancelled",
+      "fixture": "transitions/result-cancelled.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "cancelled"
+      },
+      "covers": [
+        "AE4",
+        "R3",
+        "R4"
+      ]
+    },
+    {
+      "id": "result-stopped",
+      "fixture": "transitions/result-stopped.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "stopped"
+      },
+      "covers": [
+        "AE5",
+        "R8",
+        "R9"
+      ]
+    },
+    {
+      "id": "result-written-unverified",
+      "fixture": "transitions/result-written-unverified.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "written-unverified"
+      },
+      "covers": [
+        "R3",
+        "R4",
+        "R14"
+      ]
+    },
+    {
+      "id": "result-registered-unlinked",
+      "fixture": "transitions/result-registered-unlinked.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "registered-unlinked"
+      },
+      "covers": [
+        "AE7",
+        "R4",
+        "R13"
+      ]
+    },
+    {
+      "id": "result-unregistered",
+      "fixture": "transitions/result-unregistered.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "unregistered"
+      },
+      "covers": [
+        "AE8",
+        "R15"
+      ]
+    },
+    {
+      "id": "result-occupied-invalid",
+      "fixture": "transitions/result-occupied-invalid.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "occupied-invalid"
+      },
+      "covers": [
+        "AE5",
+        "R9",
+        "R10"
+      ]
+    },
+    {
+      "id": "result-invalid-marker-resolved",
+      "fixture": "transitions/result-invalid-marker-resolved.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "invalid-marker-resolved"
+      },
+      "covers": [
+        "AE5",
+        "R9",
+        "R10"
+      ]
+    },
+    {
+      "id": "result-invalid-deleted-unverified",
+      "fixture": "transitions/result-invalid-deleted-unverified.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "invalid-deleted-unverified"
+      },
+      "covers": [
+        "AE5",
+        "R9",
+        "R10"
+      ]
+    },
+    {
+      "id": "result-changed-marker-stopped",
+      "fixture": "transitions/result-changed-marker-stopped.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "changed-marker-stopped"
+      },
+      "covers": [
+        "R15"
+      ]
+    },
+    {
+      "id": "result-conflict",
+      "fixture": "transitions/result-conflict.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "conflict"
+      },
+      "covers": [
+        "R4",
+        "R9"
+      ]
+    },
+    {
+      "id": "result-valid-with-warnings",
+      "fixture": "transitions/result-valid-with-warnings.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid-with-warnings",
+        "outcome": "linked-existing",
+        "warnings": [
+          "source-0-non-dereferenceable"
+        ]
+      },
+      "covers": [
+        "AE9",
+        "R2",
+        "R7",
+        "R8",
+        "R9",
+        "R11"
+      ]
+    },
+    {
+      "id": "result-contradiction-unverified-identity",
+      "fixture": "transitions/result-contradiction-unverified-identity.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "invalid",
+        "outcome": "written-unverified"
+      },
+      "covers": [
+        "AE5",
+        "R9"
+      ]
+    },
+    {
+      "id": "result-contradiction-invalid-promoted",
+      "fixture": "transitions/result-contradiction-invalid-promoted.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "invalid",
+        "outcome": "registered"
+      },
+      "covers": [
+        "AE5",
+        "R9"
+      ]
+    },
+    {
+      "id": "result-contradiction-unregistered-write",
+      "fixture": "transitions/result-contradiction-unregistered-write.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "invalid",
+        "outcome": "unregistered"
+      },
+      "covers": [
+        "AE5",
+        "R9"
+      ]
+    },
+    {
+      "id": "result-diagnostic-size-caps",
+      "fixture": "transitions/result-diagnostic-size-caps.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "stopped"
+      },
+      "covers": [
+        "R8",
+        "R9",
+        "R10"
+      ]
+    },
+    {
+      "id": "result-diagnostic-count-cap",
+      "fixture": "transitions/result-diagnostic-count-cap.json",
+      "category": "mandatory",
+      "expected": {
+        "validity": "valid",
+        "outcome": "stopped"
+      },
+      "covers": [
+        "R8",
+        "R9",
+        "R10"
+      ]
+    }
+  ],
+  "canaries": {
+    "fake-token-1": {
+      "kind": "token",
+      "values": [
+        "wst_live_9f2k3LmN4pQr5sT6uV7wX8yZ1aB2cD"
+      ]
+    },
+    "fake-token-2": {
+      "kind": "token",
+      "values": [
+        "ghp_J0kF2x9Qz8LmN4pR6sT7uV3wX5yZ2bC"
+      ]
+    },
+    "userinfo-uri-1": {
+      "kind": "userinfo-uri",
+      "values": [
+        "https://svc-account:fake-secret-token-9Xz2@records.example.org/projects/workstream-01",
+        "ssh://deploy:sup3r-fake-secret@git.example.org/workstream-registration.git"
+      ]
+    },
+    "userinfo-uri-2": {
+      "kind": "userinfo-uri",
+      "values": [
+        "https://redacted:redacted-fake-secret@sharepoint.example.org/sites/records/workstream-02"
+      ]
+    },
+    "key-shaped-1": {
+      "kind": "key-shaped",
+      "values": [
+        "-----BEGIN OPENSSH PRIVATE KEY-----",
+        "AKIAFAKEKEYEXAMPLE01"
+      ]
+    },
+    "key-shaped-2": {
+      "kind": "key-shaped",
+      "values": [
+        "-----BEGIN PRIVATE KEY-----",
+        "sk_fake_7O8x2P4mN9vQ0cW2eR5tY6uI8oP0aSd3"
+      ]
+    }
+  }
+}

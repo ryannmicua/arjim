@@ -1,0 +1,44 @@
+{
+  "id": "transition-stale-confirmation",
+  "kind": "parsed-value",
+  "description": "U2 stale confirmation (PLAN:374; KTD6 expiry): the unused confirmation is expired by a marker-state change (or a new inspection / second write attempt / terminal transition) before consumption; no write occurs. Outcome: cancelled.",
+  "payload": {
+    "version": 1,
+    "identity": "12345678-9abc-4def-8123-456789abcdef",
+    "label": "Expired Draft",
+    "kind": "direct",
+    "workspace": ".",
+    "record_sources": [
+      {
+        "type": "sharepoint/team-site",
+        "uri": "https://sharepoint.example.org/sites/expired-draft"
+      }
+    ]
+  },
+  "inputs": {
+    "scenario": "register",
+    "observed": {
+      "workspace_identity": "ws-identity-05",
+      "parent": "absent",
+      "marker": "absent",
+      "marker_identity": null
+    },
+    "draft": {
+      "version": 1,
+      "identity": "12345678-9abc-4def-8123-456789abcdef",
+      "label": "Expired Draft",
+      "kind": "direct",
+      "workspace": ".",
+      "record_sources": [
+        {
+          "type": "sharepoint/team-site",
+          "uri": "https://sharepoint.example.org/sites/expired-draft"
+        }
+      ]
+    },
+    "confirmation": "expired",
+    "lock": "absent",
+    "projection": "none",
+    "twist": "marker-state-change"
+  }
+}

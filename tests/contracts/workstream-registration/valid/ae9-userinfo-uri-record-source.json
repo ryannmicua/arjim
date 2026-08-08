@@ -1,0 +1,26 @@
+{
+  "id": "ae9-userinfo-uri-record-source",
+  "kind": "parsed-value",
+  "description": "AE9 (PLAN:134): record sources with userinfo, token-like, and unusual URI content remain valid; URI content is not inspected. Covers R2, R7-R9, R11.",
+  "payload": {
+    "version": 1,
+    "identity": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "label": "Records with unusual URIs",
+    "kind": "direct",
+    "workspace": ".",
+    "record_sources": [
+      {
+        "type": "sharepoint/team-site",
+        "uri": "https://svc-account:fak3-cred3ntial-9xZ@records.example.org/projects/workstream-01"
+      },
+      {
+        "type": "planner/task-list",
+        "uri": "https://planner.example.org/task-lists?token=looks-like-a-token-value"
+      },
+      {
+        "type": "ssh/access",
+        "uri": "ssh://deploy:not-a-real-secret@git.example.org/workstream-registration.git"
+      }
+    ]
+  }
+}

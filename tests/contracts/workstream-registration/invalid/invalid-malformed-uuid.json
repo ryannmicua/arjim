@@ -1,0 +1,18 @@
+{
+  "id": "invalid-malformed-uuid",
+  "kind": "parsed-value",
+  "description": "Malformed identity (PLAN:364): not RFC 4122 v4 (version nibble is 2), so the v4 UUID pattern rejects.",
+  "payload": {
+    "version": 1,
+    "identity": "123e4567-e89b-12d3-a456-426614174000",
+    "label": "Malformed UUID",
+    "kind": "direct",
+    "workspace": ".",
+    "record_sources": [
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/uuid"
+      }
+    ]
+  }
+}

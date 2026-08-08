@@ -20,15 +20,15 @@ A workspace that points to another workstream because that workstream cannot hol
 
 ## Marker
 
-The durable, assistant-neutral document through which Arjim and other assistants discover and recognize a workstream. It is one closed JSON document containing the workstream's self-description: an Arjim-generated permanent identity, a mutable operator-facing label, the workspace reference, and its record sources. Its canonical path is `.workstream/workstream.json`.
+The durable, assistant-neutral document through which Arjim and other assistants discover and recognize a workstream. It is one closed JSON document containing the workstream's self-description: an Arjim-generated permanent identity, a mutable operator-facing label, the workspace reference, and its record sources. It is the manifest file at `.workstream/manifest.json`.
 
 The marker is the registration authority. Registration writes it only after the operator confirms the exact draft, uses create-only semantics so it never silently replaces an existing marker, and completes only when read-back verifies the recorded workstream identity. Local inventory is a replaceable projection; the marker is not.
 
 Marker terminology:
 
 - **Marker** — the everyday short form of **workspace marker**. Use the full term on first mention or when it must stand on its own.
-- **Marker file** — the physical JSON file. Use this term when discussing filesystem behavior such as creation, locking, deletion, permissions, or read-back.
-- **Marker path** — the fixed location `.workstream/workstream.json` within a workspace.
+- **Marker file** — the physical JSON file at `.workstream/manifest.json`. Use this term when discussing filesystem behavior such as creation, locking, deletion, permissions, or read-back.
+- **Marker path** — the fixed location `.workstream/manifest.json` within a workspace.
 - **Marker contents** — the data recorded in the marker, including the workstream identity, operator-facing label, workspace relationship, and record sources.
 - **Marker schema** — the versioned contract that defines the allowed structure and values of a marker.
 - **Marker version** — the schema version that a reader uses to select the correct validation contract.
@@ -70,3 +70,4 @@ The closed result vocabulary that every registration, linking, and unregister op
 ## Flagged ambiguities
 
 - "record source" and "workspace reference" were used interchangeably — they are distinct. The workspace reference is the literal `.` in the marker identifying the workspace itself; a record source is a URI to a separate authoritative system and is never a workspace reference.
+- "drift" vs "ruling" — a rename or terminology change executed silently is drift (reconcile back to the settled value); the same change recorded as a dated operator decision before the edit is a ruling (accept and supersede the earlier clause).

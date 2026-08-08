@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.workstream-registration/v1/workstream.schema.json",
+  "title": "WorkstreamMarker",
+  "x-surface": "marker",
+  "x-surface-version": "1",
+  "description": "Closed v1 marker contract for the Workstream Registration corpus (U1, PLAN:354-365). The marker is the durable, assistant-neutral self-description written at .workstream/manifest.json (2026-08-07 operator decision, digest 2026080702; KTD2, PLAN:187; R10). A reader dispatches on the required integer `version` before applying this closed schema (KTD3, PLAN:188); v1 allows the value 1. Closed fields freeze at U1 (PLAN:554): identity is an RFC 4122 v4 lowercase UUID, label is required and non-empty with a 256-byte cap, kind is required (direct|proxy), the workspace reference is the literal `.` (KTD4, PLAN:189), and record_sources is a required non-empty list of 1-32 bounded typed absolute URI references (KTD5, PLAN:190). Field limits per PLAN:362: 256-byte label, 64-char ASCII type token, 2,048-char ASCII URI (the 2,048-byte budget, PLAN:167). Any syntactically well-formed URI is accepted regardless of scheme or credential-bearing content; no credential fields exist; malformed URIs warn without invalidating the marker (capability of a later unit, PLAN:362). The 256 KiB raw-byte cap, depth 8, duplicate-name, non-finite, and control rejections are raw-guard obligations (KTD11, PLAN:196), not schema keywords.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "type": "integer",
+      "const": 1,
+      "description": "Marker contract version; readers dispatch on it before applying the closed schema (KTD3, PLAN:188). v1 allowed value: 1 (PLAN:554)."
+    },
+    "identity": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+      "description": "Arjim-generated permanent workstream identity (KTD3, PLAN:64); RFC 4122 v4 UUID, lowercase (PLAN:554). Never regenerated (R14, PLAN:118)."
+    },
+    "label": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "pattern": "^.*\\S.*$",
+      "description": "Mutable operator-facing name; a label is data, not an instruction (KTD9, PLAN:194). Required, non-empty (pattern excludes empty and whitespace-only strings), 256-byte cap enforced via maxLength (PLAN:554, 362)."
+    },
+    "kind": {
+      "enum": [
+        "direct",
+        "proxy"
+      ],
+      "description": "direct = regular workspace where the workstream actually lives; proxy = proxy workspace holding the marker for a workstream whose real location cannot store assistant metadata (R6-R7, PLAN:101-102; terminology settled 2026-08-04, PLAN:547)."
+    },
+    "workspace": {
+      "const": ".",
+      "description": "Literal workspace self-reference; device paths and traversal are invalid (KTD4, PLAN:189; PLAN:362)."
+    },
+    "record_sources": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 32,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/record-source"
+      },
+      "description": "Required non-empty list of 1-32 typed absolute URI references (PLAN:362, 554); duplicate record sources are invalid (PLAN:364)."
+    }
+  },
+  "required": [
+    "version",
+    "identity",
+    "label",
+    "kind",
+    "workspace",
+    "record_sources"
+  ],
+  "$defs": {
+    "record-source": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[\\x20-\\x7E]+$",
+          "description": "Namespaced type token, ASCII, at most 64 characters (PLAN:362). Open data; capability is reported separately (PLAN:307)."
+        },
+        "uri": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048,
+          "pattern": "^[\\x20-\\x7E]+$",
+          "description": "URI-shaped ASCII text: printable-ASCII only (pattern `^[\\x20-\\x7E]+$` allows spaces), 1-2,048 characters, which is the 2,048-byte budget since all content is ASCII (PLAN:167, 362). Values may be malformed as URIs; malformed ones are warned about, not rejected (warn fixtures; KTD5, PLAN:190, 362). Any well-formed URI is accepted regardless of scheme or credential-bearing content; untrusted data that is never dereferenced or inspected (PLAN:168)."
+        }
+      },
+      "required": [
+        "type",
+        "uri"
+      ]
+    }
+  }
+}

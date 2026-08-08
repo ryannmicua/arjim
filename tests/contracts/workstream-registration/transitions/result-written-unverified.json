@@ -1,0 +1,38 @@
+{
+  "id": "result-written-unverified",
+  "kind": "parsed-value",
+  "description": "U3 result fixture: written-unverified (PLAN:391). Marker write succeeded but read-back verification failed; identity never regenerated; validity not-applicable, no verified identity (PLAN:452; KTD13 PLAN:198; protocol 4.10).",
+  "payload": {
+    "version": 1,
+    "outcome": "written-unverified",
+    "validity": "not-applicable",
+    "effects": {
+      "marker_written": true,
+      "marker_deleted": false,
+      "read_back_verified": false,
+      "absence_verified": false,
+      "linked": false,
+      "projection": "none"
+    },
+    "diagnostics": {
+      "count": 1,
+      "items": [
+        {
+          "phase": "read-back",
+          "code": "READ_BACK_FAILED",
+          "safe_path": ".workstream/manifest.json"
+        }
+      ]
+    }
+  },
+  "inputs": {
+    "scenario": "register",
+    "observed": {
+      "marker": "absent"
+    },
+    "confirmation": "exact",
+    "lock": "acquired",
+    "projection": "none",
+    "twist": "read-back-other-target"
+  }
+}

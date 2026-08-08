@@ -1,0 +1,18 @@
+{
+  "id": "invalid-malformed-kind",
+  "kind": "parsed-value",
+  "description": "Malformed kind (PLAN:364, 547): 'folder' was superseded by 'direct' on 2026-08-04; the frozen enum direct|proxy rejects it.",
+  "payload": {
+    "version": 1,
+    "identity": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "label": "Old kind value",
+    "kind": "folder",
+    "workspace": ".",
+    "record_sources": [
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/kind"
+      }
+    ]
+  }
+}

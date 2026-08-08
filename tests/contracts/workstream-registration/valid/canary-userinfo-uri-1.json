@@ -1,0 +1,22 @@
+{
+  "id": "canary-userinfo-uri-1",
+  "kind": "parsed-value",
+  "description": "Canary fixture (REV:58): exact userinfo-uri-1 group values as record-source URIs; valid and undereferenced.",
+  "payload": {
+    "version": 1,
+    "identity": "1a2b3c4d-5e6f-47a8-9b0c-1d2e3f4a5b6c",
+    "label": "Canary userinfo URIs one",
+    "kind": "direct",
+    "workspace": ".",
+    "record_sources": [
+      {
+        "type": "records/web",
+        "uri": "https://svc-account:fake-secret-token-9Xz2@records.example.org/projects/workstream-01"
+      },
+      {
+        "type": "ssh/access",
+        "uri": "ssh://deploy:sup3r-fake-secret@git.example.org/workstream-registration.git"
+      }
+    ]
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "id": "canary-key-shaped-1",
+  "kind": "parsed-value",
+  "description": "Canary fixture (REV:58): exact key-shaped-1 group values (BEGIN OPENSSH line as label, AKIA-shaped key in a URI); labels and URIs remain data.",
+  "payload": {
+    "version": 1,
+    "identity": "1a2b3c4d-5e6f-47a8-9b0c-1d2e3f4a5b6c",
+    "label": "-----BEGIN OPENSSH PRIVATE KEY-----",
+    "kind": "direct",
+    "workspace": ".",
+    "record_sources": [
+      {
+        "type": "object-storage/s3",
+        "uri": "https://s3.example.invalid/bucket-01?X-Amz-Credential=AKIAFAKEKEYEXAMPLE01"
+      }
+    ]
+  }
+}

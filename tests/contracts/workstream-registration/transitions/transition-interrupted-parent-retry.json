@@ -1,0 +1,46 @@
+{
+  "id": "transition-interrupted-parent-retry",
+  "kind": "parsed-value",
+  "description": "U2 interrupted parent-created retry (PLAN:374; KTD6 no-transition retry variant, PLAN:552): an earlier attempt created .workstream and the lock but was cancelled before marker creation; retry inspects the now-present parent, revalidates the draft, confirms exactly, writes and verifies. Outcome: registered.",
+  "payload": {
+    "version": 1,
+    "identity": "a1b2c3d4-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+    "label": "Retry Recovery",
+    "kind": "direct",
+    "workspace": ".",
+    "record_sources": [
+      {
+        "type": "vcs/git",
+        "uri": "https://git.example.org/team/retry-recovery.git"
+      }
+    ]
+  },
+  "inputs": {
+    "scenario": "register",
+    "observed": {
+      "workspace_identity": "ws-identity-03",
+      "parent": {
+        "identity": "parent-identity-03"
+      },
+      "marker": "absent",
+      "marker_identity": null
+    },
+    "draft": {
+      "version": 1,
+      "identity": "a1b2c3d4-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+      "label": "Retry Recovery",
+      "kind": "direct",
+      "workspace": ".",
+      "record_sources": [
+        {
+          "type": "vcs/git",
+          "uri": "https://git.example.org/team/retry-recovery.git"
+        }
+      ]
+    },
+    "confirmation": "exact",
+    "lock": "acquired",
+    "projection": "linked",
+    "twist": "parent-created-interrupted"
+  }
+}

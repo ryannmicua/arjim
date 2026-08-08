@@ -1,0 +1,18 @@
+{
+  "id": "invalid-unsupported-version-2",
+  "kind": "parsed-value",
+  "description": "Unsupported version (PLAN:364, 554): version 2 is not a v1 allowed value; the v1 schema (const 1) rejects it and the reader reports unsupported (R9, PLAN:107).",
+  "payload": {
+    "version": 2,
+    "identity": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "label": "Version two",
+    "kind": "direct",
+    "workspace": ".",
+    "record_sources": [
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/v2"
+      }
+    ]
+  }
+}

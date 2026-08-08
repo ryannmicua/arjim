@@ -1,0 +1,22 @@
+{
+  "id": "ae3-proxy-marker",
+  "kind": "parsed-value",
+  "description": "AE3 proxy marker (PLAN:128): kind=proxy with literal workspace reference while record-source URIs point to the real system. Covers R6-R7.",
+  "payload": {
+    "version": 1,
+    "identity": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "label": "Design Reviews (proxy)",
+    "kind": "proxy",
+    "workspace": ".",
+    "record_sources": [
+      {
+        "type": "sharepoint/team-site",
+        "uri": "https://sharepoint.example.org/sites/design-reviews"
+      },
+      {
+        "type": "vcs/git",
+        "uri": "https://git.example.org/team/design-reviews.git"
+      }
+    ]
+  }
+}

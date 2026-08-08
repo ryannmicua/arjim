@@ -1,0 +1,18 @@
+{
+  "id": "invalid-device-path-workspace-windows",
+  "kind": "parsed-value",
+  "description": "Device-path workspace reference (PLAN:364): Windows drive path is not the literal '.'; device paths belong only to local projection state (PLAN:303).",
+  "payload": {
+    "version": 1,
+    "identity": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "label": "Windows device path",
+    "kind": "direct",
+    "workspace": "C:\\workstreams\\alpha",
+    "record_sources": [
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/ws-win"
+      }
+    ]
+  }
+}

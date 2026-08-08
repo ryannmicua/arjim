@@ -1,0 +1,44 @@
+{
+  "id": "transition-concurrent-create",
+  "kind": "parsed-value",
+  "description": "U2 concurrent create (PLAN:378; R4): exclusive-create collides because another writer created the marker first; the existing marker is valid and supported, so it is read unchanged with no write and no new identity. Outcome: linked-existing.",
+  "payload": {
+    "version": 1,
+    "identity": "55555555-6666-4777-8888-999999999999",
+    "label": "Racing Writers",
+    "kind": "direct",
+    "workspace": ".",
+    "record_sources": [
+      {
+        "type": "vcs/git",
+        "uri": "https://git.example.org/team/racing-writers.git"
+      }
+    ]
+  },
+  "inputs": {
+    "scenario": "register",
+    "observed": {
+      "workspace_identity": "ws-identity-11",
+      "parent": "absent",
+      "marker": "absent",
+      "marker_identity": null
+    },
+    "draft": {
+      "version": 1,
+      "identity": "55555555-6666-4777-8888-999999999999",
+      "label": "Racing Writers",
+      "kind": "direct",
+      "workspace": ".",
+      "record_sources": [
+        {
+          "type": "vcs/git",
+          "uri": "https://git.example.org/team/racing-writers.git"
+        }
+      ]
+    },
+    "confirmation": "exact",
+    "lock": "acquired",
+    "projection": "linked",
+    "twist": "create-collision"
+  }
+}

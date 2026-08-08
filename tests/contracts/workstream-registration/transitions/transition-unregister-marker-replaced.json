@@ -1,0 +1,35 @@
+{
+  "id": "transition-unregister-marker-replaced",
+  "kind": "parsed-value",
+  "description": "U2 marker replacement during unregister (PLAN:378; KTD10): the marker content changed between confirmation and the pre-delete re-read (same identity, different label); the conditional delete is aborted and nothing is deleted. Outcome: changed-marker-stopped.",
+  "payload": {
+    "version": 1,
+    "identity": "eeeeeeee-ffff-4000-8111-222222222222",
+    "label": "Replaced Label",
+    "kind": "direct",
+    "workspace": ".",
+    "record_sources": [
+      {
+        "type": "sharepoint/team-site",
+        "uri": "https://sharepoint.example.org/sites/replaced-label"
+      }
+    ]
+  },
+  "inputs": {
+    "scenario": "unregister",
+    "observed": {
+      "workspace_identity": "ws-identity-18",
+      "parent": {
+        "identity": "parent-identity-18"
+      },
+      "marker": "valid",
+      "marker_identity": "eeeeeeee-ffff-4000-8111-222222222222"
+    },
+    "draft": null,
+    "bound_identity": "eeeeeeee-ffff-4000-8111-222222222222",
+    "confirmation": "exact",
+    "lock": "acquired",
+    "projection": "none",
+    "twist": "marker-replaced"
+  }
+}

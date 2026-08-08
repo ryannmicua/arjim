@@ -1,0 +1,6 @@
+{
+  "id": "raw-control-characters",
+  "kind": "raw-byte",
+  "description": "Raw control and Bidi_Control characters (PLAN:364): a raw C0 control and U+202E bidi override in a decoded value; rejected at the controls phase.",
+  "payload_base64": "eyJsYWJlbCI6ImEBYuKArmMifQ=="
+}

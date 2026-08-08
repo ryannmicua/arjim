@@ -1,0 +1,38 @@
+{
+  "id": "result-stopped",
+  "kind": "parsed-value",
+  "description": "U3 result fixture: stopped (PLAN:391). Inaccessible workspace, fail closed; no write, bounded diagnostic, no draft (F5 PLAN:84; PLAN:200; protocol 4.9). Validity not-applicable; no identity.",
+  "payload": {
+    "version": 1,
+    "outcome": "stopped",
+    "validity": "not-applicable",
+    "effects": {
+      "marker_written": false,
+      "marker_deleted": false,
+      "read_back_verified": false,
+      "absence_verified": false,
+      "linked": false,
+      "projection": "none"
+    },
+    "diagnostics": {
+      "count": 1,
+      "items": [
+        {
+          "phase": "operation",
+          "code": "WORKSPACE_INACCESSIBLE",
+          "safe_path": ".workstream",
+          "affected_local_path": "C:\\Users\\operator\\workspaces\\archived-project"
+        }
+      ]
+    }
+  },
+  "inputs": {
+    "scenario": "inspect",
+    "observed": {
+      "workspace_identity": null,
+      "marker": "absent"
+    },
+    "projection": "none",
+    "twist": "inaccessible-workspace"
+  }
+}

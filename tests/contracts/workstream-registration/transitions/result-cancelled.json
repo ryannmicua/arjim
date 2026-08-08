@@ -1,0 +1,38 @@
+{
+  "id": "result-cancelled",
+  "kind": "parsed-value",
+  "description": "U3 result fixture: cancelled (PLAN:391). Operator rejection at confirmation; no write, no delete, no projection change (AE4 PLAN:129; F4 PLAN:83; protocol 4.8). Bounded diagnostic with stable code; no identity (nothing verified); validity not-applicable.",
+  "payload": {
+    "version": 1,
+    "outcome": "cancelled",
+    "validity": "not-applicable",
+    "effects": {
+      "marker_written": false,
+      "marker_deleted": false,
+      "read_back_verified": false,
+      "absence_verified": false,
+      "linked": false,
+      "projection": "none"
+    },
+    "diagnostics": {
+      "count": 1,
+      "items": [
+        {
+          "phase": "operation",
+          "code": "CONFIRMATION_REJECTED",
+          "safe_path": ".workstream/manifest.json"
+        }
+      ]
+    }
+  },
+  "inputs": {
+    "scenario": "register",
+    "observed": {
+      "marker": "absent"
+    },
+    "confirmation": "rejected",
+    "lock": "absent",
+    "projection": "none",
+    "twist": "none"
+  }
+}

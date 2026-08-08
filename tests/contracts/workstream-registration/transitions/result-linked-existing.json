@@ -1,0 +1,38 @@
+{
+  "id": "result-linked-existing",
+  "kind": "parsed-value",
+  "description": "U3 result fixture: linked-existing (PLAN:391). Supported valid marker read unchanged; no write, no confirmation, identity never regenerated (AE2 PLAN:127; KTD7 PLAN:192; protocol 4.7). Capability status exercises not-checked and inaccessible entries.",
+  "payload": {
+    "version": 1,
+    "outcome": "linked-existing",
+    "validity": "valid",
+    "effects": {
+      "marker_written": false,
+      "marker_deleted": false,
+      "read_back_verified": true,
+      "absence_verified": false,
+      "linked": true,
+      "projection": "linked"
+    },
+    "identity": "6ba7b810-9dad-41d1-80b4-00c04fd430c8",
+    "capabilities": [
+      {
+        "source_index": 0,
+        "status": "not-checked"
+      },
+      {
+        "source_index": 1,
+        "status": "inaccessible",
+        "code": "UNREACHABLE"
+      }
+    ]
+  },
+  "inputs": {
+    "scenario": "link",
+    "observed": {
+      "marker": "valid"
+    },
+    "projection": "linked",
+    "twist": "none"
+  }
+}

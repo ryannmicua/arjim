@@ -1,0 +1,13 @@
+{
+  "id": "invalid-empty-record-sources",
+  "kind": "parsed-value",
+  "description": "Empty record-source list (PLAN:362, 554): required non-empty list, minItems 1.",
+  "payload": {
+    "version": 1,
+    "identity": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "label": "No record sources",
+    "kind": "direct",
+    "workspace": ".",
+    "record_sources": []
+  }
+}

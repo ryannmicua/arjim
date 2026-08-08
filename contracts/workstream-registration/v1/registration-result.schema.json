@@ -1,0 +1,912 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.workstream-registration/v1/registration-result.schema.json",
+  "title": "WorkstreamRegistrationResult",
+  "x-surface": "registration-result",
+  "x-surface-version": "1",
+  "description": "Closed v1 portable result envelope for the Workstream Registration protocol (U3, PLAN:381-392). The stable result document every registration, linking, unregister, resolution, and inspection operation emits (CLI --json, PLAN:475). Readers dispatch on the required integer `version` before applying this closed schema (KTD3, PLAN:188); v1 allows the value 1. The envelope separates protocol outcome, marker validity, write/read-back/link effects, verified identity, per-record-source capability status, and structured diagnostics (PLAN:389). Outcome names are frozen at PLAN:391/PLAN:556: there is deliberately no `invalid-marker` outcome - malformed-marker inspection reports `occupied-invalid` (PLAN:556; CONCEPTS.md:62). `conflict` is the projection write-time conflict outcome (PLAN:463, 528, 556). Invalid or unsupported markers cannot promote claimed values to authority: verified identity requires a valid-class marker with a verified read-back (PLAN:389). The envelope carries no URI content, no record-source URI, no native validator messages, no instance values, no property names, and no secrets; diagnostics carry only phase, stable code, bounded safe path, count, and bounded operator-facing label and affected local path (KTD12, PLAN:197). Bounded everywhere: every string has a maxLength cap, every array a maxItems cap, and `additionalProperties: false` at every object level.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "outcome",
+    "validity",
+    "effects"
+  ],
+  "properties": {
+    "version": {
+      "const": 1,
+      "description": "Result contract version; readers dispatch on it before applying the closed schema (KTD3, PLAN:188). v1 allowed value: 1."
+    },
+    "outcome": {
+      "enum": [
+        "registered",
+        "linked-existing",
+        "cancelled",
+        "stopped",
+        "written-unverified",
+        "registered-unlinked",
+        "unregistered",
+        "occupied-invalid",
+        "invalid-marker-resolved",
+        "invalid-deleted-unverified",
+        "changed-marker-stopped",
+        "conflict"
+      ],
+      "description": "Protocol outcome name, frozen at PLAN:391/PLAN:556. Every name is a state in the registration-protocol.md machine-readable state table (REV:67); there is no `invalid-marker` outcome (PLAN:556; CONCEPTS.md:62)."
+    },
+    "validity": {
+      "enum": [
+        "valid",
+        "valid-with-warnings",
+        "invalid",
+        "not-applicable"
+      ],
+      "description": "Marker validity, aligned with the U5 manifest vocabulary (valid / valid-with-warnings / invalid) plus not-applicable where no marker claim applies or the marker state is unknown (no marker, marker gone, or write unverified). valid-with-warnings is distinct from failure (PLAN:349, 351). Invalid markers never promote claimed values to authority (PLAN:389)."
+    },
+    "effects": {
+      "$ref": "#/$defs/effects",
+      "description": "Structural write/read-back/link effects (PLAN:389). Expresses partial success: written-unverified (marker_written with read_back_verified false), registered-unlinked (read_back_verified with linked false), invalid-deleted-unverified (marker_deleted with absence_verified false)."
+    },
+    "identity": {
+      "type": "string",
+      "minLength": 36,
+      "maxLength": 36,
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+      "description": "Verified marker identity (RFC 4122 v4 lowercase UUID, same shape as the marker contract). Structurally incapable of carrying URI content: fixed 36-char lowercase UUID pattern only. Present only when verified (if/then below): a valid-class marker whose read-back verified. Never regenerated (R14, PLAN:118; PLAN:451)."
+    },
+    "capabilities": {
+      "type": "array",
+      "maxItems": 32,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/capability"
+      },
+      "description": "Per-record-source capability status (PLAN:305): distinguishes not-checked, unsupported, and inaccessible states; no dereference is ever performed and no URI content appears (KTD5, PLAN:190; AE9, PLAN:134). References record sources by 0-based index into the marker's record_sources array, never by URI. Absent = no capability claim (all not-checked)."
+    },
+    "diagnostics": {
+      "$ref": "#/$defs/diagnostics",
+      "description": "Bounded structured diagnostics (KTD12, PLAN:197). Native validator messages and parameters may embed instance values, property names, URI content, secrets, or snippets and are never emitted; diagnostics carry only phase, stable code, bounded safe path, count, and bounded label and affected local path under length caps. No free-text URI field exists."
+    },
+    "warnings": {
+      "type": "array",
+      "maxItems": 32,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 64,
+        "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"
+      },
+      "description": "Structured warnings accompanying a valid-with-warnings outcome (e.g., a non-dereferenceable record source, AE9 PLAN:134; PLAN:391). Closed-token shaped: lowercase alphanumeric tokens with hyphens, bounded to 64 characters, structurally incapable of carrying URI content, instance values, or secrets."
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": [
+          "identity"
+        ]
+      },
+      "then": {
+        "properties": {
+          "validity": {
+            "enum": [
+              "valid",
+              "valid-with-warnings"
+            ]
+          },
+          "effects": {
+            "required": [
+              "read_back_verified"
+            ],
+            "properties": {
+              "read_back_verified": {
+                "const": true
+              }
+            }
+          }
+        }
+      },
+      "description": "Verified identity only when the marker is valid-class and its read-back verified (PLAN:389): invalid or unsupported markers cannot promote claimed values to authority."
+    },
+    {
+      "if": {
+        "properties": {
+          "validity": {
+            "const": "invalid"
+          }
+        },
+        "required": [
+          "validity"
+        ]
+      },
+      "then": {
+        "properties": {
+          "effects": {
+            "properties": {
+              "read_back_verified": {
+                "const": false
+              }
+            }
+          }
+        }
+      },
+      "description": "An invalid marker can never report a verified read-back."
+    },
+    {
+      "if": {
+        "properties": {
+          "outcome": {
+            "const": "registered"
+          }
+        },
+        "required": [
+          "outcome"
+        ]
+      },
+      "then": {
+        "properties": {
+          "validity": {
+            "enum": [
+              "valid",
+              "valid-with-warnings"
+            ]
+          },
+          "effects": {
+            "required": [
+              "marker_written",
+              "marker_deleted",
+              "read_back_verified",
+              "absence_verified",
+              "linked",
+              "projection"
+            ],
+            "properties": {
+              "marker_written": {
+                "const": true
+              },
+              "marker_deleted": {
+                "const": false
+              },
+              "read_back_verified": {
+                "const": true
+              },
+              "absence_verified": {
+                "const": false
+              },
+              "linked": {
+                "const": true
+              },
+              "projection": {
+                "const": "linked"
+              }
+            }
+          }
+        }
+      },
+      "description": "registered: write, read-back verified, projection linked (AE1, PLAN:126; protocol 4.6)."
+    },
+    {
+      "if": {
+        "properties": {
+          "outcome": {
+            "const": "linked-existing"
+          }
+        },
+        "required": [
+          "outcome"
+        ]
+      },
+      "then": {
+        "properties": {
+          "validity": {
+            "enum": [
+              "valid",
+              "valid-with-warnings"
+            ]
+          },
+          "effects": {
+            "required": [
+              "marker_written",
+              "marker_deleted",
+              "read_back_verified",
+              "absence_verified",
+              "linked",
+              "projection"
+            ],
+            "properties": {
+              "marker_written": {
+                "const": false
+              },
+              "marker_deleted": {
+                "const": false
+              },
+              "read_back_verified": {
+                "const": true
+              },
+              "absence_verified": {
+                "const": false
+              },
+              "linked": {
+                "const": true
+              },
+              "projection": {
+                "const": "linked"
+              }
+            }
+          }
+        }
+      },
+      "description": "linked-existing: supported valid marker read unchanged; no write, no confirmation, identity never regenerated (KTD7, PLAN:192; AE2, PLAN:127; protocol 4.7)."
+    },
+    {
+      "if": {
+        "properties": {
+          "outcome": {
+            "const": "cancelled"
+          }
+        },
+        "required": [
+          "outcome"
+        ]
+      },
+      "then": {
+        "properties": {
+          "effects": {
+            "required": [
+              "marker_written",
+              "marker_deleted",
+              "read_back_verified",
+              "absence_verified",
+              "linked",
+              "projection"
+            ],
+            "properties": {
+              "marker_written": {
+                "const": false
+              },
+              "marker_deleted": {
+                "const": false
+              },
+              "read_back_verified": {
+                "const": false
+              },
+              "absence_verified": {
+                "const": false
+              },
+              "linked": {
+                "const": false
+              },
+              "projection": {
+                "const": "none"
+              }
+            }
+          }
+        }
+      },
+      "description": "cancelled: no marker write, no delete, no projection change (F4, PLAN:83; AE4, PLAN:129; protocol 4.8)."
+    },
+    {
+      "if": {
+        "properties": {
+          "outcome": {
+            "const": "stopped"
+          }
+        },
+        "required": [
+          "outcome"
+        ]
+      },
+      "then": {
+        "properties": {
+          "effects": {
+            "required": [
+              "marker_written",
+              "marker_deleted",
+              "read_back_verified",
+              "absence_verified",
+              "linked",
+              "projection"
+            ],
+            "properties": {
+              "marker_written": {
+                "const": false
+              },
+              "marker_deleted": {
+                "const": false
+              },
+              "read_back_verified": {
+                "const": false
+              },
+              "absence_verified": {
+                "const": false
+              },
+              "linked": {
+                "const": false
+              },
+              "projection": {
+                "const": "none"
+              }
+            }
+          }
+        }
+      },
+      "description": "stopped: operational no-write stop, bounded diagnostic, no draft (F5, PLAN:84; PLAN:200; protocol 4.9)."
+    },
+    {
+      "if": {
+        "properties": {
+          "outcome": {
+            "const": "written-unverified"
+          }
+        },
+        "required": [
+          "outcome"
+        ]
+      },
+      "then": {
+        "properties": {
+          "validity": {
+            "const": "not-applicable"
+          },
+          "effects": {
+            "required": [
+              "marker_written",
+              "marker_deleted",
+              "read_back_verified",
+              "absence_verified",
+              "linked",
+              "projection"
+            ],
+            "properties": {
+              "marker_written": {
+                "const": true
+              },
+              "marker_deleted": {
+                "const": false
+              },
+              "read_back_verified": {
+                "const": false
+              },
+              "absence_verified": {
+                "const": false
+              },
+              "linked": {
+                "const": false
+              },
+              "projection": {
+                "const": "none"
+              }
+            }
+          }
+        }
+      },
+      "description": "written-unverified: marker write succeeded but read-back verification failed; identity never regenerated; the marker may exist and be valid but the implementation cannot claim it (PLAN:452; KTD13 PLAN:198; protocol 4.10)."
+    },
+    {
+      "if": {
+        "properties": {
+          "outcome": {
+            "const": "registered-unlinked"
+          }
+        },
+        "required": [
+          "outcome"
+        ]
+      },
+      "then": {
+        "properties": {
+          "validity": {
+            "enum": [
+              "valid",
+              "valid-with-warnings"
+            ]
+          },
+          "effects": {
+            "required": [
+              "marker_written",
+              "marker_deleted",
+              "read_back_verified",
+              "absence_verified",
+              "linked",
+              "projection"
+            ],
+            "properties": {
+              "marker_written": {
+                "const": true
+              },
+              "marker_deleted": {
+                "const": false
+              },
+              "read_back_verified": {
+                "const": true
+              },
+              "absence_verified": {
+                "const": false
+              },
+              "linked": {
+                "const": false
+              },
+              "projection": {
+                "const": "unlinked"
+              }
+            }
+          }
+        }
+      },
+      "description": "registered-unlinked: marker written and read-back verified, but the projection/link update failed; the marker remains authoritative (AE7, PLAN:132; protocol 4.11)."
+    },
+    {
+      "if": {
+        "properties": {
+          "outcome": {
+            "const": "unregistered"
+          }
+        },
+        "required": [
+          "outcome"
+        ]
+      },
+      "then": {
+        "properties": {
+          "validity": {
+            "const": "not-applicable"
+          },
+          "effects": {
+            "required": [
+              "marker_written",
+              "marker_deleted",
+              "read_back_verified",
+              "absence_verified",
+              "linked",
+              "projection"
+            ],
+            "properties": {
+              "marker_written": {
+                "const": false
+              },
+              "marker_deleted": {
+                "const": true
+              },
+              "read_back_verified": {
+                "const": false
+              },
+              "absence_verified": {
+                "const": true
+              },
+              "linked": {
+                "const": false
+              },
+              "projection": {
+                "const": "none"
+              }
+            }
+          }
+        }
+      },
+      "description": "unregistered: confirmed conditional delete with absence read-back verified; the marker is gone (AE8, PLAN:133; KTD10 PLAN:195; protocol 4.12)."
+    },
+    {
+      "if": {
+        "properties": {
+          "outcome": {
+            "const": "occupied-invalid"
+          }
+        },
+        "required": [
+          "outcome"
+        ]
+      },
+      "then": {
+        "properties": {
+          "validity": {
+            "const": "invalid"
+          },
+          "effects": {
+            "required": [
+              "marker_written",
+              "marker_deleted",
+              "read_back_verified",
+              "absence_verified",
+              "linked",
+              "projection"
+            ],
+            "properties": {
+              "marker_written": {
+                "const": false
+              },
+              "marker_deleted": {
+                "const": false
+              },
+              "read_back_verified": {
+                "const": false
+              },
+              "absence_verified": {
+                "const": false
+              },
+              "linked": {
+                "const": false
+              },
+              "projection": {
+                "const": "none"
+              }
+            }
+          }
+        }
+      },
+      "description": "occupied-invalid: a marker at the marker path is invalid, partial (interrupted write), or unsupported-version; it is never overwritten; covers every invalid marker - there is no separate invalid-marker outcome (KTD13 PLAN:198; PLAN:556; CONCEPTS.md:62; protocol 4.13)."
+    },
+    {
+      "if": {
+        "properties": {
+          "outcome": {
+            "const": "invalid-marker-resolved"
+          }
+        },
+        "required": [
+          "outcome"
+        ]
+      },
+      "then": {
+        "properties": {
+          "validity": {
+            "const": "not-applicable"
+          },
+          "effects": {
+            "required": [
+              "marker_written",
+              "marker_deleted",
+              "read_back_verified",
+              "absence_verified",
+              "linked",
+              "projection"
+            ],
+            "properties": {
+              "marker_written": {
+                "const": false
+              },
+              "marker_deleted": {
+                "const": true
+              },
+              "read_back_verified": {
+                "const": false
+              },
+              "absence_verified": {
+                "const": true
+              },
+              "linked": {
+                "const": false
+              },
+              "projection": {
+                "const": "none"
+              }
+            }
+          }
+        }
+      },
+      "description": "invalid-marker-resolved: confirmed resolution delete with absence read-back verified; the path is free for a new registration (PLAN:451; protocol 4.14)."
+    },
+    {
+      "if": {
+        "properties": {
+          "outcome": {
+            "const": "invalid-deleted-unverified"
+          }
+        },
+        "required": [
+          "outcome"
+        ]
+      },
+      "then": {
+        "properties": {
+          "validity": {
+            "const": "not-applicable"
+          },
+          "effects": {
+            "required": [
+              "marker_written",
+              "marker_deleted",
+              "read_back_verified",
+              "absence_verified",
+              "linked",
+              "projection"
+            ],
+            "properties": {
+              "marker_written": {
+                "const": false
+              },
+              "marker_deleted": {
+                "const": true
+              },
+              "read_back_verified": {
+                "const": false
+              },
+              "absence_verified": {
+                "const": false
+              },
+              "linked": {
+                "const": false
+              },
+              "projection": {
+                "const": "none"
+              }
+            }
+          }
+        }
+      },
+      "description": "invalid-deleted-unverified: resolution delete succeeded but absence read-back failed; the marker may or may not be absent; nothing is rewritten; recovery is re-inspection (PLAN:451; protocol 4.15)."
+    },
+    {
+      "if": {
+        "properties": {
+          "outcome": {
+            "const": "changed-marker-stopped"
+          }
+        },
+        "required": [
+          "outcome"
+        ]
+      },
+      "then": {
+        "properties": {
+          "effects": {
+            "required": [
+              "marker_written",
+              "marker_deleted",
+              "read_back_verified",
+              "absence_verified",
+              "linked",
+              "projection"
+            ],
+            "properties": {
+              "marker_written": {
+                "const": false
+              },
+              "marker_deleted": {
+                "const": false
+              },
+              "read_back_verified": {
+                "const": false
+              },
+              "absence_verified": {
+                "const": false
+              },
+              "linked": {
+                "const": false
+              },
+              "projection": {
+                "const": "none"
+              }
+            }
+          }
+        }
+      },
+      "description": "changed-marker-stopped: cooperation could not be established or a changed marker, target, or identity was observed at any re-read; no delete, marker untouched (KTD10 PLAN:195; PLAN:463; protocol 4.16)."
+    },
+    {
+      "if": {
+        "properties": {
+          "outcome": {
+            "const": "conflict"
+          }
+        },
+        "required": [
+          "outcome"
+        ]
+      },
+      "then": {
+        "properties": {
+          "effects": {
+            "required": [
+              "marker_written",
+              "marker_deleted",
+              "read_back_verified",
+              "absence_verified",
+              "linked",
+              "projection"
+            ],
+            "properties": {
+              "marker_deleted": {
+                "const": false
+              },
+              "linked": {
+                "const": false
+              },
+              "projection": {
+                "const": "conflict"
+              }
+            }
+          }
+        }
+      },
+      "description": "conflict: projection write-time conflict - the captured target already holds a different identity; the marker is unchanged and remains authoritative, the projection does not link it; the only in-scope duplicate signal (PLAN:528, 542, 556; protocol 4.17)."
+    }
+  ],
+  "$defs": {
+    "effects": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "marker_written",
+        "marker_deleted",
+        "read_back_verified",
+        "absence_verified",
+        "linked",
+        "projection"
+      ],
+      "properties": {
+        "marker_written": {
+          "type": "boolean",
+          "description": "The marker was created/written by this operation (exclusive-create, never silent replace, R4 PLAN:96)."
+        },
+        "marker_deleted": {
+          "type": "boolean",
+          "description": "The marker was deleted by this operation (confirmed conditional delete, KTD10 PLAN:195). A single operation never both writes and deletes."
+        },
+        "read_back_verified": {
+          "type": "boolean",
+          "description": "The marker was read back (or read, for linking) and passed raw-guard + schema validation with exact identity verification (KTD13 PLAN:198)."
+        },
+        "absence_verified": {
+          "type": "boolean",
+          "description": "Absence read-back verified the marker is gone after a delete (AE8 PLAN:133; PLAN:451)."
+        },
+        "linked": {
+          "type": "boolean",
+          "description": "The local projection/link update succeeded (AE7 PLAN:132)."
+        },
+        "projection": {
+          "enum": [
+            "linked",
+            "unlinked",
+            "conflict",
+            "none"
+          ],
+          "description": "Projection state, matching the transition fixture inputs vocabulary (protocol section 14): linked = projection updated; unlinked = marker authoritative but link failed; conflict = write-time conflict on a captured target; none = no projection operation."
+        }
+      }
+    },
+    "capability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_index",
+        "status"
+      ],
+      "properties": {
+        "source_index": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 31,
+          "description": "0-based index into the marker's record_sources array (1-32 entries, workstream.schema.json); capability is reported per record source, never by URI content (PLAN:307)."
+        },
+        "status": {
+          "enum": [
+            "not-checked",
+            "unsupported",
+            "inaccessible"
+          ],
+          "description": "Capability status per record source (PLAN:305): not-checked = no capability claim; unsupported = accepted provider without dereference support; inaccessible = the source cannot be reached on this device. No dereference is ever performed and no URI content is carried (KTD5 PLAN:190; AE9 PLAN:134)."
+        },
+        "code": {
+          "enum": [
+            "UNSUPPORTED_SCHEME",
+            "UNSUPPORTED_TYPE",
+            "UNREACHABLE",
+            "ACCESS_DENIED",
+            "NOT_FOUND"
+          ],
+          "description": "Optional stable capability code; a closed enum, never free text."
+        }
+      }
+    },
+    "diagnostics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "count",
+        "items"
+      ],
+      "properties": {
+        "count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 32,
+          "description": "Number of diagnostics; bounded to the items cap (KTD12 PLAN:197). The runner asserts count == items length."
+        },
+        "items": {
+          "type": "array",
+          "maxItems": 32,
+          "items": {
+            "$ref": "#/$defs/diagnostic"
+          },
+          "description": "Bounded diagnostic list. Native validator messages, instance values, property names, URI content, and secrets are never emitted (KTD12 PLAN:197)."
+        }
+      }
+    },
+    "diagnostic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "phase",
+        "code",
+        "safe_path"
+      ],
+      "properties": {
+        "phase": {
+          "enum": [
+            "read",
+            "utf8",
+            "depth",
+            "duplicates",
+            "nonfinite",
+            "controls",
+            "schema",
+            "write",
+            "read-back",
+            "link",
+            "projection",
+            "operation"
+          ],
+          "description": "Diagnostic phase. The first seven match the raw-guard termination phases (KTD11 PLAN:196; expectations.schema.json); the remaining five cover write, read-back, link, projection, and general operational failures (KTD12 PLAN:197)."
+        },
+        "code": {
+          "enum": [
+            "READ_LIMIT",
+            "UTF8_INVALID",
+            "DEPTH_LIMIT",
+            "DUPLICATE_KEYS",
+            "NON_FINITE",
+            "CONTROL_CHARACTER",
+            "SCHEMA_INVALID",
+            "UNSUPPORTED_VERSION",
+            "MARKER_INVALID",
+            "WORKSPACE_INACCESSIBLE",
+            "IDENTITY_API_UNAVAILABLE",
+            "PATH_REDIRECTED",
+            "TARGET_ALIAS_MISMATCH",
+            "WRITE_FAILED",
+            "CONFIRMATION_REJECTED",
+            "CONFIRMATION_MISMATCH",
+            "CONFIRMATION_EXPIRED",
+            "DRAFT_CHANGED",
+            "TARGET_CHANGED",
+            "LOCK_UNAVAILABLE",
+            "READ_BACK_FAILED",
+            "READ_BACK_TARGET_MISMATCH",
+            "PROJECTION_LINK_FAILED",
+            "PROJECTION_CONFLICT",
+            "DELETE_FAILED",
+            "ABSENCE_READ_BACK_FAILED",
+            "MARKER_CHANGED",
+            "IDENTITY_MISMATCH",
+            "SAFE_INTERNAL_ERROR"
+          ],
+          "description": "Stable diagnostic code (KTD12 PLAN:197). Closed v1 enum: raw-guard and schema codes, operational stop/partial codes, and the safe internal-failure code (PLAN:556 exit 6). No free-text code field."
+        },
+        "safe_path": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[\\x20-\\x7E]+$",
+          "description": "Bounded safe path (KTD12 PLAN:197): a fixed, implementation-defined reference such as the marker path; printable ASCII, at most 256 characters. Not a URI field; never carries record-source URI content."
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^.*\\S.*$",
+          "description": "Operator-facing label under length caps (KTD12 PLAN:197; KTD9 PLAN:194); mirrors the marker label bound. A label is data, not an instruction."
+        },
+        "affected_local_path": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024,
+          "pattern": "^[\\x20-\\x7E]+$",
+          "description": "Affected device-local path under a length cap (KTD12 PLAN:197; KTD4 PLAN:189). Local routing state only, never an authority reference; printable ASCII, at most 1024 characters."
+        }
+      }
+    }
+  }
+}

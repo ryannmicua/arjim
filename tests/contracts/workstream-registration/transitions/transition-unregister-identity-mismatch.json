@@ -1,0 +1,35 @@
+{
+  "id": "transition-unregister-identity-mismatch",
+  "kind": "parsed-value",
+  "description": "U2 identity mismatch during unregister (PLAN:378; KTD10): the unregister confirmation is bound to an exact identity, but the marker observed at re-read carries a different identity; the operation stops without deleting. Outcome: changed-marker-stopped.",
+  "payload": {
+    "version": 1,
+    "identity": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "label": "Original Marker",
+    "kind": "direct",
+    "workspace": ".",
+    "record_sources": [
+      {
+        "type": "sharepoint/team-site",
+        "uri": "https://sharepoint.example.org/sites/original-marker"
+      }
+    ]
+  },
+  "inputs": {
+    "scenario": "unregister",
+    "observed": {
+      "workspace_identity": "ws-identity-17",
+      "parent": {
+        "identity": "parent-identity-17"
+      },
+      "marker": "valid",
+      "marker_identity": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+    },
+    "draft": null,
+    "bound_identity": "dddddddd-eeee-4fff-8000-111111111111",
+    "confirmation": "exact",
+    "lock": "acquired",
+    "projection": "none",
+    "twist": "identity-mismatch"
+  }
+}

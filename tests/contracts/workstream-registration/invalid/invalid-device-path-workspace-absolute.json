@@ -1,0 +1,18 @@
+{
+  "id": "invalid-device-path-workspace-absolute",
+  "kind": "parsed-value",
+  "description": "Device-path workspace reference (PLAN:364): absolute POSIX path is not the literal '.' (KTD4, PLAN:189).",
+  "payload": {
+    "version": 1,
+    "identity": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "label": "Absolute POSIX path",
+    "kind": "direct",
+    "workspace": "/abs/path",
+    "record_sources": [
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/ws-abs"
+      }
+    ]
+  }
+}

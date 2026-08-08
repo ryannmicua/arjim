@@ -1,0 +1,142 @@
+{
+  "id": "boundary-32-record-sources",
+  "kind": "parsed-value",
+  "description": "Boundary-valid (PLAN:362, 364): record_sources at the maximum of 32 distinct typed URI references.",
+  "payload": {
+    "version": 1,
+    "identity": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "label": "Maximum record sources",
+    "kind": "direct",
+    "workspace": ".",
+    "record_sources": [
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/source-00"
+      },
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/source-01"
+      },
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/source-02"
+      },
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/source-03"
+      },
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/source-04"
+      },
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/source-05"
+      },
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/source-06"
+      },
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/source-07"
+      },
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/source-08"
+      },
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/source-09"
+      },
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/source-10"
+      },
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/source-11"
+      },
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/source-12"
+      },
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/source-13"
+      },
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/source-14"
+      },
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/source-15"
+      },
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/source-16"
+      },
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/source-17"
+      },
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/source-18"
+      },
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/source-19"
+      },
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/source-20"
+      },
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/source-21"
+      },
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/source-22"
+      },
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/source-23"
+      },
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/source-24"
+      },
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/source-25"
+      },
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/source-26"
+      },
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/source-27"
+      },
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/source-28"
+      },
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/source-29"
+      },
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/source-30"
+      },
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/source-31"
+      }
+    ]
+  }
+}

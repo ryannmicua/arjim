@@ -1,0 +1,18 @@
+{
+  "id": "invalid-label-controls",
+  "kind": "parsed-value",
+  "description": "Label with a control character (PLAN:364): decoded value scan rejects prohibited controls and Bidi_Control (KTD9, KTD11 PLAN:194, 196).",
+  "payload": {
+    "version": 1,
+    "identity": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "label": "bad\u0001label",
+    "kind": "direct",
+    "workspace": ".",
+    "record_sources": [
+      {
+        "type": "example/records",
+        "uri": "https://records.example.invalid/ctrl-label"
+      }
+    ]
+  }
+}

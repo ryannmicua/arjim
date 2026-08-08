@@ -1,0 +1,38 @@
+{
+  "id": "result-changed-marker-stopped",
+  "kind": "parsed-value",
+  "description": "U3 result fixture: changed-marker-stopped (PLAN:391). During unregister, cooperation could not be established or a changed marker/target/identity was observed at re-read; no delete, marker untouched; no identity claim (KTD10 PLAN:195; PLAN:463; protocol 4.16).",
+  "payload": {
+    "version": 1,
+    "outcome": "changed-marker-stopped",
+    "validity": "not-applicable",
+    "effects": {
+      "marker_written": false,
+      "marker_deleted": false,
+      "read_back_verified": false,
+      "absence_verified": false,
+      "linked": false,
+      "projection": "none"
+    },
+    "diagnostics": {
+      "count": 1,
+      "items": [
+        {
+          "phase": "read-back",
+          "code": "MARKER_CHANGED",
+          "safe_path": ".workstream/manifest.json"
+        }
+      ]
+    }
+  },
+  "inputs": {
+    "scenario": "unregister",
+    "observed": {
+      "marker": "valid"
+    },
+    "confirmation": "exact",
+    "lock": "acquired",
+    "projection": "none",
+    "twist": "marker-replaced"
+  }
+}

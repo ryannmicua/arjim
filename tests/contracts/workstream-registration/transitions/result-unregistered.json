@@ -1,0 +1,28 @@
+{
+  "id": "result-unregistered",
+  "kind": "parsed-value",
+  "description": "U3 result fixture: unregistered (PLAN:391). Confirmed conditional delete with absence read-back verified; the marker is gone; no identity claim (AE8 PLAN:133; KTD10 PLAN:195; protocol 4.12).",
+  "payload": {
+    "version": 1,
+    "outcome": "unregistered",
+    "validity": "not-applicable",
+    "effects": {
+      "marker_written": false,
+      "marker_deleted": true,
+      "read_back_verified": false,
+      "absence_verified": true,
+      "linked": false,
+      "projection": "none"
+    }
+  },
+  "inputs": {
+    "scenario": "unregister",
+    "observed": {
+      "marker": "valid"
+    },
+    "confirmation": "exact",
+    "lock": "acquired",
+    "projection": "none",
+    "twist": "none"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "id": "result-registered-unlinked",
+  "kind": "parsed-value",
+  "description": "U3 result fixture: registered-unlinked (PLAN:391). Marker written and read-back verified, but the projection/link update failed; the marker remains authoritative; identity verified and carried (AE7 PLAN:132; protocol 4.11).",
+  "payload": {
+    "version": 1,
+    "outcome": "registered-unlinked",
+    "validity": "valid",
+    "effects": {
+      "marker_written": true,
+      "marker_deleted": false,
+      "read_back_verified": true,
+      "absence_verified": false,
+      "linked": false,
+      "projection": "unlinked"
+    },
+    "identity": "9d2c1b4a-7f3e-4a1b-9c5d-2e8f0a6b4c3d",
+    "diagnostics": {
+      "count": 1,
+      "items": [
+        {
+          "phase": "projection",
+          "code": "PROJECTION_LINK_FAILED",
+          "safe_path": ".workstream/manifest.json"
+        }
+      ]
+    }
+  },
+  "inputs": {
+    "scenario": "register",
+    "observed": {
+      "marker": "absent"
+    },
+    "confirmation": "exact",
+    "lock": "acquired",
+    "projection": "unlinked",
+    "twist": "none"
+  }
+}

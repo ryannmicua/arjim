@@ -1,0 +1,44 @@
+{
+  "id": "transition-changed-target",
+  "kind": "parsed-value",
+  "description": "U2 changed target (PLAN:378; F4 PLAN:83; KTD6): the workspace-directory identity changed between inspection and confirmation; revalidation fails; the confirmation is invalidated and no write occurs. Outcome: cancelled.",
+  "payload": {
+    "version": 1,
+    "identity": "22222222-3333-4444-8555-666666666666",
+    "label": "Moved Target",
+    "kind": "direct",
+    "workspace": ".",
+    "record_sources": [
+      {
+        "type": "vcs/git",
+        "uri": "https://git.example.org/team/moved-target.git"
+      }
+    ]
+  },
+  "inputs": {
+    "scenario": "register",
+    "observed": {
+      "workspace_identity": "ws-identity-08",
+      "parent": "absent",
+      "marker": "absent",
+      "marker_identity": null
+    },
+    "draft": {
+      "version": 1,
+      "identity": "22222222-3333-4444-8555-666666666666",
+      "label": "Moved Target",
+      "kind": "direct",
+      "workspace": ".",
+      "record_sources": [
+        {
+          "type": "vcs/git",
+          "uri": "https://git.example.org/team/moved-target.git"
+        }
+      ]
+    },
+    "confirmation": "expired",
+    "lock": "absent",
+    "projection": "none",
+    "twist": "target-changed"
+  }
+}
