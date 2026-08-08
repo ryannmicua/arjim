@@ -25,7 +25,7 @@
     },
     "draft": {
       "version": 1,
-      "identity": "9f8e7d6c-5b4a-4c3d-2e1f-0a9b8c7d6e5f",
+      "identity": "9f8e7d6c-5b4a-4c3d-8e1f-0a9b8c7d6e5f",
       "label": "Never Confirmed",
       "kind": "direct",
       "workspace": ".",

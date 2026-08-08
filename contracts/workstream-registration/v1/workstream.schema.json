@@ -16,7 +16,7 @@
     "identity": {
       "type": "string",
       "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
-      "description": "Arjim-generated permanent workstream identity (KD3, PLAN:64); RFC 4122 v4 UUID, lowercase (PLAN:554). Never regenerated (R14, PLAN:118)."
+      "description": "Arjim-generated permanent workstream identity (KTD3, PLAN:64); RFC 4122 v4 UUID, lowercase (PLAN:554). Never regenerated (R14, PLAN:118)."
     },
     "label": {
       "type": "string",
