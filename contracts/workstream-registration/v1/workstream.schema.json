@@ -72,7 +72,7 @@
           "minLength": 1,
           "maxLength": 2048,
           "pattern": "^[\\x20-\\x7E]+$",
-          "description": "Absolute URI reference, RFC 3986 ASCII; non-ASCII content must be percent-encoded, so the 2,048-character limit is also a 2,048-byte budget (PLAN:167, 190, 362). Any syntactically well-formed URI is accepted regardless of scheme or credential-bearing content (KTD5, PLAN:190); untrusted data that is never dereferenced or inspected (PLAN:168)."
+          "description": "URI-shaped ASCII text: printable-ASCII only (pattern `^[\\x20-\\x7E]+$` allows spaces), 1-2,048 characters, which is the 2,048-byte budget since all content is ASCII (PLAN:167, 362). Values may be malformed as URIs; malformed ones are warned about, not rejected (warn fixtures; KTD5, PLAN:190, 362). Any well-formed URI is accepted regardless of scheme or credential-bearing content; untrusted data that is never dereferenced or inspected (PLAN:168)."
         }
       },
       "required": [

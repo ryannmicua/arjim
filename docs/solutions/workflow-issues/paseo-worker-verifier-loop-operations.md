@@ -36,7 +36,7 @@ These are the operating conditions of the platform on this machine, not defects 
 
 - Symptom cluster to recognize: Bun "Illegal instruction" crashes, "OpenCode server exited with code 3221226505" (0xC0000409), exit 2147942402, pytest exit -1073741571 (0xC00000FD stack overflow), many opencode processes accumulating in Task Manager. These correlate with finished lane agents whose locked server memory was never freed.
 - After a round completes, archive finished lane agents with `paseo archive <id>` — a soft-delete that frees the locked OpenCode server memory while preserving the agent's history. Use archive, NOT `kill` (kill loses the history you still need to extract verdicts from).
-- Before running pytest after a memory-clean, clear stale `tests/python/.pytest_cache` (gitignored runtime artifact — the path is intentionally absent from the tree): a stale cache left by a crashed verifier session caused a stack-overflow crash (exit -1073741571) that a clean cache avoided (U11 verifier evidence; the same spec command then passed 359 tests with exit 0, confirmed by two subsequent clean runs).
+- Before running pytest after a memory-clean, clear the stale cache at the repo root — `Remove-Item .pytest_cache -Recurse` (or `pytest --cache-clear`; the `.pytest_cache` dir lives at the pytest rootdir, which is the repo root where `pyproject.toml` sits — gitignored runtime artifact, intentionally absent from the tree): a stale cache left by a crashed verifier session caused a stack-overflow crash (exit -1073741571) that a clean cache avoided (U11 verifier evidence; the same spec command then passed 359 tests with exit 0, confirmed by two subsequent clean runs).
 - After event-stream failures, redispatch fresh agents instead of resuming the crashed session — resumed sessions inherit whatever memory/cache state killed them.
 
 **3. Make verification genuinely independent and adversarial.**
@@ -68,7 +68,7 @@ A multi-day loop's bottleneck is not agent speed — it is the orchestrator's ab
 **Memory pressure — cleanup and redispatch:**
 
 - "Memory is tight again (1.4 GB free, 34 opencode processes). Cleaning up finished lane agents and redispatching the verifier." → `paseo archive <finished-id>` for each finished lane agent (soft-delete; history preserved for verdict extraction), then redispatch fresh.
-- "U11 verifier crashed (same event-stream failure). Checking memory pressure, then redispatching fresh." → crash after memory-clean traced to stale `tests/python/.pytest_cache`; `Remove-Item tests/python/.pytest_cache -Recurse` (or equivalent), then the exact spec command passed cleanly: 359 passed, exit 0, ~101 s, confirmed twice more.
+- "U11 verifier crashed (same event-stream failure). Checking memory pressure, then redispatching fresh." → crash after memory-clean traced to stale `.pytest_cache` at the repo root; `Remove-Item .pytest_cache -Recurse` (or `pytest --cache-clear`), then the exact spec command passed cleanly: 359 passed, exit 0, ~101 s, confirmed twice more.
 
 **Verification that caught real defects:**
 
