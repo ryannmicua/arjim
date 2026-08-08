@@ -41,6 +41,41 @@ jobs:
           python -c "from importlib.metadata import version; v = version('jsonschema'); assert v == '4.26.0', v; print('jsonschema', v)"
           python -c "from importlib.metadata import version; v = version('referencing'); assert v == '0.37.0', v; print('referencing', v)"
 
+      - name: Diagnostic — projection store ground truth (TEMPORARY)
+        run: |
+          whoami
+          python -c "import os; print('COMPUTERNAME', os.environ.get('COMPUTERNAME')); print('TEMP', os.environ.get('TEMP'))"
+          $t = Join-Path $env:TEMP "wsr-diag"
+          New-Item -ItemType Directory -Path $t -Force | Out-Null
+          icacls $t /inheritance:r /grant:r "$(whoami):(OI)(CI)F" | Out-Null
+          icacls $t
+          @'
+          import os, sys, tempfile, traceback
+          from pathlib import Path
+          from workstream_registration import registration as reg
+          from workstream_registration.projection import Projection, ProjectionStoreError
+          tmp = tempfile.TemporaryDirectory()
+          os.environ["WORKSTREAM_REGISTRATION_STORE_DIR"] = str(Path(tmp.name) / "store" / "projection")
+          try:
+              proj = Projection()
+              store = proj._ensure_store()
+              print("ensure_store ok:", store)
+              conn, st = proj._open()
+              print("open ok:", st)
+              conn.close()
+          except Exception:
+              traceback.print_exc()
+          ws = Path(tmp.name) / "ws"
+          ws.mkdir()
+          reg.install_default_projection_hook()
+          insp = reg.inspect(ws)
+          print("inspect:", insp.state)
+          d = reg.draft(ws, label="Diag", record_sources=[{"type":"example/records","uri":"https://records.example.org/x"}], kind="direct", inspection=insp)
+          r = reg.register(ws, d, reg.confirm(d, d.digest))
+          print("OUTCOME:", r.outcome)
+          '@ | Out-File -Encoding utf8 diag.py
+          python diag.py
+
       - name: Conformance runner — contract corpus (87 fixtures)
         run: python -m workstream_registration.conformance_runner
 
