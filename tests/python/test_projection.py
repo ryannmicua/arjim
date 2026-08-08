@@ -396,6 +396,88 @@ class TestOwnerOnlyEnforcement:
         )
         proj._verify_owner_only_windows(tmp_path)
 
+    def test_ace_parser_preserves_space_containing_principals(self) -> None:
+        path = "C:\\Users\\runner\\AppData\\Local\\Temp\\store"
+        stdout = (
+            f"{path} NT AUTHORITY\\SYSTEM:(OI)(CI)(F)\n"
+            f"              BUILTIN\\Administrators:(OI)(CI)(F)\n"
+            f"              runner-vm\\runneradmin:(OI)(CI)(F)\n"
+        )
+        grants = [grant for grant, _flags in proj._iter_icacls_aces(stdout)]
+        assert grants == [
+            "NT AUTHORITY\\SYSTEM",
+            "BUILTIN\\Administrators",
+            "runner-vm\\runneradmin",
+        ]
+
+    def test_enforce_removes_residual_non_owner_grants(
+        self, tmp_path: Path, monkeypatch
+    ) -> None:
+        principal = _windows_principal()
+        user = principal.rsplit("\\", 1)[1] if "\\" in principal else principal
+
+        class _Out:
+            def __init__(self, rc: int, stdout: str) -> None:
+                self.returncode = rc
+                self.stdout = stdout
+                self.stderr = ""
+
+        residual = _Out(
+            0,
+            f"{tmp_path}:\nNT AUTHORITY\\SYSTEM:(OI)(CI)(F)\n"
+            f"BUILTIN\\Administrators:(OI)(CI)(F)\n{principal}:(OI)(CI)(F)\n",
+        )
+        granted = _Out(0, f"{tmp_path}:\n{principal}:(OI)(CI)(F)\n")
+        calls: list[list[str]] = []
+        listings = {"n": 0}
+
+        def _fake_run(cmd, *a, **k):
+            calls.append(cmd)
+            if cmd[0] == "whoami":
+                return _Out(0, f"{principal}\n")
+            if "/inheritance:r" in cmd:
+                return _Out(0, "")
+            if cmd[0] == "icacls" and len(cmd) == 2:
+                listings["n"] += 1
+                return residual if listings["n"] == 1 else granted
+            if "/grant:r" in cmd:
+                removed = [g for g in cmd if g.startswith("/remove:g")]
+                assert removed, "expected /remove:g switches before /grant:r"
+                return _Out(0, "")
+            return _Out(0, "")
+
+        monkeypatch.setattr(proj.subprocess, "run", _fake_run)
+        proj._enforce_owner_only_windows(tmp_path)
+        assert ["/remove:g", "NT AUTHORITY\\SYSTEM"] in [c[i : i + 2] for c in calls for i in range(len(c) - 1)]
+        assert ["/remove:g", "BUILTIN\\Administrators"] in [c[i : i + 2] for c in calls for i in range(len(c) - 1)]
+        assert not any("/remove:g" in c and (user in c) for c in calls)
+
+    def test_enforce_keeps_only_owner_when_no_residual(
+        self, tmp_path: Path, monkeypatch
+    ) -> None:
+        principal = _windows_principal()
+
+        class _Out:
+            def __init__(self, rc: int, stdout: str) -> None:
+                self.returncode = rc
+                self.stdout = stdout
+                self.stderr = ""
+
+        clean = _Out(0, f"{tmp_path}:\n{principal}:(OI)(CI)(F)\n")
+
+        def _fake_run(cmd, *a, **k):
+            if "/inheritance:r" in cmd:
+                return _Out(0, "")
+            if "whoami" in cmd:
+                return _Out(0, f"{principal}\n")
+            if "/grant:r" in cmd:
+                assert "/remove:g" not in cmd
+                return _Out(0, "")
+            return clean
+
+        monkeypatch.setattr(proj.subprocess, "run", _fake_run)
+        proj._enforce_owner_only_windows(tmp_path)
+
     def test_verification_before_use_fails_closed_on_weaker_pre_existing(
         self, tmp_path: Path
     ) -> None:

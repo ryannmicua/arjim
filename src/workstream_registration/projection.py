@@ -57,7 +57,7 @@ import subprocess
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Iterator
 
 from workstream_registration import filesystem as fs
 from workstream_registration import raw_guard as rg
@@ -196,11 +196,56 @@ def _windows_principal() -> str:
     return user
 
 
+def _owner_principal_forms(principal: str) -> set[str]:
+    """All renderings of the same local account as an ACE grant name.
+
+    ``whoami`` and ``icacls`` may render the same account differently (bare
+    vs ``COMPUTERNAME``-qualified, e.g. on GitHub Actions runners), so
+    verification accepts the exact form, the bare user name, and the
+    machine-qualified form — all of which denote the granted principal.
+    """
+    user = principal.rsplit("\\", 1)[1] if "\\" in principal else principal
+    machine = os.environ.get("COMPUTERNAME", "")
+    allowed = {principal.lower(), user.lower()}
+    if machine:
+        allowed.add(f"{machine}\\{user}".lower())
+    return allowed
+
+
+def _iter_icacls_aces(stdout: str) -> Iterator[tuple[str, list[str]]]:
+    """Yield ``(grant, flags)`` for every ACE in ``icacls`` output.
+
+    Principals may contain spaces (``NT AUTHORITY\\SYSTEM``), which
+    whitespace-splits them into fragments; fragments are merged into the next
+    ACE token's principal. The first token of the first line is the path
+    header, never an ACE. Paths, summary text, and other non-ACE tokens are
+    skipped; a line's trailing fragments are discarded.
+    """
+    for line_number, line in enumerate(stdout.splitlines()):
+        tokens = line.strip().split()
+        pending: list[str] = []
+        for index, token in enumerate(tokens):
+            if line_number == 0 and index == 0:
+                continue  # path header token
+            match = _ACE_RE.match(token)
+            if match is None:
+                pending.append(token)
+                continue
+            principal = " ".join([*pending, match.group(1)])
+            yield principal, _ACE_GROUP_RE.findall(match.group(2))
+            pending = []
+
+
 def _enforce_owner_only_windows(path: Path) -> None:
-    """Reset inheritance and grant only the current user (icacls), then verify.
+    """Reset inheritance, remove residual non-owner grants, and grant only the
+    current user (icacls), then verify.
 
     ``(OI)(CI)`` on directories makes the SQLite sidecars inherit the
-    owner-only ACL (PLAN:463; compatibility.md section 3).
+    owner-only ACL (PLAN:463; compatibility.md section 3). Some Windows hosts
+    (e.g. GitHub Actions runner profiles) leave profile-provisioned
+    ``NT AUTHORITY\\SYSTEM`` / ``BUILTIN\\Administrators`` ACEs behind after
+    ``/inheritance:r``, so enforcement removes every non-owner grant
+    explicitly — the verify step stays strict.
     """
     principal = _windows_principal()
     if not principal:
@@ -208,7 +253,42 @@ def _enforce_owner_only_windows(path: Path) -> None:
             "owner-only enforcement failed: cannot resolve the current user"
         )
     flags = "(OI)(CI)F" if path.is_dir() else "F"
-    command = ["icacls", str(path), "/inheritance:r", "/grant:r", f"{principal}:{flags}"]
+    allowed = _owner_principal_forms(principal)
+    try:
+        proc = subprocess.run(
+            ["icacls", str(path), "/inheritance:r"],
+            capture_output=True, text=True, timeout=_ICACLS_TIMEOUT_SECONDS,
+        )
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        raise ProjectionStoreError(
+            "owner-only enforcement failed: icacls unavailable"
+        ) from exc
+    if proc.returncode != 0:
+        raise ProjectionStoreError(
+            "owner-only enforcement failed: icacls rejected the inheritance reset"
+        )
+    try:
+        listing = subprocess.run(
+            ["icacls", str(path)],
+            capture_output=True, text=True, timeout=_ICACLS_TIMEOUT_SECONDS,
+        )
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        raise ProjectionStoreError(
+            "owner-only enforcement failed: icacls unavailable"
+        ) from exc
+    if listing.returncode != 0:
+        raise ProjectionStoreError(
+            "owner-only enforcement failed: icacls rejected the listing"
+        )
+    residual = [
+        grant
+        for grant, _flags in _iter_icacls_aces(listing.stdout)
+        if grant.lower() not in allowed
+    ]
+    command = ["icacls", str(path)]
+    for grant in dict.fromkeys(residual):
+        command += ["/remove:g", grant]
+    command += ["/grant:r", f"{principal}:{flags}"]
     try:
         proc = subprocess.run(
             command, capture_output=True, text=True, timeout=_ICACLS_TIMEOUT_SECONDS
@@ -235,11 +315,7 @@ def _verify_owner_only_windows(path: Path, *, allow_inherited: bool = False) -> 
     inherited ACEs are accepted as long as only the current user is granted.
     """
     principal = _windows_principal()
-    user = principal.rsplit("\\", 1)[1] if "\\" in principal else principal
-    machine = os.environ.get("COMPUTERNAME", "")
-    allowed = {principal.lower(), user.lower()}
-    if machine:
-        allowed.add(f"{machine}\\{user}".lower())
+    allowed = _owner_principal_forms(principal)
     try:
         proc = subprocess.run(
             ["icacls", str(path)], capture_output=True, text=True, timeout=_ICACLS_TIMEOUT_SECONDS
@@ -251,21 +327,16 @@ def _verify_owner_only_windows(path: Path, *, allow_inherited: bool = False) -> 
     if proc.returncode != 0:
         raise ProjectionStoreError("owner-only verification failed: icacls rejected")
     grants: list[str] = []
-    for line in proc.stdout.splitlines():
-        for token in line.strip().split():
-            match = _ACE_RE.match(token)
-            if match is None:
-                continue  # path header line or summary text
-            groups = _ACE_GROUP_RE.findall(match.group(2))
-            if "I" in groups and not allow_inherited:
-                raise ProjectionStoreError(
-                    f"owner-only verification failed: inherited ACE on {path}"
-                )
-            if "F" not in groups:
-                raise ProjectionStoreError(
-                    f"owner-only verification failed: non-owner grant on {path}"
-                )
-            grants.append(match.group(1))
+    for grant, groups in _iter_icacls_aces(proc.stdout):
+        if "I" in groups and not allow_inherited:
+            raise ProjectionStoreError(
+                f"owner-only verification failed: inherited ACE on {path}"
+            )
+        if "F" not in groups:
+            raise ProjectionStoreError(
+                f"owner-only verification failed: non-owner grant on {path}"
+            )
+        grants.append(grant)
     if not grants:
         raise ProjectionStoreError(
             f"owner-only verification failed: no access control entries on {path}"
