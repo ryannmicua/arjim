@@ -348,6 +348,54 @@ class TestOwnerOnlyEnforcement:
             proj._verify_owner_only_windows(tmp_path)
         proj._verify_owner_only_windows(tmp_path, allow_inherited=True)
 
+    def test_verify_accepts_machine_qualified_ace_for_bare_whoami(
+        self, tmp_path: Path, monkeypatch
+    ) -> None:
+        machine = os.environ.get("COMPUTERNAME", "RUNNER-SRV")
+
+        class _FakeWhoami:
+            returncode = 0
+            stdout = "runneradmin\n"
+            stderr = ""
+
+        class _FakeIcacls:
+            returncode = 0
+            stdout = f"{tmp_path}:\n{machine}\\runneradmin:(OI)(CI)(F)\n"
+            stderr = ""
+
+        real_run = proj.subprocess.run
+        monkeypatch.setattr(
+            proj.subprocess, "run",
+            lambda *a, **k: _FakeWhoami()
+            if a and a[0][0] == "whoami"
+            else _FakeIcacls(),
+        )
+        proj._verify_owner_only_windows(tmp_path)
+
+    def test_verify_accepts_bare_ace_for_machine_qualified_whoami(
+        self, tmp_path: Path, monkeypatch
+    ) -> None:
+        machine = os.environ.get("COMPUTERNAME", "RUNNER-SRV")
+
+        class _FakeWhoami:
+            returncode = 0
+            stdout = f"{machine}\\runneradmin\n"
+            stderr = ""
+
+        class _FakeIcacls:
+            returncode = 0
+            stdout = f"{tmp_path}:\nrunneradmin:(OI)(CI)(F)\n"
+            stderr = ""
+
+        real_run = proj.subprocess.run
+        monkeypatch.setattr(
+            proj.subprocess, "run",
+            lambda *a, **k: _FakeWhoami()
+            if a and a[0][0] == "whoami"
+            else _FakeIcacls(),
+        )
+        proj._verify_owner_only_windows(tmp_path)
+
     def test_verification_before_use_fails_closed_on_weaker_pre_existing(
         self, tmp_path: Path
     ) -> None:

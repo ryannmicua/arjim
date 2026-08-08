@@ -235,9 +235,11 @@ def _verify_owner_only_windows(path: Path, *, allow_inherited: bool = False) -> 
     inherited ACEs are accepted as long as only the current user is granted.
     """
     principal = _windows_principal()
-    allowed = {principal.lower()}
-    if "\\" not in principal:
-        allowed.add(principal.lower())
+    user = principal.rsplit("\\", 1)[1] if "\\" in principal else principal
+    machine = os.environ.get("COMPUTERNAME", "")
+    allowed = {principal.lower(), user.lower()}
+    if machine:
+        allowed.add(f"{machine}\\{user}".lower())
     try:
         proc = subprocess.run(
             ["icacls", str(path)], capture_output=True, text=True, timeout=_ICACLS_TIMEOUT_SECONDS
