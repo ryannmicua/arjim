@@ -21,7 +21,7 @@ A workspace is an ordinary folder. Create one to practice on:
 
 ```text
 mkdir docs-demo
-echo "# Docs demo" > docs-demo\README.md
+echo "# Docs demo" > docs-demo/README.md
 ```
 
 Check the CLI is installed before continuing:
@@ -147,7 +147,11 @@ Exit code 0. A later registration of the same workspace is a fresh registration 
 
 ## What's next
 
-- Read the [operator guide](guide.md) for the full command reference, the outcome and exit-code vocabulary, `--json` result envelopes, lock recovery, invalid-marker resolution, and troubleshooting.
+- Not installed yet? See [installation](installation.md) for prerequisites, venv vs global install, and verification.
+- Read the [operator guide](guide.md) for the day-to-day operations: registration, linking, rebuild, unregister, invalid-marker resolution, and lock recovery, with troubleshooting.
+- Look up any command's flags, outcomes, exit codes, or the `--json` result envelope in the [reference](reference.md).
+- Want the machine-readable form? Add `--json` to any command — registration, linking, and unregister operations emit the stable result envelope described in the reference's result-envelope section.
+- Curious how it all works under the hood? See [how it works](how-it-works.md) — the module map, the register lifecycle, the data flow, and the outcome overview.
 - Verify the implementation against the contract corpus at any time:
 
   ```text
@@ -155,4 +159,3 @@ Exit code 0. A later registration of the same workspace is a fresh registration 
   ```
 
   The runner executes every conformance fixture (87: valid, invalid, warn, raw, and transition cases) exactly once and exits 0 only when all mandatory fixtures pass. The full test suite runs with `pytest` from the repository root (362 tests).
-- Want the machine-readable form? Add `--json` to any command — registration, linking, and unregister operations emit the stable result envelope described in the guide's result-envelope section.
