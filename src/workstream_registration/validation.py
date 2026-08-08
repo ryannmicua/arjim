@@ -37,6 +37,7 @@ snippets, or secrets. This module never prints or logs its input.
 
 from __future__ import annotations
 
+import copy
 import json
 from dataclasses import dataclass
 from pathlib import Path
@@ -109,14 +110,14 @@ def load_bundled_schema(name: str) -> dict[str, Any]:
         raise ValueError(f"not a bundled schema: {name!r}")
     cached = _SCHEMA_CACHE.get(name)
     if cached is not None:
-        return cached
+        return copy.deepcopy(cached)
     path = repo_root() / CONTRACTS_DIR / name
     with path.open("r", encoding="utf-8") as handle:
         schema = json.load(handle)
     if not isinstance(schema, dict):
         raise RuntimeError(f"bundled schema is not a JSON object: {path}")
     _SCHEMA_CACHE[name] = schema
-    return schema
+    return copy.deepcopy(schema)
 
 
 @dataclass(frozen=True)

@@ -165,6 +165,18 @@ def test_bundled_schemas_refs_are_internal_only() -> None:
             assert ref.startswith("#/$defs/"), (name, ref)
 
 
+def test_load_bundled_schema_returns_defensive_copy() -> None:
+    for name in (vd.MARKER_SCHEMA_NAME, vd.RESULT_SCHEMA_NAME):
+        first = vd.load_bundled_schema(name)
+        assert "properties" in first
+        original_properties = dict(first["properties"])
+        first["properties"] = {"hacked": {"type": "string"}}
+        second = vd.load_bundled_schema(name)
+        assert second is not first
+        assert second["properties"] == original_properties
+        assert second["properties"] is not first["properties"]
+
+
 def test_duplicate_keys_are_guard_rejected() -> None:
     text = '{"version":1,"version":2}'
     guard = rg.guard_decoded_text(text)
