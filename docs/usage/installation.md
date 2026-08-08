@@ -58,7 +58,7 @@ From anywhere, run:
 workstream-registration - workstream registration (v1)
 usage: workstream-registration [--json] <command> [args]
 commands:
-  register <workspace> --label <label> --record-source <type>=<uri>...
+  register <workspace> --label <label> --record-source <type>=<uri>... [--kind direct|proxy]
   inspect <workspace>
   link <workspace>
   rebuild <workspace>...
