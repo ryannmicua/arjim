@@ -70,3 +70,4 @@ The closed result vocabulary that every registration, linking, and unregister op
 ## Flagged ambiguities
 
 - "record source" and "workspace reference" were used interchangeably — they are distinct. The workspace reference is the literal `.` in the marker identifying the workspace itself; a record source is a URI to a separate authoritative system and is never a workspace reference.
+- "drift" vs "ruling" — a rename or terminology change executed silently is drift (reconcile back to the settled value); the same change recorded as a dated operator decision before the edit is a ruling (accept and supersede the earlier clause).
