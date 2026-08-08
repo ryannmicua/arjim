@@ -97,7 +97,7 @@ If you changed Python versions or the install location, reinstall under the new 
 pip uninstall workstream-registration
 ```
 
-This removes the console script and the package metadata from the **active** environment (the one whose pip you ran — a venv install must be uninstalled from inside that venv). It does not touch the repository checkout, the markers you registered, or the projection store (per-user application data; see the [reference](reference.md) support profile). After uninstalling, `workstream-registration` is no longer on PATH and the command fails with "not recognized".
+This removes the console script and the package metadata from the **active** environment (the one whose pip you ran — a venv install must be uninstalled from inside that venv). It does not touch the repository checkout, the markers you registered — the `manifest.json` files at `.workstream/manifest.json` — or the projection store (per-user application data; see the [reference](reference.md) support profile). After uninstalling, `workstream-registration` is no longer on PATH and the command fails with "not recognized".
 
 ## Troubleshooting
 
