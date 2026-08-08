@@ -15,10 +15,10 @@ validators are constructed with jsonschema defaults — no registry, no
 resolver, no retrieval function — so ``$ref`` resolution can only ever reach
 the loaded schema's own internal pointers and the Draft 2020-12 meta-schema
 bundled inside the ``jsonschema`` package. A schema ``$ref`` to a non-bundled
-location raises jsonschema's own resolution failure (``_WrappedReferencingError``
-in jsonschema 4.26, pinned by pyproject.toml), which this module converts into
-a bounded fail-closed ``SCHEMA_INVALID`` result — never a fetch, never a
-propagated raw message.
+location raises a resolution failure (``referencing.exceptions.Unresolvable``,
+the public base of jsonschema's internal wrapper; ``referencing`` is pinned by
+pyproject.toml), which this module converts into a bounded fail-closed
+``SCHEMA_INVALID`` result — never a fetch, never a propagated raw message.
 
 Generic format assertion is DISABLED by construction: jsonschema's format
 checker is never enabled (``Draft202012Validator`` has no format checker by
@@ -43,7 +43,7 @@ from pathlib import Path
 from typing import Any
 
 from jsonschema import Draft202012Validator
-from jsonschema.exceptions import _WrappedReferencingError
+from referencing.exceptions import Unresolvable
 
 from workstream_registration import diagnostics as diag
 
@@ -190,7 +190,7 @@ def _validate_against(schema_name: str, data: Any) -> ValidationResult:
     validator = _validator_for(schema)
     try:
         errors = list(validator.iter_errors(data))
-    except _WrappedReferencingError:
+    except Unresolvable:
         # A $ref could not be resolved; with bundled-only resolution this
         # means a non-bundled reference target. Fail closed (PLAN:439): never
         # fetch, never propagate a raw resolution message.

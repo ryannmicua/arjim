@@ -138,6 +138,30 @@ def _bound_unregister(ws: Path) -> unr.UnregisterConfirmation:
 
 
 class TestConfirmedUnregisterAE8:
+    def test_envelope_byte_form_is_canonical_sorted_serialization(
+        self, tmp_path: Path
+    ) -> None:
+        ws = tmp_path / "ws"
+        ws.mkdir()
+        reg.set_projection_hook(_linked_hook())
+        _register_full(ws)
+        envelope = unr.unregister_envelope(ws)
+        content = {
+            "contract": {
+                "marker": reg.MARKER_VERSION,
+                "conformance": reg.RESULT_VERSION,
+                "protocol": reg.PROTOCOL_VERSION,
+            },
+            "envelope_kind": unr.ENVELOPE_KIND_UNREGISTER,
+            "marker": envelope.marker,
+            "target_handle": envelope.handle.to_dict(),
+            "observed_marker_presence": True,
+        }
+        expected = json.dumps(
+            content, separators=(",", ":"), ensure_ascii=False, sort_keys=True
+        ).encode("utf-8")
+        assert envelope.envelope == expected
+
     def test_confirmed_unregister_deletes_and_verifies_absence(self, tmp_path: Path) -> None:
         ws = tmp_path / "ws"
         ws.mkdir()

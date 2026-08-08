@@ -142,7 +142,7 @@ def unregister_envelope(
         "observed_marker_presence": True,
     }
     envelope_bytes = json.dumps(
-        content, separators=(",", ":"), ensure_ascii=False
+        content, separators=(",", ":"), ensure_ascii=False, sort_keys=True
     ).encode("utf-8")
     return UnregisterEnvelope(
         workspace_path=workspace_path,

@@ -35,3 +35,7 @@ The time-of-check/time-of-use race against non-cooperating external writers is a
 ## 6. Disclosed corner — unregister absence read-back failure (2026-08-07 operator decision)
 
 If unregister's absence read-back fails after a successful conditional delete, the result reports `changed-marker-stopped` even though the marker was deleted; this lies within the disclosed non-cooperating-writer residual race (KTD10/PLAN:195) and the operator should re-inspect the workspace. This is the fail-closed outcome within the frozen v1 result vocabulary (PLAN:556): the frozen vocabulary has no delete-succeeded/absence-unverified unregister outcome, and protocol section 11 defines completion only via verified absence (registration-protocol.md section 11; unregister.py module docstring).
+
+## 7. Residual limitation — Windows `icacls` enforcement partial state
+
+The `icacls` grant is applied before parse-verification (`_enforce_owner_only_windows`, `projection.py:199-224`); if verification fails (e.g. unexpected or localized `icacls` output), enforcement fails closed with the path already left inheritance-disabled and owner-only. Recovery is re-running enforcement (idempotent — re-apply + re-verify) or applying `icacls` manually.

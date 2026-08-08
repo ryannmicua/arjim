@@ -16,7 +16,7 @@ import json
 from pathlib import Path
 
 import pytest
-from jsonschema.exceptions import _WrappedReferencingError
+from referencing.exceptions import Unresolvable
 
 from workstream_registration import conformance_runner as cr
 from workstream_registration import diagnostics as diag
@@ -135,7 +135,7 @@ def _doctored_schema_with_external_ref() -> dict:
 def test_non_bundled_ref_fails_closed_never_fetches(monkeypatch) -> None:
     doctored = _doctored_schema_with_external_ref()
     validator = vd._validator_for(doctored)
-    with pytest.raises(_WrappedReferencingError):
+    with pytest.raises(Unresolvable):
         validator.validate(_marker())
     monkeypatch.setattr(vd, "load_bundled_schema", lambda name: doctored)
     result = vd.validate_marker(_marker())

@@ -151,7 +151,10 @@ def test_manifest_path_default_is_repo_root_relative(root) -> None:
 def test_pyproject_pins_match_plan(root) -> None:
     data = tomllib.loads((root / "pyproject.toml").read_text(encoding="utf-8"))
     assert data["project"]["requires-python"] == ">=3.14,<3.15"
-    assert data["project"]["dependencies"] == ["jsonschema==4.26.0"]
+    assert data["project"]["dependencies"] == [
+        "jsonschema==4.26.0",
+        "referencing==0.37.0",
+    ]
 
 
 def test_pyproject_console_script_registered(root) -> None:
