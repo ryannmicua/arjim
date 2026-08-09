@@ -43,7 +43,11 @@ Marker terminology:
 
 ## Record source
 
-The authoritative location where a workstream's records are maintained — a typed URI reference to a system or tool such as Planner, SharePoint, or email (in the data-vault sense: the provenance of the workstream's truth). Record sources are accepted as untrusted data: adapters never dereference them, never inspect them for credentials or tokens, and diagnostics never echo them. Validity is syntactic only; an unsupported scheme stays valid but non-dereferenceable.
+The authoritative location where a workstream's records are maintained — a typed URI reference to a system or tool such as Planner, SharePoint, or email (in the data-vault sense: the provenance of the workstream's truth). Record sources are accepted as untrusted data. Registration, generic marker parsing, and capability classification never dereference a record source, never inspect it for credentials or tokens, and diagnostics never echo them. The only component that may resolve a record source is a checking adapter (see Checking adapter) that explicitly supports its type and applies that type's validation, least-access, redaction, and data-retention rules. Validity is syntactic only; an unsupported scheme stays valid but non-dereferenceable.
+
+## Checking adapter
+
+The awareness capability that reads a supported record source: dispatch on the declared source type, validate the type-specific locator, enforce least access, and read only the signals the type declares. It is the only component allowed to dereference a record source, and it never echoes or persists raw URI content, credentials, or tokens. Checking adapters and their check semantics are versioned and listed in the awareness contracts (awareness plan R0).
 
 ## Point-and-read registration
 
@@ -67,11 +71,11 @@ The closed result vocabulary that every registration, linking, and unregister op
 
 ## Configure
 
-The required step that follows registration and makes a workstream checkable: the workspace's conventions are settled either by accepting Arjim's recommended defaults or by specifying the workspace's own. The write is create-only, operator-confirmed, and read-back verified, mirroring registration. A registered-but-unconfigured workstream surfaces as a gap item and is never silently checked under defaults.
+The required step that follows registration and makes a workstream checkable: the workspace's conventions are settled either by accepting Arjim's recommended defaults or by specifying the workspace's own. The first write is create-only, operator-confirmed, and read-back verified, mirroring registration; later changes follow a confirmed conditional update that re-reads and compares the file immediately before writing. A registered-but-unconfigured workstream surfaces as a gap item and is never silently checked under defaults.
 
 ## Conventions
 
-The workspace-declared, schema'd, and versioned document that defines a workstream's awareness semantics: what counts as a "needs me" item (repo signals, a declared ledger, or other workspace-defined rules) and the freshness windows per record source. Arjim may recommend defaults and scaffold them, but the workspace owns the conventions; an unsupported version is not interpreted, mirroring the marker rule.
+The workspace-declared, schema'd, and versioned document that defines a workstream's awareness semantics: what counts as a "needs me" item (repo signals, a declared ledger, or other workspace-defined rules) and the freshness windows per record source. It records operator gap dispositions and, by reference, where the workspace declares the workstream's purpose and designated decision record source; Arjim never stores durable copies of workspace-declared information. Arjim may recommend defaults and scaffold them, but the workspace owns the conventions; an unsupported version is not interpreted, mirroring the marker rule.
 
 ## Relationships
 
