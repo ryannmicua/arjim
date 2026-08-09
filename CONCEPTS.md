@@ -65,6 +65,14 @@ The confirmed process that retires a registration: draft an unregister intent bo
 
 The closed result vocabulary that every registration, linking, and unregister operation reports, such as `registered`, `linked-existing`, `unregistered`, `occupied-invalid`, `invalid-marker-resolved`, and `changed-marker-stopped`. The outcome names and their meanings are frozen in the plan's result contract (U3) and map to CLI exit codes; contract edits must reference only names from this vocabulary. `occupied-invalid` covers every invalid marker present at the marker path — including an interrupted partial write — and is the inspection result for malformed markers; the vocabulary has no separate `invalid-marker` outcome.
 
+## Configure
+
+The required step that follows registration and makes a workstream checkable: the workspace's conventions are settled either by accepting Arjim's recommended defaults or by specifying the workspace's own. The write is create-only, operator-confirmed, and read-back verified, mirroring registration. A registered-but-unconfigured workstream surfaces as a gap item and is never silently checked under defaults.
+
+## Conventions
+
+The workspace-declared, schema'd, and versioned document that defines a workstream's awareness semantics: what counts as a "needs me" item (repo signals, a declared ledger, or other workspace-defined rules) and the freshness windows per record source. Arjim may recommend defaults and scaffold them, but the workspace owns the conventions; an unsupported version is not interpreted, mirroring the marker rule.
+
 ## Relationships
 
 - A **Workstream** is registered in a **Workspace** (a **Regular workspace** directly, or through a **Proxy workspace** when the workstream cannot hold its own metadata), which holds its **Marker**.
