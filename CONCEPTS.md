@@ -6,6 +6,10 @@ Shared domain vocabulary for this project — entities, named processes, and sta
 
 Anything Arjim manages as one unit — a project, recurring responsibility, operational process, shared initiative, or other ongoing work. A workstream exists as a durable registration only once it is registered and Arjim knows its workspace and authoritative record sources.
 
+## Workstream Protocol
+
+The assistant-neutral standard by which any agent recognizes a workstream and how its work is organized. It lives in `contracts/` — the marker schema, registration protocol, result vocabulary, and conformance corpus. Arjim is one conforming implementation of the Workstream Protocol, not its owner; the standard is implementable by any assistant. The planned domains (projects, people, recurring responsibilities, operational processes) are future headroom, not current protocol scope.
+
 ## Workspace
 
 Where a workstream keeps its lasting records — a folder plus the connected systems (Planner, SharePoint, email, repository) that hold its authoritative state. It tells Arjim where each authoritative record lives. The workspace is the durable source of truth; assistant working copies and device-local state never become authoritative.
