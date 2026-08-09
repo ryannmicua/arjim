@@ -8,7 +8,7 @@ Anything Arjim manages as one unit — a project, recurring responsibility, oper
 
 ## Workstream Protocol
 
-The assistant-neutral standard by which any agent recognizes a workstream and how its work is organized. It lives in `contracts/` — the marker schema, registration protocol, result vocabulary, and conformance corpus. Arjim is one conforming implementation of the Workstream Protocol, not its owner; the standard is implementable by any assistant. The planned domains (projects, people, recurring responsibilities, operational processes) are future headroom, not current protocol scope.
+The assistant-neutral standard by which any agent recognizes a workstream and how its work is organized. It lives in `contracts/` — the marker schema, registration protocol, result vocabulary, and conformance schemas, backed by a conformance corpus under `tests/contracts/`. Arjim is one conforming implementation of the Workstream Protocol, not its owner; the standard is implementable by any assistant. The concrete v1 contract set is `contracts/workstream-registration/`, an implementation-boundary directory distinct from the standard's home in `contracts/`. The planned domains (projects, people, recurring responsibilities, operational processes) are future headroom, not current protocol scope.
 
 ## Workspace
 

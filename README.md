@@ -6,9 +6,13 @@ See [VISION.md](VISION.md) for the direction and outcomes.
 
 Status: implemented — workstream registration (v1) is working on the tested profile.
 
+## Workstream Protocol
+
+Workstream is a standard, not a product. The [Workstream Protocol](contracts/README.md) is the assistant-neutral standard by which any assistant recognizes a workstream and how its work is organized; `contracts/` is its home. Arjim is one conforming implementation of the standard — not its owner — and any conforming assistant can implement against it.
+
 ## Workstream registration
 
-The first capability is workstream registration: an operator points the Python CLI at a workspace, confirms one exact draft, and a durable marker at `.workstream/manifest.json` becomes the registration record that survives any assistant, device, or local-state rebuild. The versioned contracts — marker schema, registration protocol, result vocabulary, and conformance fixtures — live under [contracts/workstream-registration/](contracts/workstream-registration/README.md), and the full conformance corpus passes on the pinned runtime.
+The first capability is workstream registration, Arjim's conforming implementation of the Workstream Protocol: an operator points the Python CLI at a workspace, confirms one exact draft, and a durable marker at `.workstream/manifest.json` becomes the registration record that survives any assistant, device, or local-state rebuild. The versioned contracts — marker schema, registration protocol, result vocabulary, and conformance fixtures — live under [contracts/workstream-registration/](contracts/workstream-registration/README.md), and the full conformance corpus passes on the pinned runtime.
 
 The Python implementation (CPython 3.14.6 with `jsonschema` 4.26.0; see [compatibility.md](contracts/workstream-registration/v1/compatibility.md) for the exact tested profile) provides:
 

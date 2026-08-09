@@ -25,6 +25,8 @@ I do not want another dashboard or system that I have to maintain. I want an ass
 
 Arjim is responsible for a workstream once it is registered and Arjim knows its workspace and authoritative record sources.
 
+**Workstream Protocol** is the assistant-neutral standard by which any assistant recognizes a workstream and how its work is organized — the marker schema, registration protocol, result vocabulary, and conformance schemas that live in `contracts/`, backed by a conformance corpus under `tests/contracts/`. Arjim is one conforming implementation of the Workstream Protocol, not its owner; any conforming assistant can implement against the same standard. For now the protocol is workstream-specific. Projects, people, recurring responsibilities, and operational processes are future headroom, not active protocol scope.
+
 ## Near-term promise
 
 The first promise I want Arjim to keep is this: give me a trustworthy view of every registered workstream, tell me what needs my attention, and show me exactly what it could and could not verify.
