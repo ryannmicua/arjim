@@ -1,0 +1,4 @@
+interface:
+  display_name: "Execute CE Plan"
+  short_description: "Dispatch and ship an existing CE plan"
+  default_prompt: "Use $execute-ce-plan to execute this implementation-ready plan through review and a merge-ready PR verdict."
