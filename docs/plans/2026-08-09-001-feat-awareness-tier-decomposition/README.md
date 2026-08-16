@@ -4,9 +4,18 @@ type: plan-decomposition
 date: 2026-08-10
 source_plan: docs/plans/2026-08-09-001-feat-awareness-tier-plan.md
 artifact_readiness: implementation-ready
+status: not-authorized-for-execution
+status_date: 2026-08-16
+superseded_by: docs/reviews/2026-08-15-001-arjim-direction-recommendation-brief.md
 ---
 
 # Trustworthy Awareness Tier - Vertical-Slice Decomposition
+
+> **Not authorized for execution (2026-08-16).** This decomposition inherits the
+> source plan's status: `implementation-ready` describes sequencing completeness,
+> not authorization. Do not begin AT-01. See the banner in
+> `docs/plans/2026-08-09-001-feat-awareness-tier-plan.md` for the reasoning and
+> for what survives regardless of pilot outcome.
 
 ## Purpose and Authority
 

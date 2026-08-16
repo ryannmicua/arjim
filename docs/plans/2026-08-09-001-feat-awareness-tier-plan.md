@@ -5,11 +5,38 @@ date: 2026-08-09
 topic: awareness-tier
 artifact_contract: ce-unified-plan/v1
 artifact_readiness: implementation-ready
-product_contract_source: ce-brainstorm
-execution: code
+status: not-authorized-for-execution
+status_date: 2026-08-16
+superseded_by: docs/reviews/2026-08-15-001-arjim-direction-recommendation-brief.md
 ---
 
 # Trustworthy Awareness Tier - Plan
+
+> **Not authorized for execution (2026-08-16).** `artifact_readiness:
+> implementation-ready` describes this artifact's internal completeness, not an
+> authorization to build it. The 2026-08-15 direction brief
+> (`docs/reviews/2026-08-15-001-arjim-direction-recommendation-brief.md`) is
+> later evidence and governs: do not execute U1-U11 as one program. Treat this
+> plan as a design reference and contract inventory until the pilot selects the
+> first source and the operator approves a revised roadmap (brief R10, Phase 5).
+>
+> Two reasons, recorded so they are not re-derived: AT-01 freezes the version
+> spaces, adapter registry, and git rule set *before* the evidence that is meant
+> to inform them; and R18 plus AE13 mean a fully successful U1-U11 still
+> terminates in a surface the operator must initiate, which cannot retire a
+> recurring round.
+>
+> What survives regardless of pilot outcome: the two seven-value enums, the KTD9
+> derivation table and precedence, the honesty rules (R8, R10, R13), the
+> reference-not-copy and persistence allow-lists (R19, R20), the confirmed
+> create-only write pattern (R3, R3b), and KTD19's read-only git isolation if git
+> wins selection. Candidate follow-on work is tracked in
+> `docs/ideation/2026-08-16-firstmate-derived-candidates.md`.
+>
+> Note also that `VISION.md` now states the operator's interface is Arjim itself
+> and that all tooling is Arjim-operated; this plan's operator-invokes-the-CLI
+> framing predates that and requires the C2b confirmation-evidence decision
+> before AT-02.
 
 ## Goal Capsule
 

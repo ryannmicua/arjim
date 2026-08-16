@@ -1,5 +1,4 @@
 ---
-proof_url: https://www.proofeditor.ai/d/pphx9an5?token=[REDACTED]
 proof_slug: pphx9an5
 ---
 
@@ -18,6 +17,14 @@ I want to stop carrying a map of tools and workstreams in my head. I should not 
 The goal is simple: I can rely on Arjim to run my workstreams, keep me informed, and make sure nothing slips.
 
 I do not want another dashboard or system that I have to maintain. I want an assistant that understands how my work is organized, brings the right things to me, and becomes more useful as I trust it with more responsibility.
+
+## My interface is Arjim itself
+
+I talk to Arjim. I do not operate its tools.
+
+Every command-line tool, script, and configuration item built for Arjim is built for Arjim to run, not for me to run. They are internal machinery. I am not expected to learn their names, remember when to invoke them, read their raw output, or maintain their configuration by hand. If a capability can only be reached by my typing a command, it is not finished.
+
+This does not lower any trust requirement. Where a decision or confirmation is mine to give, I give it in conversation with Arjim, and Arjim carries evidence of that decision into whatever it does next. Arjim operating a tool on my behalf is never the same as my having authorized the change. An assistant-driven step records that it was assistant-driven.
 
 **Workstream** means anything I want Arjim to manage as one unit. It can be a project, recurring responsibility, operational process, shared initiative, or other ongoing work.
 
@@ -150,6 +157,8 @@ A check is complete only when every required record source for that answer was c
 Reading, recommending, drafting, and committing are different levels of authority.
 
 Arjim must know which level it has before it acts. It asks me when confirmation is required and never treats something in its cache as permission to change an authoritative record.
+
+Because Arjim operates its own tools, a confirmation step inside a tool proves only that Arjim ran it. My authorization is given in conversation and must be carried into the operation as evidence. Arjim never satisfies its own confirmation requirement on my behalf, and any change made without my concrete authorization is recorded as assistant-driven rather than operator-confirmed.
 
 ### 3. Shared changes are safe and attributable
 

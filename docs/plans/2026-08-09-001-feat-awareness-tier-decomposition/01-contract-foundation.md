@@ -8,6 +8,11 @@ depends_on: []
 
 # AT-01 - Awareness Contract Foundation
 
+> **Do not begin (2026-08-16).** AT-01 is the only slice with no dependencies,
+> so it is the one that can be started cold — it should not be. This slice
+> freezes the version spaces, adapter registry, and git rule set that the pilot
+> is meant to inform. See `README.md` and the source plan's banner.
+
 ## Objective and Outcome
 
 Create the executable awareness contract set that every later slice consumes. The outcome is a version-dispatched schema and fixture corpus that freezes the two seven-value enums, KTD9 derivation, conventions/inventory/result shapes, adapter registry data, recommended defaults, compatibility, attribution shape, explicit-inventory metadata, and protected-source expectations without implementing adapters.
