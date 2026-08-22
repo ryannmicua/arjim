@@ -244,8 +244,7 @@ def _cmd_show(argv: list[str]) -> None:
     job_id = argv[0]
     from workstream_dispatch import records as rec
 
-    # Search all known workspaces for this job
-    import json as _json
+    # Read the job record from the current workspace
     workspace = Path(".")
     result = rec.read_job_record(workspace, job_id)
     if result is None:

@@ -263,15 +263,20 @@ def read_outcome_note(workspace: Path, job_id: str) -> NoteResult:
     dispatch = _dispatch_dir(workspace)
 
     # --- path gate (must come first per U6 step 2b) ---
-    # Walk lexical components BEFORE resolve to detect reparse points
-    for component in derived.parts:
-        comp_path = Path(component)
-        if _is_reparse_point(comp_path):
+    # Walk parent chain BEFORE resolve to detect reparse points (junctions,
+    # symlinks) on the path to the dispatch directory.  A junction at
+    # .workstream/dispatch/ would follow into its target before containment
+    # is checked, so we must refuse before resolving.
+    check = derived
+    while check != check.parent:  # walk up to filesystem root
+        if _is_reparse_point(check):
             return NoteResult(status="path-refused", job_id=job_id)
-    for component in dispatch.parts:
-        comp_path = Path(component)
-        if _is_reparse_point(comp_path):
+        check = check.parent
+    check = dispatch
+    while check != check.parent:
+        if _is_reparse_point(check):
             return NoteResult(status="path-refused", job_id=job_id)
+        check = check.parent
 
     try:
         resolved_note = derived.resolve()

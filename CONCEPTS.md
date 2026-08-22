@@ -101,7 +101,7 @@ The derived current status of a dispatched job, computed through the KTD5 table 
 
 ## Chained dispatch
 
-A dispatch whose instruction explicitly references a prior job via the `follows` field. The prior job's outcome note is read and its summary included in the context payload, giving the new agent the previous result. Chained dispatches preserve instruction ordering and confirmation semantics while enabling multi-step workflows.
+A dispatch whose instruction explicitly references a prior job via the `follows` field. The new agent receives the operator's instruction as its dispatched text; the `follows` reference is recorded in the job record for provenance and chain reconstruction. Chained dispatches preserve instruction ordering and confirmation semantics while enabling multi-step workflows.
 
 ## Flagged ambiguities
 

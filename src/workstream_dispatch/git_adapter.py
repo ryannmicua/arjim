@@ -65,9 +65,9 @@ def capture_git_state(workspace: Path) -> GitState | None:
             env=_GIT_ENV,
         )
         if proc_status.returncode != 0:
-            # Can get HEAD but not status — still usable, digest is just HEAD
-            digest = hashlib.sha256(head_oid.encode()).hexdigest()[:16]
-            return GitState(head_oid=head_oid, worktree_digest=digest)
+            # Cannot determine worktree state — honour the docstring contract
+            # (returns None on git failure so caller derives unsupported).
+            return None
 
         # Hash the porcelain output as the worktree digest
         digest = hashlib.sha256(proc_status.stdout.encode()).hexdigest()[:16]
