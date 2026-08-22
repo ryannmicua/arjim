@@ -1,0 +1,1 @@
+{"schema_version":1,"job_id":"a1b2c3d4-e5f6-4a7b-8c9d-e0f1a2b3c4d5","workstream_identity":"test","instruction":"Do something","dispatch_posture":{"provider":"opencode","model":"opencode-go/mimo-v2.5","mode":"default","thinking":"none"},"actor":"operator-confirmed","recorded_at":"2026-08-21T00:00:00Z","confirmation_ref":"abc","created_at":"2026-08-21T00:00:00Z"}
