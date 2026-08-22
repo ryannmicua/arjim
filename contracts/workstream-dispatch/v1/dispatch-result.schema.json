@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.workstream-dispatch/v1/dispatch-result.schema.json",
+  "title": "WorkstreamDispatchResult",
+  "x-surface": "dispatch-result",
+  "x-surface-version": "1",
+  "description": "Closed v1 portable result envelope for the Workstream Dispatch protocol. Mirrors the registration result envelope shape (version, outcome, effects, optional diagnostics with the same bounded caps) but with a dispatch-local outcome enum. Readers dispatch on the required integer `version` before applying the closed schema. Outcome names are frozen: dispatched, partial-success, cancelled, stopped, invalid-workspace, and internal-failure. Bounded everywhere: every string has a maxLength cap, every array a maxItems cap, and `additionalProperties: false` at every object level.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "outcome"
+  ],
+  "properties": {
+    "version": {
+      "const": 1,
+      "description": "Result contract version; readers dispatch on it before applying the closed schema. v1 allowed value: 1."
+    },
+    "outcome": {
+      "enum": [
+        "dispatched",
+        "partial-success",
+        "cancelled",
+        "stopped",
+        "invalid-workspace",
+        "internal-failure"
+      ],
+      "description": "Protocol outcome name, frozen at v1. `dispatched`: job record written and agent spawned. `partial-success`: job record written but spawn failed (R4). `cancelled`: confirmation mismatch or rejection (R2). `stopped`: record-write failure before spawn. `invalid-workspace`: unregistered or invalid-marker workspace (R5). `internal-failure`: safe internal error with stable code."
+    },
+    "job_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+      "minLength": 36,
+      "maxLength": 36,
+      "description": "The job identity, present when the outcome is `dispatched` or `partial-success`."
+    },
+    "diagnostics": {
+      "$ref": "#/$defs/diagnostics",
+      "description": "Bounded structured diagnostics (KTD13, KTD9). Native error messages are never emitted; diagnostics carry only phase, stable code, bounded safe path, count, and optional bounded label."
+    }
+  },
+  "$defs": {
+    "diagnostics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "count",
+        "items"
+      ],
+      "properties": {
+        "count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 32,
+          "description": "Number of diagnostic items (always equals items length)."
+        },
+        "items": {
+          "type": "array",
+          "maxItems": 32,
+          "items": {
+            "$ref": "#/$defs/diagnostic"
+          }
+        }
+      }
+    },
+    "diagnostic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "phase",
+        "code",
+        "safe_path"
+      ],
+      "properties": {
+        "phase": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 16,
+          "description": "Operation phase where the diagnostic originated."
+        },
+        "code": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 32,
+          "description": "Stable diagnostic code (never native error text)."
+        },
+        "safe_path": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "description": "Bounded safe path (no URI content, no secrets)."
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "description": "Optional bounded operator-facing label."
+        }
+      }
+    }
+  }
+}

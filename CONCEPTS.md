@@ -83,6 +83,26 @@ The workspace-declared, schema'd, and versioned document that defines a workstre
 - A **Marker** references **Record sources**; the record sources, not the marker, point to where the workstream's lasting records live.
 - The **Local link projection** is derived from **Markers** and never outranks them.
 
+## Dispatch
+
+The confirmed process that sends an operator-drafted instruction to a workspace agent. Dispatch follows strict ordering: write the job record create-only (U2), then spawn the agent (U4), then bind the job to the agent (U3). A record-write failure stops before spawning; a spawn failure after a successful write returns partial success naming the job. Dispatch requires operator confirmation via exact HMAC digest match (KTD8) before any write.
+
+## Job record
+
+The durable, schema-validated JSON document that records a dispatched instruction. Each job record lives at `.workstream/dispatch/<job-id>.json` inside the target workspace and carries the instruction, dispatch posture, confirmation reference, and creation timestamp. Job records use create-only write semantics (exclusive create) so an existing record is never silently replaced.
+
+## Workspace agent
+
+A background agent spawned by the Paseo adapter to execute a dispatched instruction within a workspace. The agent receives a fixed, content-free title (R23) and the instruction as a positional argument after `--` to prevent option injection (R30, KTD14). The agent's identity is bound to the job record via the dispatch store (U3).
+
+## Job state
+
+The derived current status of a dispatched job, computed through the KTD5 table as the single owner of state mapping. Job state combines the agent's lifecycle status (running, idle, closed, error), the presence of pending permissions, whether the agent is archived, and whether the Paseo daemon is reachable. The state vocabulary is: running, idle, needs-operator, not-found, unreachable, superseded, never-dispatched, failed.
+
+## Chained dispatch
+
+A dispatch whose instruction explicitly references a prior job via the `follows` field. The new agent receives the operator's instruction as its dispatched text; the `follows` reference is recorded in the job record for provenance and chain reconstruction. Chained dispatches preserve instruction ordering and confirmation semantics while enabling multi-step workflows.
+
 ## Flagged ambiguities
 
 - "record source" and "workspace reference" were used interchangeably — they are distinct. The workspace reference is the literal `.` in the marker identifying the workspace itself; a record source is a URI to a separate authoritative system and is never a workspace reference.

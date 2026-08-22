@@ -1,0 +1,55 @@
+{
+  "manifest_version": "1.0.0",
+  "contract": "workstream-dispatch/v1",
+  "entries": [
+    {
+      "id": "valid-minimal-record",
+      "path": "valid/minimal-record.json",
+      "category": "mandatory",
+      "covers": ["R3", "R16", "R19", "AE12"]
+    },
+    {
+      "id": "valid-record-with-follows",
+      "path": "valid/record-with-follows.json",
+      "category": "mandatory",
+      "covers": ["R13", "R16"]
+    },
+    {
+      "id": "invalid-unknown-field",
+      "path": "invalid/unknown-field.json",
+      "category": "mandatory",
+      "covers": ["R16"]
+    },
+    {
+      "id": "invalid-outcome-note-path",
+      "path": "invalid/outcome-note-path.json",
+      "category": "mandatory",
+      "covers": ["R26"]
+    },
+    {
+      "id": "invalid-missing-actor",
+      "path": "invalid/missing-actor.json",
+      "category": "mandatory",
+      "covers": ["R3"]
+    },
+    {
+      "id": "invalid-wrong-provider",
+      "path": "invalid/wrong-provider.json",
+      "category": "mandatory",
+      "covers": ["R27", "R28"]
+    },
+    {
+      "id": "valid-outcome-note",
+      "path": "valid/outcome-note.json",
+      "category": "mandatory",
+      "covers": ["R26"]
+    },
+    {
+      "id": "invalid-note-unknown-field",
+      "path": "invalid/note-unknown-field.json",
+      "category": "mandatory",
+      "covers": ["R26"]
+    }
+  ],
+  "canaries": {}
+}
