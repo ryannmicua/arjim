@@ -152,14 +152,6 @@ def draft_instruction(
     # Generate job_id
     job_id = str(uuid.uuid4())
 
-    # Assemble context payload (R25) — label, identity, job-record path
-    # The instruction asked to the agent includes these
-    context = {
-        "workstream_label": workstream_label,
-        "workstream_identity": workstream_identity,
-        "job_record_path": f".workstream/dispatch/{job_id}.json",
-    }
-
     # Compute digest over the exact bytes that will be dispatched
     dispatch_bytes = normalized.encode("utf-8")
     digest = reg.envelope_digest(dispatch_bytes)
