@@ -160,7 +160,8 @@ def test_pyproject_pins_match_plan(root) -> None:
 def test_pyproject_console_script_registered(root) -> None:
     data = tomllib.loads((root / "pyproject.toml").read_text(encoding="utf-8"))
     assert data["project"]["scripts"] == {
-        "workstream-registration": "workstream_registration.cli:main"
+        "workstream-registration": "workstream_registration.cli:main",
+        "workstream-dispatch": "workstream_dispatch.cli:main",
     }
 
 

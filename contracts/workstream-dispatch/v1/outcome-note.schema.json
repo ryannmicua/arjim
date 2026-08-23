@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.workstream-dispatch/v1/outcome-note.schema.json",
+  "title": "WorkstreamDispatchOutcomeNote",
+  "x-surface": "outcome-note",
+  "x-surface-version": "1",
+  "description": "Closed v1 outcome-note schema. The dispatched agent writes this file beside its job record; Arjim only reads it (R26, KTD11). The note is one mutable snapshot per job — a later write at the same derived path replaces what the next answer reads. The path is derived from `job_id` (`<job-id>.note.json` inside `.workstream/dispatch/`) and is never recorded in the job record. Nothing in the note is trusted as verified truth or as a confirmed claim of authorship; it is reported as an unverified workspace note associated with the job.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "job_id",
+    "summary",
+    "reported_at"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1,
+      "description": "Note contract version; readers dispatch on it before applying the closed schema. v1 allowed value: 1."
+    },
+    "job_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+      "minLength": 36,
+      "maxLength": 36,
+      "description": "Must match the job record's `job_id`. A note whose `job_id` differs is `mismatched` and its content is never rendered (R26)."
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "description": "Bounded free-text outcome summary from the dispatched agent. Untrusted input passed through the dispatch-local guard at read time (U6, KTD13)."
+    },
+    "reported_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 UTC timestamp when the agent reported this outcome. Rendered beside the note's claim in status answers (R26)."
+    }
+  }
+}

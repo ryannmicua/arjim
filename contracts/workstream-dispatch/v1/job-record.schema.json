@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.workstream-dispatch/v1/job-record.schema.json",
+  "title": "WorkstreamDispatchJobRecord",
+  "x-surface": "job-record",
+  "x-surface-version": "1",
+  "description": "Closed v1 job record schema for the Workstream Dispatch protocol. One immutable JSON file per dispatched job at `.workstream/dispatch/<job-id>.json` inside the target workspace. The record is workspace-owned, create-only, and never modified or deleted by Arjim after creation (R19). Readers dispatch on the required integer `schema_version` before applying the closed schema; v1 allows the value 1. The record carries no outcome-note path: Arjim derives that path from `job_id` (R26, KTD11), so no agent-writable value decides which file a status answer opens. `additionalProperties: false` at every object level makes a reintroduced `outcome_note_path` a validation failure rather than a silently honoured field.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "job_id",
+    "workstream_identity",
+    "instruction",
+    "dispatch_posture",
+    "actor",
+    "recorded_at",
+    "confirmation_ref",
+    "created_at"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1,
+      "description": "Record contract version; readers dispatch on it before applying the closed schema. v1 allowed value: 1."
+    },
+    "job_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+      "minLength": 36,
+      "maxLength": 36,
+      "description": "Unique job identifier (uuid4-shaped, RFC 4122 v4 lowercase hex with hyphens). Keys the Arjim-local binding, the Paseo label value `arjim.job=<job-id>`, `follows` references, and the record filename."
+    },
+    "workstream_identity": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "description": "The registered workstream identity at dispatch time (from the workspace marker). Used for unattributable-job detection (R31)."
+    },
+    "instruction": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 65536,
+      "description": "The operator-confirmed instruction text — prose intended for an agent, not a command line (R1). The exact bytes dispatched are byte-identical to the bytes whose digest was confirmed (R2). Stored as the sole sanctioned record of what was requested; never persisted elsewhere (R23)."
+    },
+    "dispatch_posture": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider",
+        "model",
+        "mode",
+        "thinking"
+      ],
+      "properties": {
+        "provider": {
+          "const": "opencode",
+          "description": "The pinned dispatch provider (KTD12). A record naming any other provider fails validation."
+        },
+        "model": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "description": "The operator-chosen model id (e.g. `opencode-go/mimo-v2.5`). Validated against the live CLI at draft time (U4), not enumerated in the schema."
+        },
+        "mode": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "description": "The operator-chosen mode string. Validated against the live CLI at draft time (U4), not enumerated in the schema."
+        },
+        "thinking": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "description": "The operator-chosen thinking option id. Validated per-model against the live CLI's thinkingOptionIds at draft time (U4, KTD12)."
+        }
+      },
+      "description": "The confirmed dispatch posture tuple: provider, model, mode, and thinking (R27, R28). Provider is pinned (KTD12); model, mode, and thinking are per-dispatch operator choices."
+    },
+    "follows": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+      "minLength": 36,
+      "maxLength": 36,
+      "description": "Optional identity of the predecessor job this step follows (R13). The relationship is recorded once at creation and never mutated."
+    },
+    "actor": {
+      "type": "string",
+      "enum": [
+        "operator-confirmed",
+        "assistant-drafted"
+      ],
+      "description": "Bounded attribution: `operator-confirmed` when the operator supplied a confirmation from outside the process; `assistant-drafted` when Arjim initiated without an operator confirmation in hand (R3, AE12). Arjim never writes `operator-confirmed` for a confirmation it produced itself."
+    },
+    "recorded_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 UTC timestamp when the job record was written (R3)."
+    },
+    "confirmation_ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "description": "The HMAC-SHA-256 digest of the confirmed instruction envelope (KTD8). Opaque to external readers; proves the operator saw this draft from this process."
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 UTC timestamp when the job was created (may equal recorded_at for immediate writes)."
+    }
+  }
+}

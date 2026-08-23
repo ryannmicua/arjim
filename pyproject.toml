@@ -20,6 +20,7 @@ dev = [
 
 [project.scripts]
 workstream-registration = "workstream_registration.cli:main"
+workstream-dispatch = "workstream_dispatch.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
