@@ -118,15 +118,86 @@ implements that at R3 (`dispatch-loop-plan:58`). This record only notes that the
 distro decision is *why* C2b was necessary, and that registration v1 will need
 the same treatment whenever it is next opened.
 
+## Q1 — resolved in proposal: role follows the checkout
+
+**The question.** Does `AGENTS.md` serve the agent being Arjim, or the agent
+building Arjim? It cannot serve both: the builder writes `src/`; Arjim must not.
+
+FirstMate offers no answer to copy. Its two contracts never collide because the
+firstmate home is never one of its own projects — the job description and a
+project's build conventions live in different repositories
+(`firstmate-deep-dive.md:476-478`). Arjim, once dogfooded, is one of its own
+workstreams and hits a case the source design does not have.
+
+**Proposed resolution.** The collision exists only when one directory holds both
+roles. It dissolves across two checkouts of the same upstream:
+
+- **Distro home** — a harness launched here becomes Arjim. Arjim writes to `src/`
+  nowhere, here included. This is FirstMate hard rule 1
+  (`firstmate-deep-dive.md:488`) and the dispatch plan's file-and-walk-away
+  posture (`dispatch-loop-plan:42`) reaching the same place.
+- **Workstream workspace** — an ordinary checkout, registered, that Arjim
+  dispatches builder agents into. Dispatch R5 already requires a registered
+  target.
+
+No new mechanism is introduced; this is the tracked-home versus project split
+(`firstmate-deep-dive.md:34-58`) applied to the self-referential case.
+
+**File placement that follows.**
+
+| File | Role | Present state |
+|---|---|---|
+| `AGENTS.md` (root) | Arjim's job description; clone and launch yields Arjim (`firstmate-deep-dive.md:19-21`) | Currently holds build conventions |
+| `CLAUDE.md` | Symlink to `AGENTS.md` | Absent — the symlink is free to establish |
+| `CONTRIBUTING.md` | Build conventions, relocated from today's `AGENTS.md` | Absent |
+
+A dispatched builder loses nothing by the move: it arrives carrying prose
+instruction (dispatch R1) that names `CONTRIBUTING.md`, so its context comes
+through the instruction rather than ambient file loading.
+
+**Disclosed weakness.** A session opened directly against the repository to
+build Arjim will auto-load Arjim's job description and behave as Arjim,
+refusing to write `src/`. The mitigation is a fixed routing block at the head of
+`AGENTS.md` rather than a judgment call. This is the one point where the distro
+layer depends on the agent reading correctly; the failure mode is a confused
+builder, not a false trust claim, so it is disclosed rather than engineered
+around.
+
+**Rejected: two repositories.** Clean role separation, but premature — brief R8
+warns against a second contract before a second consumer, the layers will
+co-evolve tightly, and there is one operator. Reconsider when the distro is
+installed somewhere that does not contain the product.
+
 ## Open question
 
-**Q1. Does `AGENTS.md` serve the agent being Arjim, or the agent building
-Arjim?** It cannot serve both. FirstMate avoids the collision because its
-repository *is* its distro — the source is the toolbelt. Arjim's repository is
-both a contract-bound Python product and the distro, and the two readers need
-contradictory rules: the builder writes `src/`; Arjim must not. Settle the split
-before any distro file is written, or the contract will be edited in two
-directions at once.
+**Q2. What is workspace identity when the workspace is a distributed VCS working
+tree?** Surfaced by dogfooding: `.gitignore` does not list `.workstream/`, so a
+marker written into this repository is committed by default.
+
+The marker carries a permanent Arjim-generated identity (`CONCEPTS.md`, Marker)
+and pins `workspace` to the literal `.` (KTD4) precisely so no device path can
+break cross-device identity. Both presume the workspace is one durable location.
+A clone breaks that presumption in each direction:
+
+- **Committed** — every clone carries the same workstream identity, including
+  the distro home and the workspace checkout that Q1 above separates into
+  different roles. One identity in two places is the inverse of the second-identity
+  hazard KTD7 guards against.
+- **Ignored** — the marker does not survive a fresh clone. Outcome 3
+  (`VISION.md:80-90`) requires workstream memory to survive an *Arjim* wipe and
+  is silent on whether a fresh clone is the same workspace or a new one.
+
+This is a Workstream Protocol question rather than a dogfooding detail, and it
+is unresolved in the contract set. It needs an operator ruling before the
+repository is registered.
+
+## Dogfooding note
+
+Registering this repository as a workstream is available with shipped code and
+is the natural test of Q1's two-checkout resolution. It proves *mechanism* only.
+Per brief Risk 1, it may not be counted as pilot evidence of reduced management
+work: the operator does not perform checking rounds on this repository the way
+the pilot's candidate sources demand.
 
 ## The three grounding questions
 
@@ -145,5 +216,8 @@ directions at once.
 
 ## Status
 
-Proposed. Becomes settled on operator acceptance, after which Q1 is the first
-thing to resolve and `CONCEPTS.md` gains an "Agent distro" entry.
+Proposed, including Q1's resolution. Becomes settled on operator acceptance.
+
+Q2 blocks registering this repository but blocks nothing else. On acceptance,
+`CONCEPTS.md` gains an "Agent distro" entry, and the `AGENTS.md` to
+`CONTRIBUTING.md` relocation is the first concrete change.
