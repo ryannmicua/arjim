@@ -683,6 +683,31 @@ class TestExitCodes:
         assert "workstream-registration" in out
         assert "register" in out
 
+    def test_register_help_exits_zero(self) -> None:
+        code, out, err = _run_main(["register", "--help"])
+        assert code == 0
+        assert "register" in out.lower()
+        assert "record-source" in out
+        assert "error:" not in err
+
+    def test_inspect_help_exits_zero(self) -> None:
+        code, out, err = _run_main(["inspect", "--help"])
+        assert code == 0
+        assert "inspect" in out.lower()
+        assert "error:" not in err
+
+    def test_rebuild_help_exits_zero(self) -> None:
+        code, out, err = _run_main(["rebuild", "--help"])
+        assert code == 0
+        assert "rebuild" in out.lower()
+        assert "error:" not in err
+
+    def test_help_with_trailing_flags_no_error(self) -> None:
+        code, out, err = _run_main(["register", "--help", "--label", "foo"])
+        assert code == 0
+        assert "register" in out.lower()
+        assert "error:" not in err
+
 
 # ---------------------------------------------------------------------------
 # no-echo / canary discipline
