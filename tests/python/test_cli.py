@@ -666,7 +666,6 @@ class TestExitCodes:
         ws = tmp_path / "ws"
         ws.mkdir()
         cases: list[list[str]] = [
-            [],
             ["bogus-command"],
             ["register", str(ws), "--record-source", SOURCE],
             ["register", str(ws), "--label", "x", "--record-source", "no-equals"],
@@ -677,6 +676,37 @@ class TestExitCodes:
             code, out, err = _run_main(argv)
             assert code == 3, argv
             assert "error:" in err
+
+    def test_empty_argv_shows_help_exit_zero(self) -> None:
+        code, out, err = _run_main([])
+        assert code == 0
+        assert "workstream-registration" in out
+        assert "register" in out
+
+    def test_register_help_exits_zero(self) -> None:
+        code, out, err = _run_main(["register", "--help"])
+        assert code == 0
+        assert "register" in out.lower()
+        assert "record-source" in out
+        assert "error:" not in err
+
+    def test_inspect_help_exits_zero(self) -> None:
+        code, out, err = _run_main(["inspect", "--help"])
+        assert code == 0
+        assert "inspect" in out.lower()
+        assert "error:" not in err
+
+    def test_rebuild_help_exits_zero(self) -> None:
+        code, out, err = _run_main(["rebuild", "--help"])
+        assert code == 0
+        assert "rebuild" in out.lower()
+        assert "error:" not in err
+
+    def test_help_with_trailing_flags_no_error(self) -> None:
+        code, out, err = _run_main(["register", "--help", "--label", "foo"])
+        assert code == 0
+        assert "register" in out.lower()
+        assert "error:" not in err
 
 
 # ---------------------------------------------------------------------------

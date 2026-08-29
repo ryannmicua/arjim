@@ -70,7 +70,7 @@ import json
 import sys
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Callable, TextIO
+from typing import Any, Callable, TextIO
 
 from workstream_registration import diagnostics as diag
 from workstream_registration import filesystem as fs
@@ -419,16 +419,26 @@ class _Parser:
     ) -> None:
         self._subparsers.append({"name": name, "help": help, "args": args})
 
+    def _is_boolean_flag(self, sub: dict[str, Any], name: str) -> bool:
+        for spec in sub["args"]:
+            if spec["name"] == name:
+                return spec.get("boolean", False)
+        return False
+
     def parse(self, argv: list[str]) -> dict[str, Any]:
         if not argv:
-            raise UsageError("a command is required")
+            return {"help": True}
         args: dict[str, Any] = {}
         index = 0
         while index < len(argv) and argv[index] == "--json":
             args["json"] = True
             index += 1
         if index >= len(argv):
-            raise UsageError("a command is required")
+            args["help"] = True
+            return args
+        if argv[index] in ("--help", "help"):
+            args["help"] = True
+            return args
         command = argv[index]
         index += 1
         sub = next((s for s in self._subparsers if s["name"] == command), None)
@@ -447,6 +457,9 @@ class _Parser:
                 continue
             if token.startswith("--"):
                 name = token[2:].replace("-", "_")
+                if name == "help" or self._is_boolean_flag(sub, name):
+                    args["help"] = True
+                    break
                 if token_index + 1 >= len(tokens):
                     raise UsageError(f"option {token!r} requires a value")
                 flag_values.setdefault(name, []).append(tokens[token_index + 1])
@@ -454,32 +467,33 @@ class _Parser:
                 continue
             positionals.append(token)
             token_index += 1
-        for spec in sub["args"]:
-            name = spec["name"]
-            if spec.get("positional"):
-                if spec.get("greedy"):
-                    got = positionals[:]
-                    if not got:
-                        raise UsageError(f"missing required argument <{name}>")
-                    args[name] = got
-                    positionals = []
+        if not args.get("help"):
+            for spec in sub["args"]:
+                name = spec["name"]
+                if spec.get("positional"):
+                    if spec.get("greedy"):
+                        got = positionals[:]
+                        if not got:
+                            raise UsageError(f"missing required argument <{name}>")
+                        args[name] = got
+                        positionals = []
+                    else:
+                        if not positionals:
+                            raise UsageError(f"missing required argument <{name}>")
+                        args[name] = positionals.pop(0)
+                    continue
+                values = flag_values.pop(name, None)
+                if spec.get("required") and not values:
+                    raise UsageError(f"missing required option --{name.replace('_', '-')}")
+                if spec.get("repeatable"):
+                    args[name] = values or []
                 else:
-                    if not positionals:
-                        raise UsageError(f"missing required argument <{name}>")
-                    args[name] = positionals.pop(0)
-                continue
-            values = flag_values.pop(name, None)
-            if spec.get("required") and not values:
-                raise UsageError(f"missing required option --{name.replace('_', '-')}")
-            if spec.get("repeatable"):
-                args[name] = values or []
-            else:
-                args[name] = values[0] if values else spec.get("default")
-        if positionals:
-            raise UsageError(f"unexpected argument {positionals[0]!r}")
-        if flag_values:
-            unknown = next(iter(flag_values))
-            raise UsageError(f"unknown option --{unknown.replace('_', '-')}")
+                    args[name] = values[0] if values else spec.get("default")
+            if positionals:
+                raise UsageError(f"unexpected argument {positionals[0]!r}")
+            if flag_values:
+                unknown = next(iter(flag_values))
+                raise UsageError(f"unknown option --{unknown.replace('_', '-')}")
         return args
 
 
@@ -493,37 +507,38 @@ def _build_parser() -> _Parser:
             {"name": "label", "required": True},
             {"name": "record_source", "required": True, "repeatable": True},
             {"name": "kind", "default": "direct"},
+            {"name": "help", "boolean": True},
         ],
     )
     parser.add_subcommand(
         "inspect",
         "read-only inspection of a workspace",
-        [{"name": "workspace", "positional": True}],
+        [{"name": "workspace", "positional": True}, {"name": "help", "boolean": True}],
     )
     parser.add_subcommand(
         "link",
         "link an existing valid marker (no write, no confirmation)",
-        [{"name": "workspace", "positional": True}],
+        [{"name": "workspace", "positional": True}, {"name": "help", "boolean": True}],
     )
     parser.add_subcommand(
         "rebuild",
         "transactionally rebuild the projection from explicit workspace roots",
-        [{"name": "workspace", "positional": True, "greedy": True}],
+        [{"name": "workspace", "positional": True, "greedy": True}, {"name": "help", "boolean": True}],
     )
     parser.add_subcommand(
         "unregister",
         "unregister a workspace (interactive confirmation)",
-        [{"name": "workspace", "positional": True}],
+        [{"name": "workspace", "positional": True}, {"name": "help", "boolean": True}],
     )
     parser.add_subcommand(
         "resolve-invalid",
         "resolve an occupied-invalid marker (interactive confirmation)",
-        [{"name": "workspace", "positional": True}],
+        [{"name": "workspace", "positional": True}, {"name": "help", "boolean": True}],
     )
     parser.add_subcommand(
         "recover-lock",
         "recover a stale per-workspace lock (interactive confirmation)",
-        [{"name": "workspace", "positional": True}],
+        [{"name": "workspace", "positional": True}, {"name": "help", "boolean": True}],
     )
     return parser
 
@@ -669,18 +684,300 @@ def _cmd_recover_lock(args: dict[str, Any], stdin: TextIO, stdout: TextIO, stder
 
 
 def _usage() -> str:
-    return (
-        "workstream-registration - workstream registration (v1)\n"
-        "usage: workstream-registration [--json] <command> [args]\n"
-        "commands:\n"
-        "  register <workspace> --label <label> --record-source <type>=<uri>... [--kind direct|proxy]\n"
-        "  inspect <workspace>\n"
-        "  link <workspace>\n"
-        "  rebuild <workspace>...\n"
-        "  unregister <workspace>\n"
-        "  resolve-invalid <workspace>\n"
-        "  recover-lock <workspace>\n"
-    )
+    return """\
+workstream-registration - register and manage workstream identities
+
+Quick start:
+  workstream-registration register ./my-workspace \\
+      --label "My Project" \\
+      --record-source sharepoint/site=https://sharepoint.example.org/sites/project
+
+Commands:
+  register        Register a workspace (interactive confirmation)
+  inspect         Read-only inspection of a workspace state
+  link            Link an existing valid marker (no write, no confirmation)
+  rebuild         Rebuild the projection from explicit workspace roots
+  unregister      Unregister a workspace (interactive confirmation)
+  resolve-invalid Resolve an occupied-invalid marker (interactive confirmation)
+  recover-lock    Recover a stale per-workspace lock (interactive confirmation)
+
+Global options:
+  --json          Emit the stable result envelope (JSON) after completion
+
+Each command supports --help for detailed usage:
+  workstream-registration <command> --help
+"""
+
+
+def _help_register() -> str:
+    return """\
+workstream-registration register - register a workspace
+
+Usage:
+  workstream-registration register <workspace> --label <label> \\
+      --record-source <type>=<uri>... [--kind direct|proxy]
+
+Arguments:
+  <workspace>                 Path to the workspace directory
+  --label <label>             Human-readable label for this workspace
+  --record-source <type>=<uri>  Record source (repeatable; at least one required)
+                              Format: type token = URI
+  --kind <direct|proxy>       Registration kind (default: direct)
+
+What happens:
+  1. Inspects the workspace for an existing valid marker
+  2. If a valid marker already exists, degrades to linking (linked-existing)
+  3. Otherwise, drafts the marker and shows a preview with the digest
+  4. You confirm by typing: confirm <digest>
+  5. The marker is written and the projection is updated
+
+The preview shows labels and local paths, but record-source URI content
+is redacted for safety. The digest uses a process-ephemeral key, so it
+is only valid within this invocation.
+
+Examples:
+  workstream-registration register ./my-workspace \\
+      --label "My Project" \\
+      --record-source sharepoint/site=https://sharepoint.example.org/sites/p
+
+  workstream-registration register ./proxy-ws \\
+      --label "Proxy Setup" \\
+      --record-source git=https://github.com/org/repo.git \\
+      --kind proxy
+
+  workstream-registration --json register ./my-workspace \\
+      --label "Json Run" \\
+      --record-source example/records=https://records.example.org/x
+
+Output:
+  Human mode:  preview lines, then "outcome: <result>"
+  --json mode: {"outcome": "...", "identity": "...", "validity": "...",
+                "effects": {...}, "diagnostics": {...}}
+
+Exit codes:
+  0  registered / linked-existing
+  2  cancelled / stopped
+  3  invalid input
+  4  conflict
+  5  written-unverified / registered-unlinked
+"""
+
+
+def _help_inspect() -> str:
+    return """\
+workstream-registration inspect - read-only inspection of a workspace
+
+Usage:
+  workstream-registration inspect <workspace> [--json]
+
+Arguments:
+  <workspace>    Path to the workspace directory
+
+What happens:
+  Reads the workspace marker (if any) and reports its state without
+  modifying anything.
+
+States:
+  draft-ready        No marker found; workspace is ready for registration
+  linked-existing    A valid marker is present and linked
+  occupied-invalid   A marker exists but is invalid or unreadable
+
+Examples:
+  workstream-registration inspect ./my-workspace
+  workstream-registration --json inspect ./my-workspace
+
+Output:
+  Human mode:  "state: <state>" followed by outcome and identity
+  --json mode: {"outcome": "...", "identity": "...", ...}
+
+Exit codes:
+  0  linked-existing
+  2  stopped (draft-ready or missing workspace)
+  3  occupied-invalid
+"""
+
+
+def _help_link() -> str:
+    return """\
+workstream-registration link - link an existing valid marker
+
+Usage:
+  workstream-registration link <workspace> [--json]
+
+Arguments:
+  <workspace>    Path to the workspace directory
+
+What happens:
+  Reads an existing valid marker and links it to the projection.
+  No write occurs, no confirmation is required.
+
+  This is useful when a marker was written manually or by another
+  process and you want to register it in the projection.
+
+Examples:
+  workstream-registration link ./my-workspace
+  workstream-registration --json link ./my-workspace
+
+Output:
+  Human mode:  "outcome: linked-existing" with identity
+  --json mode: {"outcome": "linked-existing", "identity": "...", ...}
+
+Exit codes:
+  0  linked-existing
+  2  stopped (no valid marker found)
+"""
+
+
+def _help_rebuild() -> str:
+    return """\
+workstream-registration rebuild - rebuild the projection from workspace roots
+
+Usage:
+  workstream-registration rebuild <workspace>... [--json]
+
+Arguments:
+  <workspace>...    One or more workspace root paths (greedy; at least one required)
+
+What happens:
+  Scans the given workspace roots, reads each valid marker, and
+  rebuilds the projection database. Workspace paths must be provided
+  explicitly -- there is no auto-discovery.
+
+  Use this after projection data loss or corruption, or to force a
+  full re-scan of known workspaces.
+
+Examples:
+  workstream-registration rebuild ./my-workspace
+  workstream-registration rebuild ./ws-a ./ws-b ./ws-c
+  workstream-registration --json rebuild ./my-workspace
+
+Output:
+  Human mode:  "rebuild: rebuilt (N entries)" or "rebuild: failed"
+  --json mode: {"status": "rebuilt", "entries": [...], "detail": "..."}
+
+Exit codes:
+  0  rebuilt successfully
+  3  failed (invalid root or no valid markers)
+"""
+
+
+def _help_unregister() -> str:
+    return """\
+workstream-registration unregister - unregister a workspace
+
+Usage:
+  workstream-registration unregister <workspace> [--json]
+
+Arguments:
+  <workspace>    Path to the workspace directory
+
+What happens:
+  1. Inspects the workspace for a valid linked marker
+  2. If linked, drafts an unregister envelope and shows a preview
+  3. You confirm by typing: confirm <digest>
+  4. The marker is deleted and the projection is updated
+
+  If the workspace has no valid marker, the operation stops (exit 2).
+  If the marker identity changes between preview and confirmation,
+  the operation stops with changed-marker-stopped (exit 4).
+
+Examples:
+  workstream-registration unregister ./my-workspace
+  workstream-registration --json unregister ./my-workspace
+
+Output:
+  Human mode:  preview lines, then "outcome: <result>"
+  --json mode: {"outcome": "...", "identity": "...", ...}
+
+Exit codes:
+  0  unregistered
+  2  cancelled / stopped
+  4  changed-marker-stopped
+"""
+
+
+def _help_resolve_invalid() -> str:
+    return """\
+workstream-registration resolve-invalid - resolve an occupied-invalid marker
+
+Usage:
+  workstream-registration resolve-invalid <workspace> [--json]
+
+Arguments:
+  <workspace>    Path to the workspace directory
+
+What happens:
+  1. Inspects the workspace for an occupied-invalid marker
+  2. Shows a preview with marker identity, length, digest, lock status,
+     and target handle
+  3. You confirm by typing: confirm <digest>
+  4. The invalid marker is deleted (after active/stale lock checks)
+
+  If the workspace is not occupied-invalid, the operation fails (exit 3).
+  If verification of absence fails after deletion, reports
+  invalid-deleted-unverified (exit 5).
+
+Examples:
+  workstream-registration resolve-invalid ./my-workspace
+  workstream-registration --json resolve-invalid ./my-workspace
+
+Output:
+  Human mode:  preview lines, then "outcome: <result>"
+  --json mode: {"outcome": "...", "identity": "...", ...}
+
+Exit codes:
+  0  invalid-marker-resolved
+  2  cancelled
+  3  not occupied-invalid
+  5  invalid-deleted-unverified
+"""
+
+
+def _help_recover_lock() -> str:
+    return """\
+workstream-registration recover-lock - recover a stale per-workspace lock
+
+Usage:
+  workstream-registration recover-lock <workspace> [--json]
+
+Arguments:
+  <workspace>    Path to the workspace directory
+
+What happens:
+  1. Captures the target handle and reads the current lock status
+  2. Shows a preview with workspace, target handle, and lock status
+  3. You confirm by typing: confirm <digest>
+  4. A stale lock is recovered; a live owner's lock is never broken
+
+  Lock states:
+    absent    No lock file exists
+    recovered A stale lock was successfully recovered
+    held      A live owner holds the lock (conflict; exit 4)
+
+Examples:
+  workstream-registration recover-lock ./my-workspace
+  workstream-registration --json recover-lock ./my-workspace
+
+Output:
+  Human mode:  preview lines, then "lock: <state>"
+  --json mode: {"workspace": "...", "lock_state": "..."}
+
+Exit codes:
+  0  absent / recovered
+  2  cancelled
+  4  held (live owner)
+"""
+
+
+_HELP_DISPATCH: dict[str, Callable[[], str]] = {
+    "register": _help_register,
+    "inspect": _help_inspect,
+    "link": _help_link,
+    "rebuild": _help_rebuild,
+    "unregister": _help_unregister,
+    "resolve-invalid": _help_resolve_invalid,
+    "recover-lock": _help_recover_lock,
+}
 
 
 def main(
@@ -700,9 +997,6 @@ def main(
     stderr = stderr if stderr is not None else sys.stderr
     reg.install_default_projection_hook()
     argv = list(sys.argv[1:] if argv is None else argv)
-    if "--help" in argv or argv == ["help"]:
-        print(_usage(), file=stdout)
-        return EXIT_OK
     parser = _build_parser()
     try:
         args = parser.parse(argv)
@@ -710,6 +1004,17 @@ def main(
         print(f"error: {exc}", file=stderr)
         print("commands: register inspect link rebuild unregister resolve-invalid recover-lock", file=stderr)
         return EXIT_INVALID_INPUT
+    if args.get("help"):
+        command = args.get("command")
+        if command is None:
+            print(_usage(), file=stdout)
+        else:
+            help_fn = _HELP_DISPATCH.get(command)
+            if help_fn is not None:
+                print(help_fn(), file=stdout)
+            else:
+                print(_usage(), file=stdout)
+        return EXIT_OK
     try:
         command = args["command"]
         if command == "register":
