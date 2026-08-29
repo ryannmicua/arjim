@@ -427,14 +427,15 @@ class _Parser:
 
     def parse(self, argv: list[str]) -> dict[str, Any]:
         if not argv:
-            raise UsageError("a command is required")
+            return {"help": True}
         args: dict[str, Any] = {}
         index = 0
         while index < len(argv) and argv[index] == "--json":
             args["json"] = True
             index += 1
         if index >= len(argv):
-            raise UsageError("a command is required")
+            args["help"] = True
+            return args
         if argv[index] in ("--help", "help"):
             args["help"] = True
             return args
@@ -458,8 +459,7 @@ class _Parser:
                 name = token[2:].replace("-", "_")
                 if name == "help" or self._is_boolean_flag(sub, name):
                     args["help"] = True
-                    token_index += 1
-                    continue
+                    break
                 if token_index + 1 >= len(tokens):
                     raise UsageError(f"option {token!r} requires a value")
                 flag_values.setdefault(name, []).append(tokens[token_index + 1])
